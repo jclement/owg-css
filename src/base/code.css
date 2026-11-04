@@ -47,7 +47,12 @@
   border-radius: 0;
 }
 
-/* Language tag: <pre data-lang="bash"> labels the block in its top-right corner. */
+/* Language tag: <pre data-lang="bash"> labels the block in its top-right corner. The block
+   reserves a strip above the first line for it, so long lines never run under the tag. */
+:where(pre[data-lang]) {
+  padding-top: calc(var(--owg-text-xs) * 1.6 + var(--owg-space-2));
+}
+
 :where(pre[data-lang])::before {
   content: attr(data-lang);
   position: absolute;
@@ -55,6 +60,7 @@
   right: 0;
   padding: 0 0.7em;
   font-size: var(--owg-text-xs);
+  line-height: 1.6;
   letter-spacing: var(--owg-tracking-caps);
   text-transform: uppercase;
   color: var(--owg-muted);

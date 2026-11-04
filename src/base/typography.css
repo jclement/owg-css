@@ -258,7 +258,9 @@
   color: var(--owg-muted);
 }
 
-/* ---- Details / summary ------------------------------------------------------------------ */
+/* ---- Details / summary ------------------------------------------------------------------
+   Summary chrome (chevron, padding, rule) skips details.callout and sidebar/nav groups,
+   which draw their own ::before/::after. */
 :where(details) {
   padding: 0 var(--owg-space-4);
   background: var(--owg-surface);
@@ -270,7 +272,7 @@
   padding-bottom: var(--owg-space-3);
 }
 
-:where(details) > :where(summary) {
+:where(details:not(.callout, nav details)) > :where(summary) {
   display: flex;
   align-items: center;
   gap: var(--owg-space-3);
@@ -283,12 +285,12 @@
   cursor: pointer;
 }
 
-:where(details) > :where(summary)::-webkit-details-marker {
+:where(details:not(.callout, nav details)) > :where(summary)::-webkit-details-marker {
   display: none;
 }
 
 /* Chevron drawn from two borders: points right, turns down when open. */
-:where(details) > :where(summary)::before {
+:where(details:not(.callout, nav details)) > :where(summary)::before {
   content: "";
   flex: none;
   width: 0.4em;
@@ -300,15 +302,15 @@
   transition: transform var(--owg-transition);
 }
 
-:where(details[open]) > :where(summary)::before {
+:where(details[open]:not(.callout, nav details)) > :where(summary)::before {
   transform: translateY(-0.1em) rotate(45deg);
 }
 
-:where(details) > :where(summary:hover) {
+:where(details:not(.callout, nav details)) > :where(summary:hover) {
   background: var(--owg-surface-2);
 }
 
-:where(details[open]) > :where(summary) {
+:where(details[open]:not(.callout, nav details)) > :where(summary) {
   margin-bottom: var(--owg-space-3);
   border-bottom: 1px solid var(--owg-border);
   border-radius: var(--owg-radius) var(--owg-radius) 0 0;

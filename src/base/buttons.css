@@ -90,7 +90,21 @@
   font-size: var(--owg-text-lg);
 }
 
+/* Buttons in running text wrap onto new lines: keep a little air between the rows.
+   Flex/grid containers and [role=group] children are unaffected (use gap there). */
+:where(p, li, dd, td, figcaption) > :where(button, [type="submit"], [type="button"], [type="reset"], .button, [role="button"], [role="group"]) {
+  margin-block: var(--owg-space-1);
+}
+
 /* ---- States --------------------------------------------------------------------------- */
+/* Toggle buttons: aria-pressed="true" takes the hover fill plus a currentColor bar along the
+   bottom edge (readable in every theme because it is the button's own text colour). */
+:where(button, .button, [role="button"])[aria-pressed="true"] {
+  --_bg: var(--_hbg, var(--_h));
+  --_bd: var(--_hbd, var(--_h));
+  box-shadow: inset 0 -2px 0 currentColor;
+}
+
 :where(button, [type="submit"], [type="button"], [type="reset"], .button, [role="button"]):where(:disabled, [aria-disabled="true"]) {
   opacity: 0.5;
   pointer-events: none;
