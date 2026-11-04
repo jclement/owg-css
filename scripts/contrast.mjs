@@ -20,7 +20,7 @@ const MIN = 4.5;
 const THEMES = ["light", "dark"];
 const VARIANTS = [null, "amber", "phosphor", "slate", "contrast", "doom", "hotdog"];
 const PALETTE = ["blue", "green", "amber", "red", "purple", "pink", "cyan"];
-const CALLOUTS = ["note", "tip", "important", "warning", "danger"];
+const CALLOUTS = ["", "note", "tip", "important", "warning", "danger"];
 const ALERTS = ["note", "tip", "important", "warning", "caution"];
 
 // The page: real components (so their computed colours are what users see) plus a probe.
@@ -31,7 +31,7 @@ const html = `<!doctype html><html><head><meta charset="utf-8">
 <main>
 ${["", ...PALETTE, "accent"].map((c) => `<span class="badge ${c}" data-k="badge ${c || "neutral"}">b</span>`).join("")}
 ${["", ...PALETTE, "accent"].map((c) => `<span class="badge solid ${c}" data-k="badge solid ${c || "neutral"}">b</span>`).join("")}
-${CALLOUTS.map((c) => `<aside class="callout ${c}" data-k="callout ${c}"><p class="callout-title">t</p><p>x</p></aside>`).join("")}
+${CALLOUTS.map((c) => `<aside class="callout ${c}" data-k="callout ${c || "plain"}"><p class="callout-title">t</p><p>x</p></aside>`).join("")}
 ${ALERTS.map((c) => `<div class="markdown-alert markdown-alert-${c}" data-k="alert ${c}"><p class="markdown-alert-title">t</p><p>x</p></div>`).join("")}
 <pre><code data-k="pre code">x</code></pre><p><code data-k="inline code">x</code></p>
 <pre class="terminal" data-title="t"><span class="output" data-k="terminal output">x</span></pre>
@@ -123,9 +123,10 @@ function measure({ PALETTE, CALLOUTS, ALERTS }) {
   const real = (k, node = el(k)) => node && add(k, color(node), bgOf(node));
   for (const c of ["neutral", ...PALETTE, "accent"]) { real(`badge ${c}`); real(`badge solid ${c}`); }
   for (const c of CALLOUTS) {
-    const n = el(`callout ${c}`);
-    add(`callout ${c} title`, color(n.firstElementChild), bgOf(n));
-    add(`callout ${c} body`, color(n.lastElementChild), bgOf(n));
+    const k = c || "plain";
+    const n = el(`callout ${k}`);
+    add(`callout ${k} title`, color(n.firstElementChild), bgOf(n));
+    add(`callout ${k} body`, color(n.lastElementChild), bgOf(n));
   }
   for (const c of ALERTS) {
     const n = el(`alert ${c}`);
