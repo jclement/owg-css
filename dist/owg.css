@@ -2299,8 +2299,8 @@ a.badge:hover {
 }
 
 :is(.callout, .markdown-alert) {
-  --_c: var(--owg-info);
-  --_g: "i";
+  --_c: var(--owg-muted);
+  --_g: "›";
   margin-block: 0 var(--owg-flow);
   padding: var(--owg-space-3) var(--owg-space-4);
   border: var(--owg-border-width) solid color-mix(in srgb, var(--_c) 22%, var(--owg-border));
@@ -2346,6 +2346,11 @@ a.badge:hover {
   display: none;
 }
 
+.callout:is(.note, .info), .markdown-alert-note {
+  --_c: var(--owg-info);
+  --_g: "i";
+}
+
 .callout:is(.tip, .success), .markdown-alert-tip {
   --_c: var(--owg-success);
   --_g: "✓";
@@ -2375,12 +2380,20 @@ details.callout > summary {
   cursor: pointer;
   background: none;
   border: 0;
+  border-radius: 0;
   margin: 0;
   list-style: none;
 }
 
 details.callout > summary::-webkit-details-marker {
   display: none;
+}
+
+details.callout > summary:before {
+  border: 0;
+  margin: 0;
+  transition: none;
+  transform: none;
 }
 
 details.callout > summary:after {
@@ -2392,6 +2405,7 @@ details.callout > summary:after {
 
 details.callout[open] > summary {
   margin-bottom: var(--owg-space-2);
+  border-bottom: 0;
 }
 
 details.callout[open] > summary:after {
@@ -2475,7 +2489,7 @@ a.card:focus-visible {
   outline-offset: 2px;
 }
 
-.label {
+.label:not(svg *) {
   align-items: center;
   gap: var(--owg-space-2);
   margin: var(--owg-space-5) 0 var(--owg-space-2);
@@ -2489,21 +2503,25 @@ a.card:focus-visible {
   display: flex;
 }
 
-.label:before {
+.label:not(svg *):before {
   content: "//";
   color: var(--owg-accent);
 }
 
-.label:after {
+.label:not(svg *):after {
   content: "";
   height: var(--owg-border-width);
   background: var(--owg-border);
   flex: 1;
 }
 
-.label > span {
+.label:not(svg *) > span {
   color: var(--owg-text);
   font-variant-numeric: tabular-nums;
+}
+
+.label:not(svg *) + :is(h1, h2, h3, h4, h5, h6) {
+  margin-top: var(--owg-space-2);
 }
 
 .prompt {
@@ -3085,12 +3103,12 @@ ul.tags > li::marker {
   content: none;
 }
 
-:is(ul.tags > li, .tag) {
+:is(ul.tags > li, .tag:not(.token)) {
   color: var(--owg-muted);
   font-size: var(--owg-text-sm);
 }
 
-:is(ul.tags > li, .tag):before {
+:is(ul.tags > li, .tag:not(.token)):before {
   content: "#";
   color: var(--owg-accent);
 }
