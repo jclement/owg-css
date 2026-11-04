@@ -4,7 +4,9 @@
    Switch: <input type="checkbox" role="switch">. Joined: <div role="group"> (or role=search).
    Side-by-side fields: <div class="row"> inside a form.
    Text controls and buttons share padding + line-height, so they line up in a row or group.
-   --_ring is the state colour of a text control (accent, danger or success). */
+   --_ring is the state colour of a text control (focus, danger or success).
+   Boundaries use --owg-control-border (>= 3:1); focus is a solid outline; logical properties
+   throughout so RTL mirrors; @media (forced-colors) at the end keeps states visible. */
 
 :where(label) {
   display: block;
@@ -33,7 +35,7 @@ fieldset {
 /* Legends read as owg section labels: // LEGEND */
 legend {
   padding: 0 var(--owg-space-2);
-  margin-left: calc(-1 * var(--owg-space-2));
+  margin-inline-start: calc(-1 * var(--owg-space-2));
   font-size: var(--owg-text-sm);
   font-weight: var(--owg-weight-medium);
   letter-spacing: var(--owg-tracking-caps);
@@ -48,16 +50,16 @@ legend::before {
 
 /* ---- Text-like controls (checkbox, radio, range, color, file are re-styled below) ---- */
 :where(input, select, textarea) {
-  --_ring: var(--owg-accent);
+  --_ring: var(--owg-focus);
   width: 100%;
   margin-bottom: var(--owg-space-4);
   padding: var(--owg-space-2) var(--owg-space-3);
   line-height: var(--owg-line-height-tight);
   background-color: var(--owg-surface);
-  border: 1px solid var(--owg-border-strong);
+  border: 1px solid var(--owg-control-border);
   border-radius: var(--owg-radius);
   appearance: none;
-  transition: border-color var(--owg-transition), box-shadow var(--owg-transition);
+  transition: border-color var(--owg-transition);
 }
 
 :where(label) > :where(input:not([type="checkbox"], [type="radio"]), select, textarea) {
@@ -65,9 +67,9 @@ legend::before {
 }
 
 :where(input, select, textarea):focus-visible {
-  outline: 0;
+  outline: var(--owg-focus-width) solid var(--_ring);
+  outline-offset: 1px;
   border-color: var(--_ring);
-  box-shadow: 0 0 0 var(--owg-focus-width) color-mix(in srgb, var(--_ring) 45%, transparent);
 }
 
 :where([aria-invalid="true"], :user-invalid) {
@@ -82,6 +84,7 @@ legend::before {
 
 ::placeholder {
   color: var(--owg-muted);
+  opacity: 1;                              /* browsers fade it otherwise; muted is already 4.5:1 */
 }
 
 textarea {
@@ -93,12 +96,16 @@ textarea {
 
 /* Chevron drawn from two gradients so it follows the theme. */
 :where(select:not([multiple], [size])) {
-  padding-right: 2.25em;
+  padding-inline-end: 2.25em;
   background-image: linear-gradient(45deg, #0000 50%, var(--owg-muted) 0), linear-gradient(135deg, var(--owg-muted) 50%, #0000 0);
   background-position: calc(100% - 1.15em) 52%, calc(100% - 0.8em) 52%;
   background-size: 0.35em 0.35em;
   background-repeat: no-repeat;
   appearance: none;
+}
+
+:where(select:not([multiple], [size])):dir(rtl) {
+  background-position: 0.8em 52%, 1.15em 52%;
 }
 
 /* Helper / error text right after a control. */
@@ -122,6 +129,12 @@ textarea {
   cursor: not-allowed;
 }
 
+/* Dim once: a control inside a dimmed label or disabled fieldset is not dimmed again. */
+:where(fieldset:disabled, label:has(> :disabled)) :disabled,
+:where(fieldset:disabled) label {
+  opacity: 1;
+}
+
 :where(input, select, textarea):where(:disabled, [readonly]) {
   background-color: var(--owg-surface-2);
 }
@@ -129,7 +142,6 @@ textarea {
 /* ---- Checkbox, radio, switch: tokens only. Checked box = accent square in its frame. ---- */
 :where([type="checkbox"], [type="radio"]) {
   flex: none;
-  border-color: color-mix(in srgb, var(--owg-border-strong), var(--owg-muted));
   width: 1.15em;
   height: 1.15em;
   margin: 0;
@@ -150,7 +162,6 @@ textarea {
 :where([type="checkbox"], [type="radio"]):focus-visible {
   outline: var(--owg-focus-width) solid var(--owg-focus);
   outline-offset: 2px;
-  box-shadow: none;
 }
 
 :where([type="checkbox"], [type="radio"]):checked {
@@ -193,13 +204,13 @@ textarea {
 
 [type="range"]::-webkit-slider-runnable-track {
   height: 4px;
-  background: var(--owg-surface-3);
+  background: var(--owg-control-border);
   border-radius: 2px;
 }
 
 [type="range"]::-moz-range-track {
   height: 4px;
-  background: var(--owg-surface-3);
+  background: var(--owg-control-border);
   border-radius: 2px;
 }
 
@@ -258,12 +269,12 @@ textarea {
 }
 
 ::file-selector-button {
-  margin-right: var(--owg-space-3);
+  margin-inline-end: var(--owg-space-3);
   padding: var(--owg-space-1) var(--owg-space-3);
   font: inherit;
   color: var(--owg-text);
   background: var(--owg-surface-2);
-  border: 1px solid var(--owg-border-strong);
+  border: 1px solid var(--owg-control-border);
   border-radius: var(--owg-radius);
   cursor: pointer;
 }
@@ -301,21 +312,60 @@ textarea {
 }
 
 :where([role="group"], [role="search"]) > :not(:first-child) {
-  margin-left: -1px;
+  margin-inline-start: -1px;
 }
 
 :where([role="group"], [role="search"]) > :first-child {
-  border-radius: var(--owg-radius) 0 0 var(--owg-radius);
+  border-start-start-radius: var(--owg-radius);
+  border-end-start-radius: var(--owg-radius);
 }
 
 :where([role="group"], [role="search"]) > :last-child {
-  border-radius: 0 var(--owg-radius) var(--owg-radius) 0;
-}
-
-:where([role="group"], [role="search"]) > :where(:only-child) {
-  border-radius: var(--owg-radius);
+  border-start-end-radius: var(--owg-radius);
+  border-end-end-radius: var(--owg-radius);
 }
 
 :where([role="group"], [role="search"]) > :where(:hover, :focus-visible) {
   position: relative;
+}
+
+/* ---- Windows high contrast / forced colours ------------------------------------------
+   Shadows and author colours are dropped there, so the drawn checkbox/radio/switch/range
+   opt out of forcing and repaint themselves in system colours. */
+@media (forced-colors: active) {
+  :where([type="checkbox"], [type="radio"], [type="range"]) {
+    forced-color-adjust: none;
+    background-color: Canvas;
+    border-color: CanvasText;
+  }
+
+  :where([type="checkbox"], [type="radio"]):checked {
+    background-color: Highlight;
+    border-color: Highlight;
+    box-shadow: inset 0 0 0 0.2em Canvas;
+  }
+
+  :where([type="checkbox"]):indeterminate {
+    background: linear-gradient(Highlight 0 0) center / 55% 2px no-repeat Canvas;
+  }
+
+  :where([role="switch"]) {
+    --_knob: CanvasText;
+    background-color: Canvas;
+  }
+
+  :where([role="switch"]):checked {
+    --_knob: HighlightText;
+    background-color: Highlight;
+    box-shadow: none;
+  }
+
+  [type="range"]::-webkit-slider-runnable-track { background: CanvasText; }
+  [type="range"]::-webkit-slider-thumb { background: Highlight; border-color: Canvas; }
+  [type="range"]::-moz-range-track { background: CanvasText; }
+  [type="range"]::-moz-range-thumb { background: Highlight; border-color: Canvas; }
+
+  :where(input, select, textarea):focus-visible {
+    outline-color: Highlight;
+  }
 }

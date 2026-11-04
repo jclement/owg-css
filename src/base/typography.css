@@ -189,7 +189,8 @@
 }
 
 :where(li) > :where(input[type="checkbox"]:first-child) {
-  margin: 0 0.6ch 0 -2.5ch;
+  margin: 0;
+  margin-inline: -2.5ch 0.6ch;
   vertical-align: -0.2em;
 }
 
@@ -206,7 +207,8 @@
 }
 
 :where(dd) {
-  margin: 0 0 var(--owg-space-2) 2.5ch;
+  margin: 0 0 var(--owg-space-2);
+  margin-inline-start: 2.5ch;
 }
 
 /* <dl class="inline">: two-column term / definition grid. */
@@ -223,8 +225,9 @@
 /* ---- Quotes, rules, figures ------------------------------------------------------------- */
 :where(blockquote) {
   margin-inline: 0;
-  padding: var(--owg-space-1) 0 var(--owg-space-1) var(--owg-space-4);
-  border-left: 2px solid var(--owg-accent);
+  padding-block: var(--owg-space-1);
+  padding-inline: var(--owg-space-4) 0;
+  border-inline-start: 2px solid var(--owg-accent);
   color: var(--owg-muted);
 }
 
@@ -289,7 +292,7 @@
   display: none;
 }
 
-/* Chevron drawn from two borders: points right, turns down when open. */
+/* Chevron drawn from two borders: points to the inline end (mirrored in RTL), down when open. */
 :where(details:not(.callout, nav details)) > :where(summary)::before {
   content: "";
   flex: none;
@@ -300,6 +303,10 @@
   border-width: 0 1.5px 1.5px 0;
   transform: rotate(-45deg);
   transition: transform var(--owg-transition);
+}
+
+:where(details:not(.callout, nav details):dir(rtl)) > :where(summary)::before {
+  transform: rotate(135deg);
 }
 
 :where(details[open]:not(.callout, nav details)) > :where(summary)::before {

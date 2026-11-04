@@ -1,6 +1,6 @@
 /* owg-css: base/tables — owned by the core agent (see SPEC.md).
    Dense data tables: small-caps header over a strong rule, hairline rows, hover tint,
-   tabular numbers. Opt-ins: .striped .compact .bordered; td.num / th.num right-align.
+   tabular numbers. Opt-ins: .striped .compact .bordered; td.num / th.num align to the end.
    Wide tables: wrap in <figure> or <div class="table-wrap"> to scroll sideways. */
 
 :where(table) {
@@ -17,12 +17,12 @@
   padding-top: var(--owg-space-2);
   font-size: var(--owg-text-sm);
   color: var(--owg-muted);
-  text-align: left;
+  text-align: start;
 }
 
 :where(th, td) {
   padding: var(--owg-space-2) var(--owg-space-3);
-  text-align: left;
+  text-align: start;
   vertical-align: top;
   border-bottom: 1px solid var(--owg-border);
 }
@@ -56,7 +56,7 @@
 }
 
 :where(th.num, td.num) {
-  text-align: right;
+  text-align: end;
   white-space: nowrap;
 }
 

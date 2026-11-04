@@ -63,9 +63,11 @@
   *,
   ::before,
   ::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    /* none, not 0.01ms: a near-zero duration still makes every style change a transition,
+       which breaks scripts that measure right after styling (mermaid sizing). The spinner and
+       the indeterminate progress bar have static looks without their animation. */
+    animation: none !important;
+    transition: none !important;
     scroll-behavior: auto !important;
   }
 }
