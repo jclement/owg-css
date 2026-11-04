@@ -4,14 +4,15 @@
      <p>Body text.</p>
    </aside>
    Types: note tip important warning danger   (aliases: info = note, success = tip, caution = danger)
+   No type = a neutral, quiet aside (muted rule and tint).
    Collapsible: <details class="callout warning"><summary>Title</summary><p>...</p></details>
    GitHub Markdown alerts are styled too:
    <div class="markdown-alert markdown-alert-note"><p class="markdown-alert-title">Note</p>...</div>
    (GitHub's own <svg> icon in the title is hidden; the CSS glyph replaces it.) */
 
 :is(.callout, .markdown-alert) {
-  --_c: var(--owg-info);
-  --_g: "i";
+  --_c: var(--owg-muted);
+  --_g: "\203A";
   margin-block: 0 var(--owg-flow);
   padding: var(--owg-space-3) var(--owg-space-4);
   border: var(--owg-border-width) solid color-mix(in srgb, var(--_c) 22%, var(--owg-border));
@@ -50,6 +51,9 @@
 }
 .markdown-alert-title > svg { display: none; }
 
+.callout:is(.note, .info), .markdown-alert-note {
+  --_c: var(--owg-info); --_g: "i";
+}
 .callout:is(.tip, .success), .markdown-alert-tip {
   --_c: var(--owg-success); --_g: "\2713";
 }
@@ -63,24 +67,35 @@
   --_c: var(--owg-danger); --_g: "\00d7";
 }
 
-/* Collapsible: reset the base details box, keep the callout look. */
+/* Collapsible: undo the core details box and its chevron (core draws the chevron on
+   summary::before with a border + rotate), keep the callout look. */
 details.callout { padding-block: var(--owg-space-2); }
 details.callout > summary {
   margin: 0;
   padding: var(--owg-space-1) 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
   list-style: none;
   cursor: pointer;
-  background: none;
-  border: 0;
 }
 details.callout > summary::-webkit-details-marker { display: none; }
+details.callout > summary::before {
+  margin: 0;
+  border: 0;
+  transform: none;
+  transition: none;
+}
 details.callout > summary::after {
   content: "+";
   margin-left: auto;
   color: var(--_c);
   font-weight: var(--owg-weight-normal);
 }
-details.callout[open] > summary { margin-bottom: var(--owg-space-2); }
+details.callout[open] > summary {
+  margin-bottom: var(--owg-space-2);
+  border-bottom: 0;
+}
 details.callout[open] > summary::after { content: "\2212"; }
 details.callout > summary:focus-visible {
   outline: var(--owg-focus-width) solid var(--owg-focus);
