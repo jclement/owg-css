@@ -1,0 +1,21 @@
+# Build, size budget and contrast checks on every PR and push.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+      - run: npm ci
+      - run: mise run check
+      - name: dist/ is up to date
+        run: git diff --quiet -- dist/ || echo "::warning::dist/ differs from a fresh build; run mise run build and commit it"

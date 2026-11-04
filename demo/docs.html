@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Getting started — owg://css docs</title>
+  <meta name="description" content="Getting started with owg-css: install it with two link tags, pick a theme and variant, and use the app shell and components.">
+  <meta name="color-scheme" content="light dark">
+  <script src="../dist/plugins/owg-theme.js"></script>
+  <link rel="stylesheet" href="../dist/owg-fonts.css" onerror="this.onerror=null;this.href='https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,400..700;1,400&amp;display=swap'">
+  <link rel="stylesheet" href="../dist/owg.css">
+  <link rel="stylesheet" href="../dist/plugins/owg-highlight.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%2309090b'/%3E%3Ctext x='8' y='12' font-family='monospace' font-size='10' font-weight='700' text-anchor='middle' fill='%2338bdf8'%3E//%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+  <header>
+    <a href="#sidebar" class="sidebar-toggle" aria-label="Open menu">☰</a>
+    <a href="./">owg<span>://</span>css</a>
+    <nav>
+      <a href="./">Kitchen sink</a>
+      <a href="docs.html" aria-current="page">Docs</a>
+      <a href="plain.html">Plain</a>
+      <a href="https://github.com/jclement/owg-css">GitHub</a>
+    </nav>
+    <div role="group" aria-label="Colour theme" class="theme-set">
+      <button type="button" class="small ghost" data-theme-set="auto" aria-pressed="true" aria-label="Auto theme" data-tooltip="auto" data-placement="bottom">◐</button>
+      <button type="button" class="small ghost" data-theme-set="light" aria-pressed="false" aria-label="Light theme" data-tooltip="light" data-placement="bottom">☀&#xFE0E;</button>
+      <button type="button" class="small ghost" data-theme-set="dark" aria-pressed="false" aria-label="Dark theme" data-tooltip="dark" data-placement="bottom">☾&#xFE0E;</button>
+    </div>
+  </header>
+
+  <aside id="sidebar">
+    <a href="#_" class="sidebar-close" aria-label="Close menu">×</a>
+    <nav>
+      <h2>Getting started</h2>
+      <ul>
+        <li><a href="docs.html" aria-current="page">Introduction</a>
+          <ul>
+            <li><a href="#install">Install</a></li>
+            <li><a href="#first-page">Your first page</a></li>
+            <li><a href="#themes">Themes</a></li>
+            <li><a href="#variants">Variants</a></li>
+          </ul>
+        </li>
+        <li><a href="#app-shell">App shell</a></li>
+        <li><a href="#docs-layout">Docs layout</a></li>
+      </ul>
+      <h2>Reference</h2>
+      <ul>
+        <li><a href="./#typography">Elements</a></li>
+        <li><a href="./#badges">Components</a></li>
+        <li><a href="#tokens">Tokens</a></li>
+        <li><a href="#plugins">Plugins</a></li>
+      </ul>
+      <h2>Project</h2>
+      <ul>
+        <li><a href="https://github.com/jclement/owg-css">Source</a></li>
+        <li><a href="https://github.com/jclement/owg-css/releases">Changelog</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main>
+    <article>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="./">owg-css</a></li>
+          <li><a href="docs.html">docs</a></li>
+          <li aria-current="page">getting started</li>
+        </ol>
+      </nav>
+
+      <h1>Getting started with owg-css</h1>
+      <p>
+        owg-css is one stylesheet that makes plain HTML look like a well-kept terminal: dense,
+        monospace, quiet. This page takes you from nothing to a themed docs site in about five
+        minutes. <span class="badge accent">v0.1.0</span> <span class="badge">~6 KB gzip</span>
+      </p>
+
+      <h2 id="install">Install</h2>
+      <p>There is nothing to install. Link the stylesheet from jsDelivr, pinned to a release:</p>
+<pre data-lang="html"><code class="language-html">&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist/owg-fonts.css"&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist/owg.min.css"&gt;</code></pre>
+      <p>
+        <code>owg-fonts.css</code> is optional: it self-hosts Roboto Mono. Leave it out and the
+        stack falls back to your system monospace font (SF Mono, Menlo, Consolas, DejaVu).
+      </p>
+      <aside class="callout tip">
+        <p class="callout-title">Tip</p>
+        <p>Use <code>@main</code> instead of <code>@v0.1.0</code> to follow the latest commit. Fine for a side project; pin a tag for anything you care about.</p>
+      </aside>
+      <p>Prefer to vendor it? Download <code>dist/</code> and <code>fonts/</code> and keep them side by side so the font paths resolve.</p>
+
+      <h2 id="first-page">Your first page</h2>
+      <p>Write semantic HTML. A <code>&lt;header&gt;</code> directly inside <code>&lt;body&gt;</code> becomes a fixed top bar, and its first child is the title:</p>
+      <ol class="steps">
+        <li><strong>Create <code>index.html</code></strong>
+<pre data-lang="html"><code class="language-html">&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;link rel="stylesheet" href="owg.min.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;header&gt;
+    &lt;a href="/"&gt;relic&lt;span&gt;://&lt;/span&gt;status&lt;/a&gt;
+    &lt;nav&gt;&lt;a href="/logs"&gt;Logs&lt;/a&gt;&lt;/nav&gt;
+  &lt;/header&gt;
+  &lt;main&gt;
+    &lt;h1&gt;All systems normal&lt;/h1&gt;
+  &lt;/main&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        </li>
+        <li><strong>Open it in a browser</strong><p>No server needed; <code>file://</code> works.</p></li>
+        <li><strong>Add classes only where Markdown can't reach</strong><p>Badges, callouts, cards, steps. See the <a href="./">kitchen sink</a>.</p></li>
+      </ol>
+
+      <h2 id="themes">Themes</h2>
+      <p>
+        By default the page follows the operating system's light or dark setting. To force one,
+        set <code>data-theme</code> on <code>&lt;html&gt;</code>:
+      </p>
+<pre data-lang="html"><code class="language-html">&lt;html data-theme="dark"&gt;   &lt;!-- or "light"; omit for auto --&gt;</code></pre>
+      <p>To give visitors a switch that remembers their choice, add the theme helper in <code>&lt;head&gt;</code> (not deferred, so it applies before the first paint) and mark up a few buttons:</p>
+<pre data-lang="html"><code class="language-html">&lt;script src="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist/plugins/owg-theme.js"&gt;&lt;/script&gt;
+
+&lt;div role="group" aria-label="Theme"&gt;
+  &lt;button data-theme-set="auto"&gt;auto&lt;/button&gt;
+  &lt;button data-theme-set="light"&gt;light&lt;/button&gt;
+  &lt;button data-theme-set="dark"&gt;dark&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+      <table>
+        <thead><tr><th>API</th><th>Does</th></tr></thead>
+        <tbody>
+          <tr><td><code>owgTheme.set('dark')</code></td><td>Force <code>auto</code>, <code>light</code> or <code>dark</code>; saved to <code>localStorage</code>.</td></tr>
+          <tr><td><code>owgTheme.variant('slate')</code></td><td>Switch variant; <code>null</code> for the default.</td></tr>
+          <tr><td><code>owgTheme.get()</code></td><td><code>{ theme, variant }</code> as currently applied.</td></tr>
+          <tr><td><code>owg:theme</code> event</td><td>Fired on <code>document</code> after every change.</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="variants">Variants</h2>
+      <p>A variant is a different set of colour tokens. Each one has a light and a dark form, so it combines with any theme:</p>
+<pre data-lang="html"><code class="language-html">&lt;html data-variant="phosphor"&gt;
+&lt;select data-variant-select aria-label="Variant"&gt;
+  &lt;option value=""&gt;default&lt;/option&gt;
+  &lt;option value="amber"&gt;amber&lt;/option&gt;
+  &lt;option value="hotdog"&gt;hotdog&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+      <p>
+        <span class="badge">default</span> <span class="badge amber">amber</span>
+        <span class="badge green">phosphor</span> <span class="badge blue">slate</span>
+        <span class="badge">contrast</span> <span class="badge red">doom</span>
+        <span class="badge solid red">hotdog</span>
+      </p>
+      <aside class="callout warning">
+        <p class="callout-title">Warning</p>
+        <p><code>hotdog</code> is a faithful tribute to Windows 3.1's Hotdog Stand scheme. It passes contrast checks. It does not pass taste checks.</p>
+      </aside>
+
+      <h2 id="app-shell">App shell</h2>
+      <p>
+        Add an <code>&lt;aside&gt;</code> directly inside <code>&lt;body&gt;</code> and you get a fixed
+        sidebar under the top bar. Below 960px it becomes a drawer, opened by a plain link, so it
+        works without JavaScript:
+      </p>
+<pre data-lang="html"><code class="language-html">&lt;header&gt;
+  &lt;a href="#sidebar" class="sidebar-toggle" aria-label="Open menu"&gt;☰&lt;/a&gt;
+  &lt;a href="/"&gt;owg&lt;span&gt;://&lt;/span&gt;css&lt;/a&gt;
+&lt;/header&gt;
+&lt;aside id="sidebar"&gt;
+  &lt;a href="#" class="sidebar-close" aria-label="Close menu"&gt;×&lt;/a&gt;
+  &lt;nav&gt;
+    &lt;h2&gt;Getting started&lt;/h2&gt;
+    &lt;ul&gt;&lt;li&gt;&lt;a href="#install" aria-current="page"&gt;Install&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;
+  &lt;/nav&gt;
+&lt;/aside&gt;</code></pre>
+      <p>With <code>owg-theme.js</code> loaded, <kbd>Esc</kbd> and a click outside also close the drawer.</p>
+
+      <h2 id="docs-layout">Docs layout</h2>
+      <p>
+        Put an <code>&lt;article&gt;</code> and a <code>&lt;nav class="toc"&gt;</code> in <code>&lt;main&gt;</code>.
+        Above 1200px the table of contents becomes a sticky right column; below that it sits above the article.
+        This page is built exactly that way.
+      </p>
+
+      <h3 id="tokens">Tokens</h3>
+      <p>Everything is a custom property on <code>:root</code>. Override a few to make it yours:</p>
+<pre data-lang="css"><code class="language-css">:root {
+  --owg-font-size: 15px;      /* everything scales from here */
+  --owg-radius: 0;            /* sharp corners */
+  --owg-accent: #c2410c;      /* burnt orange links and buttons */
+}</code></pre>
+      <dl class="kv">
+        <dt><code>--owg-font-size</code></dt><dd>14px root; every size is in <code>rem</code></dd>
+        <dt><code>--owg-accent</code></dt><dd>links, buttons, focus rings, markers</dd>
+        <dt><code>--owg-measure</code></dt><dd>prose line length, 78ch</dd>
+        <dt><code>--owg-sidebar-width</code></dt><dd>15rem</dd>
+        <dt><code>--owg-topbar-bg</code></dt><dd>top bar fill, separate so variants can paint it</dd>
+      </dl>
+
+      <h3 id="plugins">Plugins</h3>
+      <p>Three optional files, each independent:</p>
+      <ul>
+        <li><code>owg-highlight.css</code>: highlight.js, Prism and Shiki colours from theme tokens.</li>
+        <li><code>owg-mermaid.js</code>: Mermaid diagrams in the current palette, re-rendered when the theme changes.</li>
+        <li><code>owg-theme.js</code>: the theme and variant switch, plus drawer niceties.</li>
+      </ul>
+      <aside class="callout note">
+        <p class="callout-title">Note</p>
+        <p>None of them is needed for the core. The stylesheet has no JavaScript and works with it switched off.</p>
+      </aside>
+
+      <nav class="pagination" aria-label="Pagination">
+        <a href="./" rel="prev">&larr; kitchen sink</a>
+        <a href="plain.html" rel="next">classless page &rarr;</a>
+      </nav>
+    </article>
+
+    <nav class="toc">
+      <h2>On this page</h2>
+      <ul>
+        <li><a href="#install">Install</a></li>
+        <li><a href="#first-page">Your first page</a></li>
+        <li><a href="#themes">Themes</a></li>
+        <li><a href="#variants">Variants</a></li>
+        <li><a href="#app-shell">App shell</a></li>
+        <li><a href="#docs-layout">Docs layout</a>
+          <ul>
+            <li><a href="#tokens">Tokens</a></li>
+            <li><a href="#plugins">Plugins</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </main>
+
+  <footer>
+    <p>owg-css · MIT · <a href="https://github.com/jclement/owg-css/edit/main/demo/docs.html">Edit this page</a></p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+  <script>if (window.hljs) { hljs.configure({ cssSelector: "pre code[class*=language-]" }); hljs.highlightAll(); }</script>
+</body>
+</html>
