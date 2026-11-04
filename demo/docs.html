@@ -65,8 +65,8 @@
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <ol>
           <li><a href="./">owg-css</a></li>
-          <li><a href="docs.html">Docs</a></li>
-          <li><a href="docs.html" aria-current="page">Getting started</a></li>
+          <li><a href="docs.html">docs</a></li>
+          <li aria-current="page">getting started</li>
         </ol>
       </nav>
 
@@ -214,8 +214,8 @@
       </aside>
 
       <nav class="pagination" aria-label="Pagination">
-        <a href="./" rel="prev"><small>Previous</small> Kitchen sink</a>
-        <a href="plain.html" rel="next"><small>Next</small> Classless page</a>
+        <a href="./" rel="prev">&larr; kitchen sink</a>
+        <a href="plain.html" rel="next">classless page &rarr;</a>
       </nav>
     </article>
 
@@ -242,6 +242,6 @@
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
-  <script>window.hljs && hljs.highlightAll();</script>
+  <script>if (window.hljs) { hljs.configure({ cssSelector: "pre code[class*=language-]" }); hljs.highlightAll(); }</script>
 </body>
 </html>

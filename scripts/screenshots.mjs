@@ -23,17 +23,22 @@ const browser = await chromium.launch();
 // Open a page in a given theme/variant, wait for fonts, highlighting and diagrams to settle.
 async function open({ page = "index.html", hash = "", theme = "light", variant = "default", width = 1440, height = 900, scale = 1 }) {
   const ctx = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: scale, colorScheme: theme, reducedMotion: "reduce" });
+  // owg-theme.js picks the choice up from localStorage before paint; pages without it
+  // (plain.html) get the attributes set right after load.
   await ctx.addInitScript(([t, v]) => {
     try { localStorage.setItem("owg-theme", t); localStorage.setItem("owg-variant", v); } catch (e) {}
-    const el = document.documentElement;
-    el.setAttribute("data-theme", t);
-    if (v === "default") el.removeAttribute("data-variant"); else el.setAttribute("data-variant", v);
   }, [theme, variant]);
   const p = await ctx.newPage();
+  p.on("pageerror", (e) => console.warn(`warn ${page}: ${e.message}`));
   await p.goto(url(page, hash), { waitUntil: "load", timeout: 30000 }).catch((e) => console.warn(`warn ${page}: ${e.message}`));
+  await p.evaluate(([t, v]) => {
+    const el = document.documentElement;
+    if (el.getAttribute("data-theme") !== t) el.setAttribute("data-theme", t);
+    if (v === "default") el.removeAttribute("data-variant"); else if (el.getAttribute("data-variant") !== v) el.setAttribute("data-variant", v);
+  }, [theme, variant]);
   await p.evaluate(() => document.fonts.ready);
   // Mermaid renders async; give it a moment if the page has diagrams and mermaid loaded.
-  await p.waitForFunction(() => !document.querySelector(".mermaid") || !window.mermaid || document.querySelector(".mermaid svg"), null, { timeout: 8000 }).catch(() => {});
+  await p.waitForFunction(() => !document.querySelector(".mermaid") || document.querySelector(".mermaid svg"), null, { timeout: 15000 }).catch(() => console.warn(`warn ${page}: mermaid did not render (offline?)`));
   await p.waitForTimeout(300);
   return { p, ctx };
 }

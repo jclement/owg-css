@@ -74,13 +74,14 @@
         <li><a href="#stats">Stats &amp; status</a></li>
         <li><a href="#tooltips">Tooltips</a></li>
         <li><a href="#avatars">Avatars</a></li>
+        <li><a href="#empty">Empty state &amp; tags</a></li>
         <li><a href="#terminal">Terminal &amp; prompt</a></li>
       </ul>
       <details open>
         <summary>Plugins</summary>
         <ul>
           <li><a href="#highlight">Syntax highlighting</a></li>
-          <li><a href="#mermaid">Mermaid diagrams</a></li>
+          <li><a href="#diagrams">Mermaid diagrams</a></li>
         </ul>
       </details>
       <details>
@@ -656,13 +657,13 @@ max_upload = "25MB"</code></pre>
       <p class="label">components / stats &amp; status</p>
       <h2>Stats &amp; status dots</h2>
       <div class="grid cols-4">
-        <div class="stat"><strong>99.97%</strong> <span>uptime, 30d</span></div>
-        <div class="stat"><strong>142ms</strong> <span>p99 latency</span></div>
+        <div class="stat"><strong>99.97%</strong> <span>uptime, 30d</span> <small class="up">+0.02</small></div>
+        <div class="stat"><strong>142ms</strong> <span>p99 latency</span> <small class="down">+18ms</small></div>
         <div class="stat"><strong>1.2k</strong> <span>req/min</span></div>
         <div class="stat"><strong>0</strong> <span>open incidents</span></div>
       </div>
       <p>
-        <span class="dot green"></span> api
+        <span class="dot green pulse"></span> api
         &nbsp; <span class="dot amber"></span> worker
         &nbsp; <span class="dot red"></span> mailer
         &nbsp; <span class="dot blue"></span> cron
@@ -695,6 +696,29 @@ max_upload = "25MB"</code></pre>
     </section>
 
     <!-- ================================================================== -->
+    <section id="empty">
+      <p class="label">components / empty state &amp; tags</p>
+      <h2>Empty state &amp; tags</h2>
+      <div class="grid cols-2">
+        <div class="empty">
+          <strong>no matching logs</strong>
+          <p>Nothing at level <code>error</code> in the last 24 hours. Enjoy it.</p>
+          <a class="button secondary small" href="#empty">clear filters</a>
+        </div>
+        <div>
+          <p>Tags, as a plain list:</p>
+          <ul class="tags">
+            <li><a href="#empty">homelab</a></li>
+            <li><a href="#empty">self-hosting</a></li>
+            <li><a href="#empty">caddy</a></li>
+            <li>postgres</li>
+            <li>onewheel</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
     <section id="terminal">
       <p class="label">components / terminal &amp; prompt</p>
       <h2>Terminal &amp; prompt</h2>
@@ -703,8 +727,10 @@ max_upload = "25MB"</code></pre>
 <span class="prompt">$</span> notes sync --dry-run
 <span class="output">→ 3 notes changed, 1 attachment added
 → would upload 2.4 MiB to s3://notes-backup/jsc</span>
-<span class="prompt">$</span> <span class="output"></span></code></pre>
-      <p>A one-line prompt in running text: <code><span class="prompt">$</span> mise run check</code></p>
+<span class="prompt">$</span> <span class="cursor"></span></code></pre>
+      <p>The owg.me prompt bar, <code>.cmdline</code> (add <code>.rule</code> for the hairline):</p>
+      <p class="cmdline rule"><span class="user">jeff</span>@<span class="host">owg</span>:<span class="path">~/code/owg-css</span>$ <span class="cmd">mise run check</span></p>
+      <p class="cmdline"><span class="user">root</span>@<span class="host">relic</span>:<span class="path">/var/log</span># <span class="cmd">journalctl -u caddy --since today | grep -c ' 502 '</span></p>
     </section>
 
     <!-- ================================================================== -->
@@ -771,7 +797,7 @@ echo "backup ok: $stamp"</code></pre>
     </section>
 
     <!-- ================================================================== -->
-    <section id="mermaid">
+    <section id="diagrams">
       <p class="label">plugins / mermaid</p>
       <h2>Mermaid diagrams</h2>
       <p>
@@ -789,9 +815,9 @@ echo "backup ok: $stamp"</code></pre>
   participant API as notes API
   participant DB as Postgres
   CLI->>API: POST /sync (3 changes)
-  API->>DB: BEGIN; UPSERT notes
+  API->>DB: UPSERT notes (one transaction)
   DB-->>API: ok
-  API-->>CLI: 200 {"synced": 3}
+  API-->>CLI: 200 OK, synced=3
   Note over CLI,API: retries with backoff on 5xx</pre>
     </section>
   </main>
@@ -805,8 +831,8 @@ echo "backup ok: $stamp"</code></pre>
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
-  <script>window.hljs && hljs.highlightAll();</script>
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
-  <script src="../dist/plugins/owg-mermaid.js"></script>
+  <script>if (window.hljs) { hljs.configure({ cssSelector: "pre code[class*=language-]" }); hljs.highlightAll(); }</script>
+  <!-- owg-mermaid.js imports mermaid@11.4.1 from jsDelivr on first use (or reuses window.mermaid). -->
+  <script src="../dist/plugins/owg-mermaid.js" defer></script>
 </body>
 </html>

@@ -172,6 +172,9 @@ Everything below is opt-in. Plain elements (headings, lists, tables, forms, `det
 | Buttons | `button` · `.secondary .outline .ghost .danger .small .large` · `a.button` · `aria-busy="true"` · `[role=group]` joins |
 | Tables | `td.num` · `table.striped .compact .bordered` · wrap in `<figure>` to scroll |
 | Forms | `aria-invalid="true|false"` · `role="switch"` on a checkbox · `[role=group]` for input + button |
+| Prompt bar | `<p class="cmdline"><span class="user">jeff</span>@<span class="host">owg</span>:<span class="path">~</span>$ <span class="cmd">ls</span></p>` · `.rule` |
+| Empty state | `<div class="empty"><strong>no results</strong><p>…</p></div>` |
+| Tags | `<ul class="tags"><li><a href="…">css</a></li></ul>` |
 | Breadcrumb / pager | `nav.breadcrumb > ol` · `nav.pagination` with `rel="prev|next"` links |
 
 The [kitchen sink](https://jclement.github.io/owg-css/) shows every one of these in every
@@ -187,16 +190,18 @@ All optional, all in `dist/plugins/`:
   ```html
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist/plugins/owg-highlight.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
-  <script>hljs.highlightAll();</script>
+  <script>hljs.configure({ cssSelector: "pre code[class*=language-]" }); hljs.highlightAll();</script>
   ```
 
 - **`owg-mermaid.js`**: renders `pre.mermaid` blocks with the current palette and Roboto Mono,
   and re-renders when the theme or variant changes.
 
   ```html
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist/plugins/owg-mermaid.js"></script>
+  <!-- imports mermaid@11.4.1 from jsDelivr on first use, or reuses window.mermaid -->
+  <script src="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist/plugins/owg-mermaid.js" defer></script>
   ```
+
+  Don't give any element `id="mermaid"`: browsers expose it as `window.mermaid`.
 
 - **`owg-theme.js`**: the theme and variant switch above.
 
