@@ -89,7 +89,7 @@ Every variant has a light and a dark form and keeps body text at 4.5:1 or better
 
 ### The theme switch (optional)
 
-`plugins/owg-theme.js` (~3.8 KB, ~1.5 KB gzipped, no dependencies) remembers the visitor's choice
+`plugins/owg-theme.js` (about 1.5 KB gzipped, no dependencies) remembers the visitor's choice
 and applies it before the first paint. Load it in `<head>`, not deferred:
 
 ```html
@@ -145,6 +145,145 @@ JavaScript off.
 </main>
 <footer> ... </footer>
 ```
+
+## Use it for docs
+
+owg-css styles what Markdown renderers already emit, so a docs site is a template and a
+renderer. You don't need mdBook, Docusaurus or Astro.
+
+### The minimum template
+
+Put the rendered Markdown inside `<main><article>` and you're done. Add the `<aside>` sidebar and
+a `nav.toc` (see [App shell](#app-shell-and-docs-layout)) when the docs grow past one page.
+
+```html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist/owg-fonts.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist/owg.min.css">
+</head>
+<body>
+  <header><a href="/">notes<span>://</span>docs</a></header>
+  <main><article>
+    {{ rendered markdown }}
+  </article></main>
+</body>
+</html>
+```
+
+### GitHub alerts become callouts
+
+GitHub's alert syntax renders as `div.markdown-alert`, which owg-css draws exactly like its own
+callouts. GitHub's octicon SVG is hidden and replaced by owg's glyph.
+
+| Markdown | Rendered class | Same as |
+|---|---|---|
+| `> [!NOTE]` | `.markdown-alert-note` | `.callout.note` |
+| `> [!TIP]` | `.markdown-alert-tip` | `.callout.tip` |
+| `> [!IMPORTANT]` | `.markdown-alert-important` | `.callout.important` |
+| `> [!WARNING]` | `.markdown-alert-warning` | `.callout.warning` |
+| `> [!CAUTION]` | `.markdown-alert-caution` | `.callout.danger` |
+
+### No framework: markdown-it in 20 lines
+
+`npm i markdown-it markdown-it-github-alerts`, then `node build.mjs` turns `docs/*.md` into
+`site/*.html`:
+
+```js
+import { readFileSync, writeFileSync, readdirSync, mkdirSync } from "node:fs";
+import MarkdownIt from "markdown-it";
+import alerts from "markdown-it-github-alerts";
+
+const md = MarkdownIt({ html: true, linkify: true }).use(alerts);
+const cdn = "https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist";
+mkdirSync("site", { recursive: true });
+for (const f of readdirSync("docs").filter((f) => f.endsWith(".md"))) {
+  const src = readFileSync(`docs/${f}`, "utf8");
+  const title = src.match(/^# (.+)$/m)?.[1] ?? f;
+  writeFileSync(`site/${f.replace(/\.md$/, ".html")}`, `<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>${title}</title>
+<link rel="stylesheet" href="${cdn}/owg-fonts.css"><link rel="stylesheet" href="${cdn}/owg.min.css">
+</head><body>
+<header><a href="index.html">notes<span>://</span>docs</a></header>
+<main><article>${md.render(src)}</article></main>
+</body></html>`);
+}
+```
+
+### pandoc
+
+Save the minimum template as `owg.html` with pandoc's variables, then
+`pandoc -s --template owg.html --toc notes.md -o notes.html`:
+
+```html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>$pagetitle$</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist/owg.min.css">
+</head>
+<body>
+  <header><a href="index.html">$pagetitle$</a></header>
+  <main>
+    <article>$body$</article>
+$if(toc)$
+    <nav class="toc"><h2>On this page</h2>$table-of-contents$</nav>
+$endif$
+  </main>
+</body>
+</html>
+```
+
+pandoc's own `alerts` extension uses different class names. For callouts from pandoc, write
+them as HTML (`<aside class="callout tip">`) in the Markdown.
+
+### Hugo (or Zola)
+
+A minimal `layouts/_default/baseof.html` is the app shell. `.TableOfContents` comes wrapped in
+its own `<nav>`, so strip that and let `nav.toc` be the wrapper:
+
+```html
+<body>
+  <header>
+    <a href="#sidebar" class="sidebar-toggle" aria-label="Open menu">☰</a>
+    <a href="{{ site.Home.RelPermalink }}">{{ site.Title }}</a>
+  </header>
+  <aside id="sidebar">
+    <a href="#_" class="sidebar-close" aria-label="Close menu">×</a>
+    <nav><ul>{{ range site.Menus.main }}<li><a href="{{ .URL }}"
+      {{ if $.IsMenuCurrent "main" . }}aria-current="page"{{ end }}>{{ .Name }}</a></li>{{ end }}</ul></nav>
+  </aside>
+  <main>
+    <article>{{ block "main" . }}{{ .Content }}{{ end }}</article>
+    <nav class="toc"><h2>On this page</h2>
+      {{ .TableOfContents | replaceRE "</?nav[^>]*>" "" | safeHTML }}</nav>
+  </main>
+</body>
+```
+
+Hugo 0.132+ turns GitHub alerts into callouts with a blockquote render hook,
+`layouts/_default/_markup/render-blockquote.html`:
+
+```html
+{{- if eq .Type "alert" -}}
+<div class="markdown-alert markdown-alert-{{ .AlertType }}">
+  <p class="markdown-alert-title">{{ .AlertType | title }}</p>
+  {{ .Text }}
+</div>
+{{- else -}}
+<blockquote>{{ .Text }}</blockquote>
+{{- end -}}
+```
+
+Zola works the same way: put the template above in `templates/base.html`, use `{{ page.content | safe }}`
+for the body, and build the TOC from `page.toc`.
 
 ## Components cheat sheet
 
@@ -212,7 +351,7 @@ Element defaults sit in `:where()`, so your own CSS wins without a fight.
 
 ```css
 :root {
-  --owg-font-size: 15px;   /* every size is rem, so this scales the lot */
+  --owg-font-size: 100%;   /* default 87.5% (14px); every size is rem, so this scales the lot */
   --owg-radius: 0;
   --owg-accent: #c2410c;
 }
@@ -220,13 +359,16 @@ Element defaults sit in `:where()`, so your own CSS wins without a fight.
 
 ## Size
 
-| File | Raw | Gzip |
-|---|---|---|
-| `owg.min.css` | target < 25 KB | ~6 KB |
-| `owg-theme.js` | 3.8 KB | 1.5 KB |
+Everything, all seven variants and every component, in one file:
+
+| File | Gzip |
+|---|---|
+| `owg.min.css` | about 12 KB (budget: 14 KB) |
+| `owg-fonts.css` + Roboto Mono latin woff2 | about 33 KB, only if you use it |
+| `owg-theme.js` | about 1.5 KB |
 
 Exact numbers for every file are in [`dist/sizes.json`](dist/sizes.json), written by each build.
-`mise run check` fails if `owg.min.css` passes 32 KB.
+`mise run check` fails if `owg.min.css` goes over 14 KB gzipped.
 
 ## Browser support
 
