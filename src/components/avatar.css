@@ -2,7 +2,7 @@
    <img class="avatar" src="me.jpg" alt="Jeff">     4rem
    .avatar.small (2rem), .avatar.large (6rem), .avatar.color (never grayscale) */
 
-img.avatar {
+:where(img).avatar {
   display: inline-block;
   width: 4rem;
   height: 4rem;
@@ -14,9 +14,9 @@ img.avatar {
   transition: filter 300ms ease;
   vertical-align: middle;
 }
-img.avatar:hover, img.avatar.color { filter: none; }
-img.avatar.small { width: 2rem; height: 2rem; }
-img.avatar.large { width: 6rem; height: 6rem; }
+:where(img).avatar:hover, :where(img).avatar.color { filter: none; }
+:where(img).avatar.small { width: 2rem; height: 2rem; }
+:where(img).avatar.large { width: 6rem; height: 6rem; }
 @media (prefers-reduced-motion: reduce) {
-  img.avatar { transition: none; }
+  :where(img).avatar { transition: none; }
 }

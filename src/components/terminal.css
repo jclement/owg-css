@@ -10,7 +10,7 @@
 .prompt { color: var(--owg-accent); user-select: none; }
 .output { color: var(--owg-muted); }
 
-pre.terminal {
+:where(pre).terminal {
   position: relative;
   padding: var(--owg-space-3) var(--owg-space-4);
   border: var(--owg-border-width) solid var(--owg-border-strong);
@@ -19,7 +19,7 @@ pre.terminal {
   color: var(--owg-code-text);
   box-shadow: var(--owg-shadow-sm);
 }
-pre.terminal::before {
+:where(pre).terminal::before {
   content: attr(data-title);
   position: sticky;
   left: 0;
@@ -41,7 +41,7 @@ pre.terminal::before {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-pre.terminal > code { background: none; padding: 0; }
+:where(pre).terminal > :where(code) { background: none; padding: 0; }
 
 .cursor {
   display: inline-block;

@@ -6,7 +6,7 @@
    (a tooltip is not announced by screen readers). Uses ::after on the host. */
 
 [data-tooltip] { position: relative; }
-[data-tooltip]:not(a, button, input, select, textarea, [tabindex]) {
+[data-tooltip]:where(:not(a, button, input, select, textarea, [tabindex])) {
   border-bottom: var(--owg-border-width) dotted var(--owg-muted);
   cursor: help;
 }

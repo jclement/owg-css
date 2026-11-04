@@ -15,9 +15,9 @@
   white-space: nowrap;
   overflow: hidden;
 }
-.cmdline > :is(.user, .host, .cmd) { color: var(--owg-text); }
-.cmdline > .path { color: var(--owg-accent); }
-.cmdline > .cmd { margin-left: 0.6ch; overflow: hidden; text-overflow: ellipsis; }
+.cmdline > :where(.user, .host, .cmd) { color: var(--owg-text); }
+.cmdline > :where(.path) { color: var(--owg-accent); }
+.cmdline > :where(.cmd) { margin-left: 0.6ch; overflow: hidden; text-overflow: ellipsis; }
 .cmdline::after {
   content: "";
   flex: none;

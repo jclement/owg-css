@@ -9,7 +9,8 @@
    <a class="tag" href="/t/css">css</a>
      Hashtag chips: "#" in the accent, text muted, accent on hover.
      (.tag skips Prism's span.token.tag.)
-   Mermaid: pre.mermaid gets a surface background and a centred, responsive SVG once rendered. */
+   Mermaid: pre.mermaid gets a surface background and a centred, responsive SVG once rendered;
+   a failed diagram (pre.mermaid[data-owg-error]) shows strong.mermaid-error above its source. */
 
 .empty {
   display: flex;
@@ -25,10 +26,10 @@
   text-align: center;
 }
 .empty::before { content: "\2205"; color: var(--owg-muted); font-size: var(--owg-text-2xl); line-height: 1; }
-.empty > :first-child { color: var(--owg-text); font-size: var(--owg-text-base); }
-.empty > * { margin: 0; }
+.empty > :where(:first-child) { color: var(--owg-text); font-size: var(--owg-text-base); }
+.empty > :where(*) { margin: 0; }
 
-ul.tags {
+:where(ul).tags {
   display: flex;
   flex-wrap: wrap;
   gap: var(--owg-space-1) var(--owg-space-3);
@@ -36,17 +37,30 @@ ul.tags {
   padding: 0;
   list-style: none;
 }
-ul.tags > li { margin: 0; padding: 0; }
-ul.tags > li::marker { content: none; }
-:is(ul.tags > li, .tag:not(.token)) {
+:where(ul).tags > :where(li) { margin: 0; padding: 0; }
+:where(ul).tags > :where(li)::marker { content: none; }
+:where(ul).tags > :where(li), .tag:where(:not(.token)) {
   color: var(--owg-muted);
   font-size: var(--owg-text-sm);
 }
-:is(ul.tags > li, .tag:not(.token))::before { content: "#"; color: var(--owg-accent); }
-:is(ul.tags a, a.tag) { color: inherit; text-decoration: none; }
-:is(ul.tags a, a.tag):hover { color: var(--owg-accent); text-decoration: underline; }
-ul.tags > li:has(> a:hover) { color: var(--owg-accent); }
+:where(ul).tags > :where(li)::before, .tag:where(:not(.token))::before { content: "#"; color: var(--owg-accent); }
+:where(ul).tags :where(a), :where(a).tag { color: inherit; text-decoration: none; }
+:where(ul).tags :where(a):hover, :where(a).tag:hover { color: var(--owg-accent); text-decoration: underline; }
+:where(ul).tags > :where(li:has(> a:hover)) { color: var(--owg-accent); }
 
 /* Mermaid diagrams (see plugins/owg-mermaid.js). Before rendering the source shows as code. */
-pre.mermaid[data-processed] { background: var(--owg-surface); text-align: center; }
-.mermaid svg { max-width: 100%; height: auto; }
+.mermaid:where(pre[data-processed]) { background: var(--owg-surface); text-align: center; }
+.mermaid :where(svg) { max-width: 100%; height: auto; }
+/* A diagram that failed to render (owg-mermaid.js): danger rule, message, then the source. */
+.mermaid:where([data-owg-error]) {
+  border-left: 3px solid var(--owg-danger);
+  background: color-mix(in srgb, var(--owg-danger) var(--owg-tint), var(--owg-surface));
+  text-align: left;
+}
+.mermaid-error {
+  display: block;
+  margin-bottom: var(--owg-space-2);
+  color: var(--owg-danger);
+  font-weight: var(--owg-weight-bold);
+  white-space: pre-wrap;
+}

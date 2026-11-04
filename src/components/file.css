@@ -4,7 +4,7 @@
      <pre><code>...</code></pre>
    </figure> */
 
-figure.file {
+:where(figure).file {
   margin: 0 0 var(--owg-flow);
   padding: 0;
   border: var(--owg-border-width) solid var(--owg-border);
@@ -12,7 +12,7 @@ figure.file {
   background: var(--owg-code-bg);
   overflow: hidden;
 }
-figure.file > figcaption {
+:where(figure).file > :where(figcaption) {
   display: flex;
   align-items: center;
   gap: var(--owg-space-2);
@@ -24,9 +24,9 @@ figure.file > figcaption {
   font-size: var(--owg-text-xs);
   text-align: left;
 }
-figure.file > figcaption::before { content: "\25A4"; color: var(--owg-accent); }
-figure.file > figcaption > span { margin-left: auto; color: var(--owg-muted); }
-figure.file > pre {
+:where(figure).file > :where(figcaption)::before { content: "\25A4"; color: var(--owg-accent); }
+:where(figure).file > :where(figcaption > span) { margin-left: auto; color: var(--owg-muted); }
+:where(figure).file > :where(pre) {
   margin: 0;
   border: 0;
   border-radius: 0;
