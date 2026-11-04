@@ -893,6 +893,15 @@
   border-radius: var(--owg-radius) var(--owg-radius) 0 0;
 }
 
+:where(pre, code, kbd, samp) {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+:where(pre) {
+  text-align: left;
+}
+
 :where(code, samp) {
   font-family: var(--owg-font-mono);
   font-size: .929em;
@@ -2438,7 +2447,7 @@ body > footer a:where(:hover) {
   }
 }
 
-.badge {
+.badge, :where(h1, h2, h3, h4, h5, h6, a, li > p, th, td, dt, summary, button, li) > :where(mark), :where(mark[data-status]) {
   --_c: var(--owg-muted);
   border: var(--owg-border-width) solid color-mix(in srgb, var(--_c) 28%, transparent);
   border-radius: var(--owg-radius);
@@ -2460,6 +2469,14 @@ body > footer a:where(:hover) {
   border-color: var(--_c);
 }
 
+:where(td, th) > :where(.badge, mark) {
+  vertical-align: baseline;
+}
+
+:where(body > header a) > :where(mark, .badge) {
+  margin-inline-start: .5ch;
+}
+
 .badge.solid {
   background: var(--_c);
   border-color: var(--_c);
@@ -2470,7 +2487,7 @@ body > footer a:where(:hover) {
   color: var(--owg-accent-ink);
 }
 
-.badge.dot:before {
+.badge.dot:before, :where(mark[data-status]):before {
   content: "";
   background: currentColor;
   border-radius: 50%;
@@ -2478,7 +2495,30 @@ body > footer a:where(:hover) {
   height: .5em;
 }
 
-.callout, .markdown-alert {
+:where(mark[data-status="ok"]) {
+  --_c: var(--owg-success);
+}
+
+:where(mark[data-status="warn"]) {
+  --_c: var(--owg-warning);
+}
+
+:where(mark[data-status="error"]) {
+  --_c: var(--owg-danger);
+}
+
+:where(mark[data-status="info"]) {
+  --_c: var(--owg-info);
+}
+
+@media (forced-colors: active) {
+  .badge.dot:before, :where(mark[data-status]):before {
+    forced-color-adjust: none;
+    background: canvastext;
+  }
+}
+
+.callout, .markdown-alert, :where(main, article) :where(aside) {
   --_c: var(--owg-muted);
   --_g: "›";
   margin-block: 0 var(--owg-flow);
@@ -2490,23 +2530,26 @@ body > footer a:where(:hover) {
   color: var(--owg-text);
 }
 
-:where(.callout, .markdown-alert) > :where(:last-child) {
+:where(.callout, .markdown-alert, main aside, article aside) > :where(:last-child) {
   margin-bottom: 0;
 }
 
-.callout-title, .markdown-alert-title, :where(details.callout) > summary {
+.callout-title, .markdown-alert-title, :where(details.callout) > summary, :where(main, article) :where(aside) > :where(h2, h3, h4, h5, h6):where(:first-child) {
   align-items: center;
   gap: var(--owg-space-2);
   margin: 0 0 var(--owg-space-2);
+  line-height: var(--owg-line-height);
   color: var(--_c);
   font-size: var(--owg-text-sm);
   font-weight: var(--owg-weight-bold);
   letter-spacing: var(--owg-tracking-caps);
   text-transform: uppercase;
+  border: 0;
+  padding: 0;
   display: flex;
 }
 
-.callout-title:before, .markdown-alert-title:before, :where(details.callout) > summary:before {
+.callout-title:before, .markdown-alert-title:before, :where(details.callout) > summary:before, :where(main, article) :where(aside) > :where(h2, h3, h4, h5, h6):where(:first-child):before {
   content: var(--_g);
   border-radius: var(--owg-radius);
   background: var(--_c);
@@ -2526,27 +2569,27 @@ body > footer a:where(:hover) {
   display: none;
 }
 
-.callout:is(.note, .info), .markdown-alert-note {
+.callout:is(.note, .info), .markdown-alert-note, :where(main, article) :where(aside):where([data-type="note"], [data-type="info"], [role="note"]) {
   --_c: var(--owg-info);
   --_g: "i";
 }
 
-.callout:is(.tip, .success), .markdown-alert-tip {
+.callout:is(.tip, .success), .markdown-alert-tip, :where(main, article) :where(aside):where([data-type="tip"], [data-type="success"], [role="status"]) {
   --_c: var(--owg-success);
   --_g: "✓";
 }
 
-.callout.important, .markdown-alert-important {
+.callout.important, .markdown-alert-important, :where(main, article) :where(aside):where([data-type="important"]) {
   --_c: var(--owg-important);
   --_g: "★";
 }
 
-.callout.warning, .markdown-alert-warning {
+.callout.warning, .markdown-alert-warning, :where(main, article) :where(aside):where([data-type="warning"]) {
   --_c: var(--owg-warning);
   --_g: "!";
 }
 
-.callout:is(.danger, .caution), .markdown-alert-caution {
+.callout:is(.danger, .caution), .markdown-alert-caution, :where(main, article) :where(aside):where([data-type="danger"], [data-type="caution"], [role="alert"]) {
   --_c: var(--owg-danger);
   --_g: "×";
 }
