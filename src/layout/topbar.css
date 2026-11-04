@@ -3,16 +3,22 @@
      <header>
        <a href="/">owg<span>://</span>css</a>   first child = title; <span> in the accent
        <nav><a aria-current="page">Docs</a>...</nav>   right-aligned (bare <a>s or ul > li > a)
-       <button>...</button>                     anything else sits at the far right
+       <button>...</button>                     anything else sits at the far end
      </header>
    Colours come only from the --owg-topbar-* tokens so a variant (hotdog) can paint it.
-   A page without `body > header` gets no bar and no padding. */
+   Space: the title and controls keep their size; the nav takes what is left and scrolls
+   sideways. Only when the title and controls alone overflow (very narrow phones) does the
+   title shrink, with an ellipsis.
+   Specificity (all layout files): type selectors only, with every class, attribute and
+   state wrapped in :where(). So any author class wins, while stray author element rules
+   (a {}, h2 {}, ul {}) do not leak in. Exception: bar controls keep real :hover /
+   [aria-pressed] / :focus-visible so they beat core's button states. */
 
-:where(html:has(> body > header)) {
+html:has(> body > header) {
   scroll-padding-top: calc(var(--owg-topbar-height) + var(--owg-space-4));
 }
 
-:where(body:has(> header)) {
+body:has(> header) {
   padding-top: var(--owg-topbar-height);
 }
 
@@ -37,11 +43,11 @@ body > header {
 }
 
 /* Title: first child, or the first thing after the drawer toggle. */
-body > header > :first-child:not(.sidebar-toggle),
-body > header > .sidebar-toggle + * {
-  flex: 0 0 auto;
-  max-width: 60%;
-  margin: 0 auto 0 0;
+body > header > :where(:first-child:not(.sidebar-toggle), .sidebar-toggle + *) {
+  flex: 0 1 auto;
+  min-width: 0;
+  margin: 0;
+  margin-inline-end: auto;
   overflow: hidden;
   text-overflow: ellipsis;
   color: var(--owg-topbar-title);
@@ -51,19 +57,18 @@ body > header > .sidebar-toggle + * {
   text-decoration: none;
 }
 
-body > header > :first-child span,
-body > header > .sidebar-toggle + * span {
+body > header > :where(:first-child, .sidebar-toggle + *) span {
   color: var(--owg-topbar-accent);
 }
 
-body > header img,
-body > header svg {
+body > header :is(img, svg) {
   height: 1.25rem;
   width: auto;
   vertical-align: middle;
 }
 
-/* Nav: links fill the bar's height so the active rail sits on its bottom edge. */
+/* Nav: basis 0 + grow, so it fills the space between title and controls and never takes
+   space from them; links are pushed to the end and the strip scrolls when it is too short. */
 body > header nav,
 body > header nav ul {
   display: flex;
@@ -76,10 +81,14 @@ body > header nav ul {
 }
 
 body > header nav {
-  flex: 0 100 auto;
+  flex: 1 1 0;
   min-width: 0;
   overflow-x: auto;
   scrollbar-width: none;
+}
+
+body > header nav > :where(:first-child) {
+  margin-inline-start: auto;
 }
 
 body > header nav li {
@@ -92,17 +101,19 @@ body > header nav a {
   position: relative;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
   padding: 0 var(--owg-space-2);
   color: var(--owg-topbar-text);
   text-decoration: none;
   transition: color var(--owg-transition);
 }
 
-body > header nav a:hover {
+body > header nav a:where(:hover) {
   color: var(--owg-topbar-accent);
   text-decoration: none;
 }
 
+/* Active link: a 2px rail sitting on the bar's bottom edge. */
 body > header nav a::after {
   content: "";
   position: absolute;
@@ -111,17 +122,16 @@ body > header nav a::after {
   background: transparent;
 }
 
-body > header nav a[aria-current] {
+body > header nav a:where([aria-current]) {
   color: var(--owg-topbar-title);
   font-weight: var(--owg-weight-medium);
 }
 
-body > header nav a[aria-current]::after {
+body > header nav a:where([aria-current])::after {
   background: var(--owg-topbar-accent);
 }
 
-body > header a:focus-visible,
-body > header button:focus-visible {
+body > header :is(a, button):focus-visible {
   outline: var(--owg-focus-width) solid var(--owg-topbar-accent);
   outline-offset: -2px;
   border-radius: var(--owg-radius);
@@ -147,22 +157,40 @@ body > header button:hover {
   color: var(--owg-topbar-title);
 }
 
-/* A [role=group] of buttons is a segmented control: centred, joined, pressed = filled. */
-body > header [role="group"] {
+/* A [role=group] of buttons is a segmented control: centred, joined, pressed = filled.
+   Seams and rounded ends are logical, so it also joins correctly in RTL. */
+body > header :where([role="group"]) {
   display: inline-flex;
   flex-shrink: 0;
   align-self: center;
   margin: 0;
 }
 
-body > header [role="group"] > button {
+body > header :where([role="group"]) > button {
   min-width: 1.9rem;
   padding-inline: var(--owg-space-2);
   font-size: var(--owg-text-base);
 }
 
-body > header [role="group"] > :not(:first-child) {
-  margin-left: calc(-1 * var(--owg-border-width));
+body > header :where([role="group"]) > :not(:first-child) {
+  margin: 0;
+  margin-inline-start: calc(-1 * var(--owg-border-width));
+}
+
+body > header :where([role="group"]) > :not(:first-child, :last-child) {
+  border-radius: 0;
+}
+
+body > header :where([role="group"]) > :first-child:not(:last-child) {
+  border-radius: 0;
+  border-start-start-radius: var(--owg-radius);
+  border-end-start-radius: var(--owg-radius);
+}
+
+body > header :where([role="group"]) > :last-child:not(:first-child) {
+  border-radius: 0;
+  border-start-end-radius: var(--owg-radius);
+  border-end-end-radius: var(--owg-radius);
 }
 
 body > header button[aria-pressed="true"] {
@@ -183,18 +211,29 @@ body > header button[aria-pressed="true"] {
   body > header :is(button, select) {
     padding-inline: var(--owg-space-1);
   }
-  body > header [role="group"] > button {
+  body > header :where([role="group"]) > button {
     min-width: 1.6rem;
   }
   body > header select {
     max-width: 5.5rem;
-    padding-right: var(--owg-space-5);
+    padding-inline-end: var(--owg-space-5);
     text-overflow: ellipsis;
   }
-  /* Overflowing links scroll sideways; the fade hints there is more (mask is alpha only). */
+  /* The strip scrolls sideways; a fade at its end hints there is more (mask is alpha only). */
   body > header nav {
     -webkit-mask-image: linear-gradient(to left, transparent, black 1.25rem);
     mask-image: linear-gradient(to left, transparent, black 1.25rem);
-    padding-right: var(--owg-space-4);
+    padding-inline-end: var(--owg-space-4);
+  }
+  body > header nav:where(:dir(rtl)) {
+    -webkit-mask-image: linear-gradient(to right, transparent, black 1.25rem);
+    mask-image: linear-gradient(to right, transparent, black 1.25rem);
+  }
+}
+
+@media (forced-colors: active) {
+  body > header nav a:where([aria-current])::after {
+    forced-color-adjust: none;
+    background: Highlight;
   }
 }
