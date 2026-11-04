@@ -20,6 +20,7 @@
 
   var CDN = "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs";
   var SELECTOR = "pre.mermaid, .mermaid";
+  var FONT_SIZE = 13; // px, every diagram type
   var script = document.currentScript;
   var mermaid = null;
   var queue = Promise.resolve();
@@ -69,7 +70,7 @@
     return {
       darkMode: luminance(t.bg) < 0.5,
       fontFamily: t.font,
-      fontSize: "13px",
+      fontSize: FONT_SIZE + "px",
       background: t.surface,
       textColor: t.text,
       titleColor: t["text-strong"],
@@ -120,7 +121,9 @@
   function load(m) {
     if (m) return Promise.resolve(m);
     if (mermaid) return Promise.resolve(mermaid);
-    if (window.mermaid) return Promise.resolve(window.mermaid);
+    // Only a real mermaid: an element with id="mermaid" is also window.mermaid.
+    var w = window.mermaid;
+    if (w && typeof w.initialize === "function" && typeof w.run === "function") return Promise.resolve(w);
     return import(CDN).then(function (mod) { return mod.default || mod; });
   }
 
@@ -140,9 +143,19 @@
       theme: "base",
       securityLevel: "strict",
       fontFamily: vars.fontFamily,
+      // Top-level fontSize is what sequence diagrams read (themeVariables.fontSize is not).
+      fontSize: FONT_SIZE,
       themeVariables: vars
     });
-    return mermaid.run({ nodes: nodes, suppressErrors: true });
+    // Mermaid styles elements and measures them in the same tick. Any active transition
+    // (e.g. a reduced-motion reset setting transition-duration: 0.01ms on *, which with the
+    // default transition-property: all transitions everything) makes it measure stale sizes
+    // and lay out a huge, mostly empty canvas. Switch transitions off while rendering.
+    var guard = document.createElement("style");
+    guard.textContent = "*,::before,::after{transition:none!important}";
+    document.head.appendChild(guard);
+    var done = function () { guard.remove(); };
+    return mermaid.run({ nodes: nodes, suppressErrors: true }).then(done, function (e) { done(); throw e; });
   }
 
   // Serialise renders: a theme flip during a render queues one more, never two at once.
