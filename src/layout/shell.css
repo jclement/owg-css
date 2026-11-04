@@ -113,6 +113,15 @@ body > aside nav > details > summary::before {
   color: var(--owg-accent);
 }
 
+/* Core draws its details chevron in summary::before; the label owns ::before here. */
+body > aside nav > details > summary::before {
+  width: auto;
+  height: auto;
+  margin: 0;
+  border: 0;
+  transform: none;
+}
+
 /* Collapsible group: the label is the summary, a chevron on the right. */
 body > aside nav > details {
   margin: 0;
@@ -123,6 +132,9 @@ body > aside nav > details {
 
 body > aside nav > details > summary {
   display: flex;
+  align-items: baseline;
+  gap: 0;
+  background: none;
   cursor: pointer;
   list-style: none;
   border-radius: var(--owg-radius);
@@ -135,7 +147,7 @@ body > aside nav > details > summary::-webkit-details-marker {
 body > aside nav > details > summary::after {
   content: "›";
   margin-left: auto;
-  color: var(--owg-faint);
+  color: var(--owg-muted);
   transition: transform var(--owg-transition);
 }
 
