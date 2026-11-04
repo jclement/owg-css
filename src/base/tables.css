@@ -89,3 +89,17 @@
   scrollbar-width: thin;
   scrollbar-color: var(--owg-border-strong) transparent;
 }
+
+/* Narrow screens: a bare table in the page scrolls inside its own box instead of widening the
+   page. display:block on <table> only changes the outer box; the rows still sit in an
+   (anonymous) table, and the element keeps its table role (checked in Chromium's a11y tree).
+   Tables already in .table-wrap or a figure keep the wrapper's scroll. */
+@media (max-width: 640px) {
+  :where(main table:not(.table-wrap > *, figure > *)) {
+    display: block;
+    max-inline-size: 100%;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--owg-border-strong) transparent;
+  }
+}
