@@ -131,10 +131,24 @@ body > header nav a:where([aria-current])::after {
   background: var(--owg-topbar-accent);
 }
 
-body > header :is(a, button):focus-visible {
+/* Focus in the bar uses the bar's accent: --owg-focus is drawn for the page and can vanish
+   on a painted bar (hotdog light: accent red on a red bar). */
+body > header :where(a, button, select, input, textarea, summary, [tabindex]):focus-visible {
   outline: var(--owg-focus-width) solid var(--owg-topbar-accent);
   outline-offset: -2px;
   border-radius: var(--owg-radius);
+}
+
+/* Controls draw the ring just outside, on the bar itself (a pressed button is filled with the
+   accent, so an inset ring would vanish); links keep it inset because the nav strip clips. */
+body > header :where(button, select, input, textarea):focus-visible {
+  position: relative;
+  z-index: 1;
+  outline-offset: 2px;
+}
+
+body > header :where(select, input, textarea):focus-visible {
+  border-color: var(--owg-topbar-accent);
 }
 
 /* Controls in the bar (theme toggle, variant select): quiet, sized to the bar, and

@@ -112,7 +112,9 @@
   svg,
   .card,
   .callout,
-  .markdown-alert {
+  .markdown-alert,
+  main aside,
+  article aside {
     break-inside: avoid;
   }
 
@@ -144,6 +146,8 @@
   /* Tints carry meaning in callouts and badges: ask the browser to keep them. */
   .callout,
   .markdown-alert,
+  main aside,
+  article aside,
   .badge,
   mark,
   kbd {
