@@ -1,0 +1,55 @@
+/* owg-css variant: phosphor
+   Green phosphor: a P1 monitor at night, lab paper by day.
+   Usage: <html data-variant="phosphor">. Combines with data-theme (auto / light / dark).
+   Rule: the light and dark blocks override exactly the same properties, so a light
+   override can never leak into dark mode. */
+
+:root[data-variant="phosphor"] {
+  --owg-bg: #f6faf6;
+  --owg-surface: #ffffff;
+  --owg-surface-2: #ecf4ec;
+  --owg-surface-3: #dfeadf;
+  --owg-text: #0f1a12;
+  --owg-text-strong: #06100a;
+  --owg-muted: #4b5e50;
+  --owg-faint: #a3b5a7;
+  --owg-border: #dbe7dc;
+  --owg-border-strong: #c4d6c6;
+  --owg-accent: #047857;
+  --owg-accent-hover: #065f46;
+  --owg-accent-ink: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-variant="phosphor"]:not([data-theme="light"]) {
+    --owg-bg: #050a06;
+    --owg-surface: #0a120c;
+    --owg-surface-2: #0f1a12;
+    --owg-surface-3: #152419;
+    --owg-text: #8df0a8;
+    --owg-text-strong: #c6ffd4;
+    --owg-muted: #5fa874;
+    --owg-faint: #24402c;
+    --owg-border: #16281b;
+    --owg-border-strong: #1f3626;
+    --owg-accent: #39ff7a;
+    --owg-accent-hover: #8dffb0;
+    --owg-accent-ink: #050a06;
+  }
+}
+
+:root[data-variant="phosphor"][data-theme="dark"] {
+  --owg-bg: #050a06;
+  --owg-surface: #0a120c;
+  --owg-surface-2: #0f1a12;
+  --owg-surface-3: #152419;
+  --owg-text: #8df0a8;
+  --owg-text-strong: #c6ffd4;
+  --owg-muted: #5fa874;
+  --owg-faint: #24402c;
+  --owg-border: #16281b;
+  --owg-border-strong: #1f3626;
+  --owg-accent: #39ff7a;
+  --owg-accent-hover: #8dffb0;
+  --owg-accent-ink: #050a06;
+}

@@ -1,0 +1,70 @@
+/* owg-css variant: hotdog
+   Hotdog Stand: the Windows 3.1 colour scheme nobody asked for and everybody remembers.
+   Yellow desk, red title bar, black rules. Dark mode is ketchup after midnight.
+   Usage: <html data-variant="hotdog">. Combines with data-theme (auto / light / dark).
+   Rule: the light and dark blocks override exactly the same properties. */
+
+:root[data-variant="hotdog"] {
+  --owg-bg: #ffff00;
+  --owg-surface: #ffffff;
+  --owg-surface-2: #ffff80;
+  --owg-surface-3: #ffe866;
+  --owg-text: #000000;
+  --owg-text-strong: #000000;
+  --owg-muted: #4a4a00;
+  --owg-faint: #c0a000;
+  --owg-border: #000000;
+  --owg-border-strong: #000000;
+  --owg-accent: #c00000;
+  --owg-accent-hover: #900000;
+  --owg-accent-ink: #ffffff;
+  --owg-topbar-bg: #c00000;
+  --owg-topbar-text: #ffffff;
+  --owg-topbar-title: #ffffff;
+  --owg-topbar-accent: #ffff00;
+  --owg-topbar-border: #000000;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-variant="hotdog"]:not([data-theme="light"]) {
+    --owg-bg: #1a0000;
+    --owg-surface: #2a0000;
+    --owg-surface-2: #3a0000;
+    --owg-surface-3: #4a0000;
+    --owg-text: #ffff66;
+    --owg-text-strong: #ffff00;
+    --owg-muted: #ff8a8a;
+    --owg-faint: #7a2020;
+    --owg-border: #a00000;
+    --owg-border-strong: #ffff00;
+    --owg-accent: #ffd000;
+    --owg-accent-hover: #ffff66;
+    --owg-accent-ink: #1a0000;
+    --owg-topbar-bg: #c00000;
+    --owg-topbar-text: #ffffff;
+    --owg-topbar-title: #ffff00;
+    --owg-topbar-accent: #ffff00;
+    --owg-topbar-border: #ffff00;
+  }
+}
+
+:root[data-variant="hotdog"][data-theme="dark"] {
+  --owg-bg: #1a0000;
+  --owg-surface: #2a0000;
+  --owg-surface-2: #3a0000;
+  --owg-surface-3: #4a0000;
+  --owg-text: #ffff66;
+  --owg-text-strong: #ffff00;
+  --owg-muted: #ff8a8a;
+  --owg-faint: #7a2020;
+  --owg-border: #a00000;
+  --owg-border-strong: #ffff00;
+  --owg-accent: #ffd000;
+  --owg-accent-hover: #ffff66;
+  --owg-accent-ink: #1a0000;
+  --owg-topbar-bg: #c00000;
+  --owg-topbar-text: #ffffff;
+  --owg-topbar-title: #ffff00;
+  --owg-topbar-accent: #ffff00;
+  --owg-topbar-border: #ffff00;
+}

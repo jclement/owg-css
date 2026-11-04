@@ -1,0 +1,55 @@
+/* owg-css variant: amber
+   Amber terminal: warm paper by day, amber CRT by night.
+   Usage: <html data-variant="amber">. Combines with data-theme (auto / light / dark).
+   Rule: the light and dark blocks override exactly the same properties, so a light
+   override can never leak into dark mode. */
+
+:root[data-variant="amber"] {
+  --owg-bg: #fcfaf5;
+  --owg-surface: #fffdf8;
+  --owg-surface-2: #f5f0e6;
+  --owg-surface-3: #ebe3d3;
+  --owg-text: #1c1917;
+  --owg-text-strong: #0c0a09;
+  --owg-muted: #5f574d;
+  --owg-faint: #b4a995;
+  --owg-border: #e7dfcf;
+  --owg-border-strong: #d6cab4;
+  --owg-accent: #9a4a0a;
+  --owg-accent-hover: #7c3a06;
+  --owg-accent-ink: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-variant="amber"]:not([data-theme="light"]) {
+    --owg-bg: #0d0a05;
+    --owg-surface: #14100a;
+    --owg-surface-2: #1c160d;
+    --owg-surface-3: #261e12;
+    --owg-text: #f5c46b;
+    --owg-text-strong: #ffe0a3;
+    --owg-muted: #b08a4a;
+    --owg-faint: #5a4524;
+    --owg-border: #2e2414;
+    --owg-border-strong: #3e311b;
+    --owg-accent: #ffb000;
+    --owg-accent-hover: #ffc94d;
+    --owg-accent-ink: #0d0a05;
+  }
+}
+
+:root[data-variant="amber"][data-theme="dark"] {
+  --owg-bg: #0d0a05;
+  --owg-surface: #14100a;
+  --owg-surface-2: #1c160d;
+  --owg-surface-3: #261e12;
+  --owg-text: #f5c46b;
+  --owg-text-strong: #ffe0a3;
+  --owg-muted: #b08a4a;
+  --owg-faint: #5a4524;
+  --owg-border: #2e2414;
+  --owg-border-strong: #3e311b;
+  --owg-accent: #ffb000;
+  --owg-accent-hover: #ffc94d;
+  --owg-accent-ink: #0d0a05;
+}

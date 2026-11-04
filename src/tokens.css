@@ -1,0 +1,200 @@
+/* ==========================================================================
+   owg-css — design tokens
+   Every colour, size and space in the framework comes from here.
+   Theme:   auto (prefers-color-scheme) unless <html data-theme="light|dark">.
+   Variant: <html data-variant="amber|phosphor|slate|contrast|doom"> (see src/variants/).
+   ========================================================================== */
+
+:root {
+  color-scheme: light dark;
+
+  /* ---- Type ------------------------------------------------------------ */
+  --owg-font-mono: "Roboto Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo,
+    Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace;
+  --owg-font: var(--owg-font-mono);
+  --owg-font-size: 14px;            /* root size; everything else is rem */
+  --owg-line-height: 1.6;
+  --owg-line-height-tight: 1.25;
+  --owg-weight-normal: 400;
+  --owg-weight-medium: 500;
+  --owg-weight-bold: 600;
+  --owg-tracking-tight: -0.01em;
+  --owg-tracking-caps: 0.06em;
+
+  /* Modular scale, ratio ~1.2 (minor third), anchored at 14px */
+  --owg-text-xs: 0.786rem;   /* 11px */
+  --owg-text-sm: 0.857rem;   /* 12px */
+  --owg-text-base: 1rem;     /* 14px */
+  --owg-text-lg: 1.143rem;   /* 16px */
+  --owg-text-xl: 1.357rem;   /* 19px */
+  --owg-text-2xl: 1.643rem;  /* 23px */
+  --owg-text-3xl: 2rem;      /* 28px */
+
+  /* ---- Space (4px grid at 14px root: 0.2857rem = 4px) ------------------- */
+  --owg-space-1: 0.25rem;
+  --owg-space-2: 0.5rem;
+  --owg-space-3: 0.75rem;
+  --owg-space-4: 1rem;
+  --owg-space-5: 1.5rem;
+  --owg-space-6: 2rem;
+  --owg-space-7: 3rem;
+  --owg-space-8: 4rem;
+  --owg-flow: 1rem;          /* vertical rhythm between block elements */
+
+  /* ---- Shape ----------------------------------------------------------- */
+  --owg-radius: 3px;
+  --owg-radius-lg: 5px;
+  --owg-border-width: 1px;
+  --owg-focus-width: 2px;
+
+  /* ---- Layout ---------------------------------------------------------- */
+  --owg-measure: 78ch;               /* prose line length */
+  --owg-container: 64rem;            /* default main width */
+  --owg-container-wide: 90rem;       /* docs layout */
+  --owg-gutter: var(--owg-space-5);
+  --owg-topbar-height: 2.75rem;
+  --owg-sidebar-width: 15rem;
+  --owg-toc-width: 13rem;
+
+  /* ---- Motion ---------------------------------------------------------- */
+  --owg-transition: 120ms ease;
+
+  /* ---- Colour: LIGHT (default) ----------------------------------------- */
+  /* Neutrals (zinc) */
+  --owg-bg: #fbfbfc;
+  --owg-surface: #ffffff;
+  --owg-surface-2: #f4f4f5;
+  --owg-surface-3: #e9e9ec;
+  --owg-text: #18181b;
+  --owg-text-strong: #09090b;
+  --owg-muted: #5c5c66;              /* >= 4.5:1 on bg, surface and surface-2 */
+  --owg-faint: #a1a1aa;              /* decorative only (rules, glyphs), never body text */
+  --owg-border: #e4e4e7;
+  --owg-border-strong: #cfcfd5;
+
+  /* Accent (sky) */
+  --owg-accent: #0369a1;             /* text-safe: >= 4.5:1 on bg/surface/surface-2 */
+  --owg-accent-hover: #075985;
+  --owg-accent-ink: #ffffff;         /* text on an accent fill */
+  --owg-accent-soft: color-mix(in srgb, var(--owg-accent) 10%, var(--owg-surface));
+  --owg-link: var(--owg-accent);
+  --owg-link-hover: var(--owg-accent-hover);
+  --owg-focus: color-mix(in srgb, var(--owg-accent) 70%, transparent);
+  --owg-selection: color-mix(in srgb, var(--owg-accent) 22%, transparent);
+
+  /* Palette: each is text-safe (>= 4.5:1) on bg, surface, surface-2 and on its own -soft tint */
+  --owg-blue: #1d4ed8;
+  --owg-green: #166534;
+  --owg-amber: #854d0e;
+  --owg-red: #b91c1c;
+  --owg-purple: #7e22ce;
+  --owg-pink: #be185d;
+  --owg-cyan: #0e7490;
+  --owg-tint: 10%;                   /* strength of -soft backgrounds */
+  --owg-blue-soft: color-mix(in srgb, var(--owg-blue) var(--owg-tint), var(--owg-surface));
+  --owg-green-soft: color-mix(in srgb, var(--owg-green) var(--owg-tint), var(--owg-surface));
+  --owg-amber-soft: color-mix(in srgb, var(--owg-amber) var(--owg-tint), var(--owg-surface));
+  --owg-red-soft: color-mix(in srgb, var(--owg-red) var(--owg-tint), var(--owg-surface));
+  --owg-purple-soft: color-mix(in srgb, var(--owg-purple) var(--owg-tint), var(--owg-surface));
+  --owg-pink-soft: color-mix(in srgb, var(--owg-pink) var(--owg-tint), var(--owg-surface));
+  --owg-cyan-soft: color-mix(in srgb, var(--owg-cyan) var(--owg-tint), var(--owg-surface));
+
+  /* Semantic roles (callouts, form validation, badges) */
+  --owg-info: var(--owg-blue);
+  --owg-success: var(--owg-green);
+  --owg-warning: var(--owg-amber);
+  --owg-danger: var(--owg-red);
+  --owg-important: var(--owg-purple);
+
+  /* Code */
+  --owg-code-bg: var(--owg-surface-2);
+  --owg-code-text: var(--owg-text);
+  --owg-code-inline-bg: var(--owg-surface-2);
+  --owg-code-inline-text: var(--owg-text-strong);
+
+  /* Syntax (used by plugins/owg-highlight.css; derived so variants follow) */
+  --owg-syn-comment: var(--owg-muted);
+  --owg-syn-keyword: var(--owg-purple);
+  --owg-syn-string: var(--owg-green);
+  --owg-syn-number: var(--owg-amber);
+  --owg-syn-function: var(--owg-blue);
+  --owg-syn-type: var(--owg-cyan);
+  --owg-syn-tag: var(--owg-red);
+  --owg-syn-attr: var(--owg-amber);
+  --owg-syn-variable: var(--owg-text);
+  --owg-syn-punctuation: var(--owg-muted);
+  --owg-syn-inserted: var(--owg-green);
+  --owg-syn-deleted: var(--owg-red);
+
+  /* Elevation */
+  --owg-shadow-sm: 0 1px 2px rgba(24, 24, 27, 0.06);
+  --owg-shadow: 0 12px 32px -16px rgba(24, 24, 27, 0.28);
+  --owg-topbar-bg: color-mix(in srgb, var(--owg-surface) 88%, transparent);
+  --owg-topbar-text: var(--owg-text);          /* links and items in the top bar */
+  --owg-topbar-title: var(--owg-text-strong);  /* the site/page title */
+  --owg-topbar-accent: var(--owg-accent);      /* <span> in the title, active link */
+  --owg-topbar-border: var(--owg-border);
+}
+
+/* ---- Colour: DARK -------------------------------------------------------
+   Declared twice on purpose: once for auto (OS preference) unless forced light,
+   and once for forced dark. Keep the two blocks identical. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --owg-bg: #09090b;
+    --owg-surface: #111113;
+    --owg-surface-2: #18181b;
+    --owg-surface-3: #222226;
+    --owg-text: #e4e4e7;
+    --owg-text-strong: #fafafa;
+    --owg-muted: #9a9aa3;
+    --owg-faint: #4a4a52;
+    --owg-border: #26262b;
+    --owg-border-strong: #34343b;
+    --owg-accent: #38bdf8;
+    --owg-accent-hover: #7dd3fc;
+    --owg-accent-ink: #09090b;
+    --owg-blue: #60a5fa;
+    --owg-green: #4ade80;
+    --owg-amber: #fbbf24;
+    --owg-red: #f87171;
+    --owg-purple: #c084fc;
+    --owg-pink: #f472b6;
+    --owg-cyan: #22d3ee;
+    --owg-tint: 14%;
+    --owg-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+    --owg-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.8);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --owg-bg: #09090b;
+  --owg-surface: #111113;
+  --owg-surface-2: #18181b;
+  --owg-surface-3: #222226;
+  --owg-text: #e4e4e7;
+  --owg-text-strong: #fafafa;
+  --owg-muted: #9a9aa3;
+  --owg-faint: #4a4a52;
+  --owg-border: #26262b;
+  --owg-border-strong: #34343b;
+  --owg-accent: #38bdf8;
+  --owg-accent-hover: #7dd3fc;
+  --owg-accent-ink: #09090b;
+  --owg-blue: #60a5fa;
+  --owg-green: #4ade80;
+  --owg-amber: #fbbf24;
+  --owg-red: #f87171;
+  --owg-purple: #c084fc;
+  --owg-pink: #f472b6;
+  --owg-cyan: #22d3ee;
+  --owg-tint: 14%;
+  --owg-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --owg-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.8);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}

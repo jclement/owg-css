@@ -1,0 +1,20 @@
+{
+  "name": "owg-css",
+  "version": "0.1.0",
+  "description": "Classless-first, dense, monospace CSS for technical sites and docs.",
+  "license": "MIT",
+  "author": "Jeff Clement",
+  "repository": "github:jclement/owg-css",
+  "type": "module",
+  "files": ["dist", "fonts", "src", "plugins"],
+  "style": "dist/owg.css",
+  "main": "dist/owg.css",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/dev.mjs"
+  },
+  "devDependencies": {
+    "lightningcss": "1.33.0",
+    "playwright": "1.58.2"
+  }
+}

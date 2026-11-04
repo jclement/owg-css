@@ -1,0 +1,55 @@
+/* owg-css variant: doom
+   Doom: owg.me's red-alert easter egg, as a theme.
+   Usage: <html data-variant="doom">. Combines with data-theme (auto / light / dark).
+   Rule: the light and dark blocks override exactly the same properties, so a light
+   override can never leak into dark mode. */
+
+:root[data-variant="doom"] {
+  --owg-bg: #fdf8f7;
+  --owg-surface: #ffffff;
+  --owg-surface-2: #f8eeec;
+  --owg-surface-3: #f0dfdc;
+  --owg-text: #1f0a08;
+  --owg-text-strong: #120505;
+  --owg-muted: #6b3a33;
+  --owg-faint: #c9a39d;
+  --owg-border: #eedad6;
+  --owg-border-strong: #e0c2bc;
+  --owg-accent: #b42318;
+  --owg-accent-hover: #8f1a12;
+  --owg-accent-ink: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-variant="doom"]:not([data-theme="light"]) {
+    --owg-bg: #120505;
+    --owg-surface: #1a0808;
+    --owg-surface-2: #240c0c;
+    --owg-surface-3: #2e1010;
+    --owg-text: #ff6a5a;
+    --owg-text-strong: #ffb3a8;
+    --owg-muted: #d0685c;
+    --owg-faint: #5a1f19;
+    --owg-border: #4a1712;
+    --owg-border-strong: #6a2219;
+    --owg-accent: #ff7a1a;
+    --owg-accent-hover: #ffa05c;
+    --owg-accent-ink: #120505;
+  }
+}
+
+:root[data-variant="doom"][data-theme="dark"] {
+  --owg-bg: #120505;
+  --owg-surface: #1a0808;
+  --owg-surface-2: #240c0c;
+  --owg-surface-3: #2e1010;
+  --owg-text: #ff6a5a;
+  --owg-text-strong: #ffb3a8;
+  --owg-muted: #d0685c;
+  --owg-faint: #5a1f19;
+  --owg-border: #4a1712;
+  --owg-border-strong: #6a2219;
+  --owg-accent: #ff7a1a;
+  --owg-accent-hover: #ffa05c;
+  --owg-accent-ink: #120505;
+}

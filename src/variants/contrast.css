@@ -1,0 +1,82 @@
+/* owg-css variant: contrast
+   High contrast: pure black and white, heavier rules and focus rings (WCAG AAA body text).
+   Usage: <html data-variant="contrast">. Combines with data-theme (auto / light / dark).
+   Rule: the light and dark blocks override exactly the same properties, so a light
+   override can never leak into dark mode. */
+
+:root[data-variant="contrast"] {
+  --owg-bg: #ffffff;
+  --owg-surface: #ffffff;
+  --owg-surface-2: #f2f2f2;
+  --owg-surface-3: #e0e0e0;
+  --owg-text: #000000;
+  --owg-text-strong: #000000;
+  --owg-muted: #333333;
+  --owg-faint: #767676;
+  --owg-border: #595959;
+  --owg-border-strong: #000000;
+  --owg-accent: #0040c0;
+  --owg-accent-hover: #002a80;
+  --owg-accent-ink: #ffffff;
+  --owg-blue: #0033aa;
+  --owg-green: #0a5a1e;
+  --owg-amber: #6b3d00;
+  --owg-red: #a00000;
+  --owg-purple: #5b0fa0;
+  --owg-pink: #8f0c45;
+  --owg-cyan: #00576b;
+  --owg-tint: 8%;
+  --owg-focus-width: 3px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-variant="contrast"]:not([data-theme="light"]) {
+    --owg-bg: #000000;
+    --owg-surface: #000000;
+    --owg-surface-2: #111111;
+    --owg-surface-3: #222222;
+    --owg-text: #ffffff;
+    --owg-text-strong: #ffffff;
+    --owg-muted: #d0d0d0;
+    --owg-faint: #8a8a8a;
+    --owg-border: #a0a0a0;
+    --owg-border-strong: #ffffff;
+    --owg-accent: #ffd60a;
+    --owg-accent-hover: #ffe866;
+    --owg-accent-ink: #000000;
+    --owg-blue: #8ab4ff;
+    --owg-green: #6dff8f;
+    --owg-amber: #ffd60a;
+    --owg-red: #ff8a80;
+    --owg-purple: #e0a8ff;
+    --owg-pink: #ff9ccf;
+    --owg-cyan: #5cf2ff;
+    --owg-tint: 12%;
+    --owg-focus-width: 3px;
+  }
+}
+
+:root[data-variant="contrast"][data-theme="dark"] {
+  --owg-bg: #000000;
+  --owg-surface: #000000;
+  --owg-surface-2: #111111;
+  --owg-surface-3: #222222;
+  --owg-text: #ffffff;
+  --owg-text-strong: #ffffff;
+  --owg-muted: #d0d0d0;
+  --owg-faint: #8a8a8a;
+  --owg-border: #a0a0a0;
+  --owg-border-strong: #ffffff;
+  --owg-accent: #ffd60a;
+  --owg-accent-hover: #ffe866;
+  --owg-accent-ink: #000000;
+  --owg-blue: #8ab4ff;
+  --owg-green: #6dff8f;
+  --owg-amber: #ffd60a;
+  --owg-red: #ff8a80;
+  --owg-purple: #e0a8ff;
+  --owg-pink: #ff9ccf;
+  --owg-cyan: #5cf2ff;
+  --owg-tint: 12%;
+  --owg-focus-width: 3px;
+}

@@ -1,0 +1,34 @@
+[tools]
+node = "24"
+
+[tasks.setup]
+description = "Install dev dependencies (lightningcss, playwright) and the Chromium build Playwright needs"
+run = ["npm install", "npx playwright install chromium"]
+
+[tasks.build]
+description = "Bundle and minify src/ into dist/ (owg.css, owg.min.css, plugins)"
+run = "node scripts/build.mjs"
+
+[tasks.dev]
+description = "Rebuild on change and serve the repo at http://localhost:4173/demo/ (run in its own herdr tab)"
+run = "node scripts/dev.mjs"
+
+[tasks.contrast]
+description = "Check text contrast for every theme x variant combination"
+run = "node scripts/contrast.mjs"
+
+[tasks.screenshots]
+description = "Render docs/screenshots/*.png from the demo with Playwright"
+run = "node scripts/screenshots.mjs"
+
+[tasks.single]
+description = "Build a single-file demo (CSS and plugins inlined) into dist/demo-single.html"
+run = "node scripts/single-file.mjs"
+
+[tasks.check]
+description = "Build, enforce the size budget, and check contrast. Must pass before reporting work done."
+run = [
+  "node scripts/build.mjs",
+  "node -e \"const s=require('./dist/sizes.json')['owg.min.css'];if(s.raw>32768){console.error('owg.min.css over 32 KB budget: '+s.raw);process.exit(1)}console.log('size ok: '+s.raw+' B ('+s.gzip+' B gz)')\"",
+  "node scripts/contrast.mjs",
+]

@@ -1,0 +1,55 @@
+/* owg-css variant: slate
+   Slate: cool blue-grey neutrals with an indigo accent.
+   Usage: <html data-variant="slate">. Combines with data-theme (auto / light / dark).
+   Rule: the light and dark blocks override exactly the same properties, so a light
+   override can never leak into dark mode. */
+
+:root[data-variant="slate"] {
+  --owg-bg: #f8fafc;
+  --owg-surface: #ffffff;
+  --owg-surface-2: #f1f5f9;
+  --owg-surface-3: #e2e8f0;
+  --owg-text: #0f172a;
+  --owg-text-strong: #020617;
+  --owg-muted: #475569;
+  --owg-faint: #94a3b8;
+  --owg-border: #e2e8f0;
+  --owg-border-strong: #cbd5e1;
+  --owg-accent: #4338ca;
+  --owg-accent-hover: #3730a3;
+  --owg-accent-ink: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-variant="slate"]:not([data-theme="light"]) {
+    --owg-bg: #0b1120;
+    --owg-surface: #0f172a;
+    --owg-surface-2: #1e293b;
+    --owg-surface-3: #273449;
+    --owg-text: #e2e8f0;
+    --owg-text-strong: #f8fafc;
+    --owg-muted: #94a3b8;
+    --owg-faint: #475569;
+    --owg-border: #1e293b;
+    --owg-border-strong: #334155;
+    --owg-accent: #818cf8;
+    --owg-accent-hover: #a5b4fc;
+    --owg-accent-ink: #0b1120;
+  }
+}
+
+:root[data-variant="slate"][data-theme="dark"] {
+  --owg-bg: #0b1120;
+  --owg-surface: #0f172a;
+  --owg-surface-2: #1e293b;
+  --owg-surface-3: #273449;
+  --owg-text: #e2e8f0;
+  --owg-text-strong: #f8fafc;
+  --owg-muted: #94a3b8;
+  --owg-faint: #475569;
+  --owg-border: #1e293b;
+  --owg-border-strong: #334155;
+  --owg-accent: #818cf8;
+  --owg-accent-hover: #a5b4fc;
+  --owg-accent-ink: #0b1120;
+}
