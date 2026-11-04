@@ -3,9 +3,17 @@
    <span class="badge green">passing</span>   colours: accent blue green amber red purple pink cyan
    <span class="badge red solid">breaking</span>   .solid = filled
    <span class="badge green dot">online</span>     .dot = leading status dot
-   Neutral by default. Sits on the text baseline inside headings, tables, links and buttons. */
+   Neutral by default. Sits on the text baseline inside headings, tables, links and buttons.
 
-.badge {
+   Semantic form, no classes: <mark> is the badge element.
+   <h2>Release <mark>v1.2</mark></h2>        mark as a direct child of h1-h6, a, li, th, td, dt,
+   <td><mark data-status="ok">up</mark></td>  summary or button (or of a <p> directly in an <li>, so tight
+                                              and loose Markdown lists look the same) = neutral badge
+   <mark data-status="ok|warn|error|info">    = status badge with a leading dot, anywhere
+   <p>A <mark>highlight</mark> in prose.</p>  stays a highlighter (core), as does mark nested deeper
+   Colour classes work on mark too (<mark class="green">). All :where()-wrapped. */
+
+.badge, :where(h1, h2, h3, h4, h5, h6, a, li > p, th, td, dt, summary, button, li) > :where(mark), :where(mark[data-status]) {
   --_c: var(--owg-muted);
   display: inline-flex;
   align-items: center;
@@ -23,6 +31,10 @@
   text-decoration: none;
 }
 :where(a).badge:hover { border-color: var(--_c); }
+/* In table cells sit exactly on the text baseline; in the top bar's flex links the space
+   before the badge collapses, so give it one back. */
+:where(td, th) > :where(.badge, mark) { vertical-align: baseline; }
+:where(body > header a) > :where(mark, .badge) { margin-inline-start: 0.5ch; }
 
 /* Colour classes (.accent .blue ...) live in colors.css and set --_c. */
 
@@ -30,10 +42,21 @@
 .badge.solid { background: var(--_c); border-color: var(--_c); color: var(--owg-surface); }
 .badge.solid.accent { color: var(--owg-accent-ink); }
 
-.badge.dot::before {
+.badge.dot::before, :where(mark[data-status])::before {
   content: "";
   width: 0.5em;
   height: 0.5em;
   border-radius: 50%;
   background: currentColor;
+}
+
+:where(mark[data-status="ok"]) { --_c: var(--owg-success); }
+:where(mark[data-status="warn"]) { --_c: var(--owg-warning); }
+:where(mark[data-status="error"]) { --_c: var(--owg-danger); }
+:where(mark[data-status="info"]) { --_c: var(--owg-info); }
+
+/* forced-colors: borders stay (the browser forces them to CanvasText), but a background-only
+   status dot would vanish; draw it in the text colour. */
+@media (forced-colors: active) {
+  .badge.dot::before, :where(mark[data-status])::before { background: CanvasText; forced-color-adjust: none; }
 }
