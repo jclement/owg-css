@@ -69,6 +69,7 @@
       <ul>
         <li><a href="#badges">Badges</a></li>
         <li><a href="#callouts">Callouts</a></li>
+        <li><a href="#semantic">Semantic HTML</a></li>
         <li><a href="#cards">Cards &amp; grid</a></li>
         <li><a href="#steps">Steps</a></li>
         <li><a href="#kv">Key-value</a></li>
@@ -629,6 +630,74 @@ max_upload = "25MB"</code></pre>
         <p class="markdown-alert-title">Caution</p>
         <p>Don't run the migration twice.</p>
       </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <section id="semantic">
+      <p class="label">components / semantic html</p>
+      <h2>Semantic HTML, no classes</h2>
+      <p>
+        Callouts and badges need no classes. Inside <code>&lt;main&gt;</code> or <code>&lt;article&gt;</code>,
+        an <code>&lt;aside&gt;</code> is a callout and its first heading is the title. A <code>&lt;mark&gt;</code>
+        in a heading, link, list item, table cell, <code>&lt;dt&gt;</code>, <code>&lt;summary&gt;</code> or button
+        is a badge. A <mark>mark in running prose</mark> stays a highlighter. The class forms keep working.
+      </p>
+      <div class="grid cols-2">
+        <div>
+          <p class="label">with classes</p>
+          <aside class="callout warning">
+            <p class="callout-title">Warning</p>
+            <p>Back up the vault before <code>notes migrate</code>.</p>
+          </aside>
+          <ul>
+            <li>notes <span class="badge">v1.4.2</span></li>
+            <li>sync <span class="badge green dot">running</span></li>
+          </ul>
+<pre data-lang="html"><code>&lt;aside class="callout warning"&gt;
+  &lt;p class="callout-title"&gt;Warning&lt;/p&gt;
+  &lt;p&gt;Back up the vault before ...&lt;/p&gt;
+&lt;/aside&gt;
+&lt;li&gt;notes &lt;span class="badge"&gt;v1.4.2&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;sync &lt;span class="badge green dot"&gt;running&lt;/span&gt;&lt;/li&gt;</code></pre>
+        </div>
+        <div>
+          <p class="label">semantic</p>
+          <aside data-type="warning">
+            <h3>Warning</h3>
+            <p>Back up the vault before <code>notes migrate</code>.</p>
+          </aside>
+          <ul>
+            <li>notes <mark>v1.4.2</mark></li>
+            <li>sync <mark data-status="ok">running</mark></li>
+          </ul>
+<pre data-lang="html"><code>&lt;aside data-type="warning"&gt;
+  &lt;h3&gt;Warning&lt;/h3&gt;
+  &lt;p&gt;Back up the vault before ...&lt;/p&gt;
+&lt;/aside&gt;
+&lt;li&gt;notes &lt;mark&gt;v1.4.2&lt;/mark&gt;&lt;/li&gt;
+&lt;li&gt;sync &lt;mark data-status="ok"&gt;running&lt;/mark&gt;&lt;/li&gt;</code></pre>
+        </div>
+      </div>
+      <p>
+        Types come from <code>data-type</code> (<code>note tip important warning danger</code>, plus
+        <code>info success caution</code>) or from ARIA <code>role</code>; a plain <code>&lt;aside&gt;</code>
+        is the quiet one. Status badges: <code>data-status="ok|warn|error|info"</code>.
+      </p>
+      <div class="grid cols-3">
+        <aside role="note"><h4>role="note"</h4><p>Reads as a note.</p></aside>
+        <aside role="status"><h4>role="status"</h4><p>Reads as a tip.</p></aside>
+        <aside role="alert"><h4>role="alert"</h4><p>Reads as danger.</p></aside>
+      </div>
+      <aside><h4>Plain aside</h4><p>No type: muted rule and tint, for asides that are just asides.</p></aside>
+      <table>
+        <thead><tr><th>service</th><th>status</th><th>version</th></tr></thead>
+        <tbody>
+          <tr><td>caddy</td><td><mark data-status="ok">running</mark></td><td><mark>2.8</mark></td></tr>
+          <tr><td>app</td><td><mark data-status="warn">restarting</mark></td><td><mark>1.4.2</mark></td></tr>
+          <tr><td>restic</td><td><mark data-status="info">scheduled</mark></td><td><mark>0.17</mark></td></tr>
+          <tr><td>grafana</td><td><mark data-status="error">unhealthy</mark></td><td><mark>11</mark></td></tr>
+        </tbody>
+      </table>
     </section>
 
     <!-- ================================================================== -->

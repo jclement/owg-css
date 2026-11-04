@@ -208,6 +208,23 @@ spinner; `[disabled]`. `[role=group]` joins buttons.
   `<summary>` as the title = collapsible. Also style GitHub-flavoured Markdown output:
   `.markdown-alert.markdown-alert-{note,tip,important,warning,caution}` with
   `.markdown-alert-title`.
+- **Semantic forms (no classes)**: the class forms above are aliases of these; both share
+  one set of rules, all `:where()`-wrapped (one author class overrides any part).
+  - **`<mark>` is the badge.** A `<mark>` that is a direct child of `h1`-`h6`, `a`, `li`, `th`,
+    `td`, `dt`, `summary` or `button`, or of a `<p>` directly inside an `<li>`, renders as a
+    neutral badge. The `li > p > mark` case is deliberate: Markdown's "loose" lists wrap items in
+    `<p>`, and a tight and a loose list must look the same. `mark[data-status="ok|warn|error|info"]`
+    is a status badge with a leading dot anywhere. Any other `<mark>` (running prose, or nested
+    deeper, e.g. `li > p > em > mark`) stays a highlighter. Colour classes (`.green` ...) recolour a
+    mark badge. In `td`/`th` badges sit on the text baseline; in a link they are not underlined.
+  - **`<aside>` inside `<main>` or `<article>` is a callout.** A first-child `h2`-`h6` is the title
+    (callout title look: no h2 hairline, no heading margins). Type from `data-type`
+    (`note tip important warning danger`, aliases `info success caution`) or `role`
+    (`note` = note, `status` = tip, `alert` = danger); none = the neutral callout. The app-shell
+    sidebar is `body > aside`, never inside `main`, so it is never a callout. A callout title is a
+    real heading, so a generated TOC (Hugo, markdown-it) lists it like any other heading; use a
+    `<p>` title with `.callout` when that is unwanted.
+  - forced-colors: callout and badge borders stay (system colours); status dots use `CanvasText`.
 - **Card**: `.card` (surface, border, radius, padding); `.card > header` / `> footer` ruled
   sections. Classless `article` is NOT a card.
 - **Section label**: `.label` - owg.me's `// label ---------` divider (`//` accent, rule to the end).
