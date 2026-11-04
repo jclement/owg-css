@@ -1,11 +1,11 @@
 {
   "owg.css": {
-    "raw": 71754,
-    "gzip": 12693
+    "raw": 73367,
+    "gzip": 12918
   },
   "owg.min.css": {
-    "raw": 60144,
-    "gzip": 11691
+    "raw": 61492,
+    "gzip": 11901
   },
   "owg-fonts.css": {
     "raw": 1459,
