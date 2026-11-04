@@ -71,6 +71,13 @@
   background: transparent;
 }
 
+/* Reduced motion: no sweep, so show an evenly tinted full track (not a fake 45%). */
+@media (prefers-reduced-motion: reduce) {
+  :where(progress:indeterminate) {
+    background: color-mix(in srgb, var(--owg-accent) 40%, var(--owg-surface-3));
+  }
+}
+
 @keyframes owg-progress {
   from { background-position: 100% 0; }   /* bar just off the left edge... */
   to { background-position: -200% 0; }   /* ...to just off the right */
