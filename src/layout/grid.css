@@ -7,6 +7,11 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
   gap: var(--owg-space-4);
+  margin: 0 0 var(--owg-flow);
+}
+
+.grid:where(:last-child) {
+  margin-bottom: 0;
 }
 
 :where(.grid > *) {
