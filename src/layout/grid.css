@@ -1,1 +1,26 @@
-/* owg-css: layout/grid — owned by the layout agent (see SPEC.md). */
+/* owg-css: layout/grid
+   .grid           responsive auto-fit columns, each at least 14rem
+   .grid.cols-2/3/4  fixed column counts; 4 drops to 2 under 960px, all drop to 1 under 640px */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+  gap: var(--owg-space-4);
+}
+
+.grid > * {
+  min-width: 0;
+  margin: 0;
+}
+
+.grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+@media (max-width: 959.98px) {
+  .grid.cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 639.98px) {
+  .grid:is(.cols-2, .cols-3, .cols-4) { grid-template-columns: minmax(0, 1fr); }
+}

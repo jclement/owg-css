@@ -1,1 +1,168 @@
-/* owg-css: layout/docs — owned by the layout agent (see SPEC.md). */
+/* owg-css: layout/docs
+   Docs page: `main:has(> nav.toc)`.
+     <main>
+       <article>...</article>
+       <nav class="toc"><h2>On this page</h2><ul><li><a href="#a">A</a><ul>...</ul></li></ul></nav>
+     </main>
+   >= 1200px: two columns, article + sticky TOC (--owg-toc-width) on the right.
+   <  1200px: the TOC sits above the article as a compact, ruled block.
+   Mark the current section with aria-current="true" (or .active) from a scroll-spy script. */
+
+main:has(> nav.toc) {
+  display: flex;
+  flex-direction: column;
+}
+
+main:has(> nav.toc) > article {
+  min-width: 0;
+}
+
+main > nav.toc {
+  order: -1;
+  margin: 0 0 var(--owg-space-6);
+  padding: var(--owg-space-3) var(--owg-space-4);
+  border: var(--owg-border-width) solid var(--owg-border);
+  border-radius: var(--owg-radius);
+  background: var(--owg-surface);
+  font-size: var(--owg-text-sm);
+  line-height: 1.45;
+}
+
+main > nav.toc > :is(h2, h3, h4, h5, h6, p) {
+  margin: 0 0 var(--owg-space-2);
+  padding: 0;
+  border: 0;
+  color: var(--owg-muted);
+  font-size: var(--owg-text-xs);
+  font-weight: var(--owg-weight-medium);
+  letter-spacing: var(--owg-tracking-caps);
+  line-height: 1.4;
+  text-transform: lowercase;
+}
+
+main > nav.toc > :is(h2, h3, h4, h5, h6, p)::before {
+  content: "//\a0";
+  color: var(--owg-accent);
+}
+
+main > nav.toc :is(ul, ol) {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+main > nav.toc li {
+  margin: 0;
+  padding: 0;
+  break-inside: avoid;
+}
+
+main > nav.toc li::before {
+  content: none;
+}
+
+/* Compact: top-level entries flow into columns. */
+main > nav.toc > :is(ul, ol) {
+  column-width: 15rem;
+  column-gap: var(--owg-space-5);
+}
+
+/* Compact mode lists top-level entries only; the wide column shows the full tree. */
+main > nav.toc li > :is(ul, ol) {
+  display: none;
+}
+
+main > nav.toc a {
+  display: block;
+  padding: 0.15rem 0;
+  color: var(--owg-muted);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  transition: color var(--owg-transition), border-color var(--owg-transition);
+}
+
+main > nav.toc a:hover {
+  color: var(--owg-text-strong);
+  text-decoration: none;
+}
+
+main > nav.toc a:is([aria-current], .active) {
+  color: var(--owg-accent);
+}
+
+main > nav.toc a:focus-visible {
+  outline: var(--owg-focus-width) solid var(--owg-focus);
+  outline-offset: 1px;
+  border-radius: var(--owg-radius);
+}
+
+/* Wide: sticky right column with an indicator rail. */
+@media (min-width: 1200px) {
+  main:has(> nav.toc) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--owg-toc-width);
+    gap: var(--owg-space-7);
+    align-items: start;
+  }
+
+  main:has(> nav.toc) > :not(nav.toc) {
+    grid-column: 1;
+  }
+
+  main > nav.toc {
+    position: sticky;
+    top: calc(var(--owg-space-6));
+    grid-column: 2;
+    grid-row: 1 / span 99;
+    max-height: calc(100vh - 2 * var(--owg-space-6));
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    border: 0;
+    background: none;
+    scrollbar-width: thin;
+    scrollbar-color: var(--owg-border-strong) transparent;
+  }
+
+  body:has(> header) main > nav.toc {
+    top: calc(var(--owg-topbar-height) + var(--owg-space-6));
+    max-height: calc(100vh - var(--owg-topbar-height) - 2 * var(--owg-space-6));
+  }
+
+  main > nav.toc > :is(ul, ol) {
+    column-width: auto;
+    border-left: var(--owg-border-width) solid var(--owg-border);
+  }
+
+  main > nav.toc li > :is(ul, ol) {
+    display: block;
+  }
+
+  main > nav.toc a {
+    margin-left: calc(-1 * var(--owg-border-width));
+    padding-left: var(--owg-space-3);
+    border-left: 2px solid transparent;
+  }
+
+  main > nav.toc li li > a {
+    padding-left: calc(var(--owg-space-3) + var(--owg-space-3));
+  }
+
+  main > nav.toc li li li > a {
+    padding-left: calc(var(--owg-space-3) + 2 * var(--owg-space-3));
+  }
+
+  main > nav.toc a:hover {
+    border-left-color: var(--owg-border-strong);
+  }
+
+  main > nav.toc a:is([aria-current], .active) {
+    border-left-color: var(--owg-accent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main > nav.toc a {
+    transition: none;
+  }
+}

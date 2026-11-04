@@ -1,1 +1,159 @@
-/* owg-css: layout/print — owned by the layout agent (see SPEC.md). */
+/* owg-css: layout/print
+   Paper: black on white whatever the theme or variant; no top bar chrome, sidebar or TOC
+   (the site title stays as a plain line); external link URLs printed after the link;
+   code wraps instead of clipping; callouts and badges keep their (light) colours.
+   The literal colours below are the one place they are allowed: paper is white. */
+
+@media print {
+  :root {
+    color-scheme: light;
+    --owg-bg: #fff !important;
+    --owg-surface: #fff !important;
+    --owg-surface-2: #f4f4f5 !important;
+    --owg-surface-3: #e9e9ec !important;
+    --owg-text: #000 !important;
+    --owg-text-strong: #000 !important;
+    --owg-muted: #444 !important;
+    --owg-faint: #999 !important;
+    --owg-border: #ccc !important;
+    --owg-border-strong: #888 !important;
+    --owg-accent: #000 !important;
+    --owg-accent-hover: #000 !important;
+    --owg-accent-ink: #fff !important;
+    --owg-blue: #1d4ed8 !important;
+    --owg-green: #166534 !important;
+    --owg-amber: #854d0e !important;
+    --owg-red: #b91c1c !important;
+    --owg-purple: #7e22ce !important;
+    --owg-pink: #be185d !important;
+    --owg-cyan: #0e7490 !important;
+    --owg-tint: 10% !important;
+    --owg-shadow-sm: none !important;
+    --owg-shadow: none !important;
+    --owg-font-size: 10pt;
+  }
+
+  @page {
+    margin: 1.6cm 1.4cm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  body,
+  body:has(> header),
+  body:has(> aside) {
+    display: block;
+    min-height: 0;
+    padding: 0 !important;
+  }
+
+  body > aside,
+  main > nav.toc,
+  .sidebar-toggle,
+  .sidebar-close,
+  body > header > :not(:first-child, .sidebar-toggle + *) {
+    display: none !important;
+  }
+
+  body > header {
+    position: static;
+    height: auto;
+    margin: 0 0 var(--owg-space-5);
+    padding: 0 0 var(--owg-space-2);
+    background: none;
+    border-bottom: var(--owg-border-width) solid var(--owg-border-strong);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  body > header,
+  body > header * {
+    color: #000 !important;
+  }
+
+  body > main,
+  body > footer,
+  main:has(> nav.toc) {
+    display: block;
+    width: auto;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  body > footer {
+    margin-top: var(--owg-space-6);
+    padding-top: var(--owg-space-2);
+  }
+
+  /* Links: no colour to rely on, so underline them and print where external ones go. */
+  main a {
+    text-decoration: underline;
+  }
+
+  main a[href^="http"]:not(:has(img))::after {
+    content: " <" attr(href) ">";
+    color: var(--owg-muted);
+    font-size: var(--owg-text-xs);
+    font-weight: var(--owg-weight-normal);
+    overflow-wrap: anywhere;
+  }
+
+  /* Keep things whole across pages where they fit. */
+  pre,
+  blockquote,
+  figure,
+  table,
+  img,
+  svg,
+  .card,
+  .callout,
+  .markdown-alert {
+    break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr {
+    break-inside: avoid;
+  }
+
+  :is(h1, h2, h3, h4, h5, h6) {
+    break-after: avoid;
+  }
+
+  p,
+  li {
+    orphans: 3;
+    widows: 3;
+  }
+
+  pre,
+  pre code {
+    overflow: visible !important;
+    white-space: pre-wrap !important;
+    overflow-wrap: anywhere;
+  }
+
+  /* Tints carry meaning in callouts and badges: ask the browser to keep them. */
+  .callout,
+  .markdown-alert,
+  .badge,
+  mark,
+  kbd {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Closed <details> print open where the browser allows it. */
+  details::details-content {
+    content-visibility: visible;
+    display: block;
+  }
+}
