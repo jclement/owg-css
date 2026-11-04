@@ -570,9 +570,8 @@
 @media (prefers-reduced-motion: reduce) {
   *, :before, :after {
     scroll-behavior: auto !important;
-    transition-duration: .01ms !important;
-    animation-duration: .01ms !important;
-    animation-iteration-count: 1 !important;
+    transition: none !important;
+    animation: none !important;
   }
 }
 
@@ -768,8 +767,9 @@
 }
 
 :where(li) > :where(input[type="checkbox"]:first-child) {
+  margin: 0;
   vertical-align: -.2em;
-  margin: 0 .6ch 0 -2.5ch;
+  margin-inline: -2.5ch .6ch;
 }
 
 :where(ul, ol)[role="list"], :where(nav ul, nav ol) {
@@ -783,7 +783,8 @@
 }
 
 :where(dd) {
-  margin: 0 0 var(--owg-space-2) 2.5ch;
+  margin: 0 0 var(--owg-space-2);
+  margin-inline-start: 2.5ch;
 }
 
 :where(dl.inline) {
@@ -797,8 +798,9 @@
 }
 
 :where(blockquote) {
-  padding: var(--owg-space-1) 0 var(--owg-space-1) var(--owg-space-4);
-  border-left: 2px solid var(--owg-accent);
+  padding-block: var(--owg-space-1);
+  padding-inline: var(--owg-space-4) 0;
+  border-inline-start: 2px solid var(--owg-accent);
   color: var(--owg-muted);
   margin-inline: 0;
 }
@@ -873,6 +875,10 @@
   transform: rotate(-45deg);
 }
 
+:where(details:not(.callout, nav details):dir(rtl)) > :where(summary):before {
+  transform: rotate(135deg);
+}
+
 :where(details[open]:not(.callout, nav details)) > :where(summary):before {
   transform: translateY(-.1em) rotate(45deg);
 }
@@ -944,14 +950,16 @@
   color: var(--owg-muted);
   background: var(--owg-surface);
   border: solid var(--owg-border);
-  border-bottom-left-radius: var(--owg-radius);
+  border-width: 0;
   user-select: none;
-  border-width: 0 0 1px 1px;
+  border-block-end-width: 1px;
+  border-inline-start-width: 1px;
+  border-end-start-radius: var(--owg-radius);
   padding: 0 .7em;
   line-height: 1.6;
   position: absolute;
-  top: 0;
-  right: 0;
+  inset-block-start: 0;
+  inset-inline-end: 0;
 }
 
 :where(samp) {
@@ -972,12 +980,12 @@
   padding-top: var(--owg-space-2);
   font-size: var(--owg-text-sm);
   color: var(--owg-muted);
-  text-align: left;
+  text-align: start;
 }
 
 :where(th, td) {
   padding: var(--owg-space-2) var(--owg-space-3);
-  text-align: left;
+  text-align: start;
   vertical-align: top;
   border-bottom: 1px solid var(--owg-border);
 }
@@ -1011,7 +1019,7 @@
 }
 
 :where(th.num, td.num) {
-  text-align: right;
+  text-align: end;
   white-space: nowrap;
 }
 
@@ -1070,12 +1078,12 @@ fieldset {
 
 legend {
   padding: 0 var(--owg-space-2);
-  margin-left: calc(-1 * var(--owg-space-2));
   font-size: var(--owg-text-sm);
   font-weight: var(--owg-weight-medium);
   letter-spacing: var(--owg-tracking-caps);
   text-transform: uppercase;
   color: var(--owg-muted);
+  margin-inline-start: calc(-1 * var(--owg-space-2));
 }
 
 legend:before {
@@ -1084,16 +1092,16 @@ legend:before {
 }
 
 :where(input, select, textarea) {
-  --_ring: var(--owg-accent);
+  --_ring: var(--owg-focus);
   width: 100%;
   margin-bottom: var(--owg-space-4);
   padding: var(--owg-space-2) var(--owg-space-3);
   line-height: var(--owg-line-height-tight);
   background-color: var(--owg-surface);
-  border: 1px solid var(--owg-border-strong);
+  border: 1px solid var(--owg-control-border);
   border-radius: var(--owg-radius);
   appearance: none;
-  transition: border-color var(--owg-transition), box-shadow var(--owg-transition);
+  transition: border-color var(--owg-transition);
 }
 
 :where(label) > :where(input:not([type="checkbox"], [type="radio"]), select, textarea) {
@@ -1101,9 +1109,9 @@ legend:before {
 }
 
 :where(input, select, textarea):focus-visible {
+  outline: var(--owg-focus-width) solid var(--_ring);
+  outline-offset: 1px;
   border-color: var(--_ring);
-  box-shadow: 0 0 0 var(--owg-focus-width) color-mix(in srgb, var(--_ring) 45%, transparent);
-  outline: 0;
 }
 
 :where([aria-invalid="true"], :user-invalid) {
@@ -1118,6 +1126,7 @@ legend:before {
 
 ::placeholder {
   color: var(--owg-muted);
+  opacity: 1;
 }
 
 textarea {
@@ -1133,7 +1142,11 @@ textarea {
   background-position: calc(100% - 1.15em) 52%, calc(100% - .8em) 52%;
   background-repeat: no-repeat;
   background-size: .35em .35em;
-  padding-right: 2.25em;
+  padding-inline-end: 2.25em;
+}
+
+:where(select:not([multiple], [size])):dir(rtl) {
+  background-position: .8em 52%, 1.15em 52%;
 }
 
 :where(input, select, textarea, [role="group"]) + small {
@@ -1155,12 +1168,15 @@ textarea {
   cursor: not-allowed;
 }
 
+:where(fieldset:disabled, label:has( > :disabled)) :disabled, :where(fieldset:disabled) label {
+  opacity: 1;
+}
+
 :where(input, select, textarea):where(:disabled, [readonly]) {
   background-color: var(--owg-surface-2);
 }
 
 :where([type="checkbox"], [type="radio"]) {
-  border-color: color-mix(in srgb, var(--owg-border-strong), var(--owg-muted));
   vertical-align: -.2em;
   appearance: none;
   cursor: pointer;
@@ -1182,7 +1198,6 @@ textarea {
 :where([type="checkbox"], [type="radio"]):focus-visible {
   outline: var(--owg-focus-width) solid var(--owg-focus);
   outline-offset: 2px;
-  box-shadow: none;
 }
 
 :where([type="checkbox"], [type="radio"]):checked {
@@ -1222,13 +1237,13 @@ textarea {
 }
 
 [type="range"]::-webkit-slider-runnable-track {
-  background: var(--owg-surface-3);
+  background: var(--owg-control-border);
   border-radius: 2px;
   height: 4px;
 }
 
 [type="range"]::-moz-range-track {
-  background: var(--owg-surface-3);
+  background: var(--owg-control-border);
   border-radius: 2px;
   height: 4px;
 }
@@ -1287,14 +1302,14 @@ textarea {
 }
 
 ::file-selector-button {
-  margin-right: var(--owg-space-3);
   padding: var(--owg-space-1) var(--owg-space-3);
   font: inherit;
   color: var(--owg-text);
   background: var(--owg-surface-2);
-  border: 1px solid var(--owg-border-strong);
+  border: 1px solid var(--owg-control-border);
   border-radius: var(--owg-radius);
   cursor: pointer;
+  margin-inline-end: var(--owg-space-3);
 }
 
 ::file-selector-button:hover {
@@ -1328,23 +1343,72 @@ textarea {
 }
 
 :where([role="group"], [role="search"]) > :not(:first-child) {
-  margin-left: -1px;
+  margin-inline-start: -1px;
 }
 
 :where([role="group"], [role="search"]) > :first-child {
-  border-radius: var(--owg-radius) 0 0 var(--owg-radius);
+  border-start-start-radius: var(--owg-radius);
+  border-end-start-radius: var(--owg-radius);
 }
 
 :where([role="group"], [role="search"]) > :last-child {
-  border-radius: 0 var(--owg-radius) var(--owg-radius) 0;
-}
-
-:where([role="group"], [role="search"]) > :where(:only-child) {
-  border-radius: var(--owg-radius);
+  border-start-end-radius: var(--owg-radius);
+  border-end-end-radius: var(--owg-radius);
 }
 
 :where([role="group"], [role="search"]) > :where(:hover, :focus-visible) {
   position: relative;
+}
+
+@media (forced-colors: active) {
+  :where([type="checkbox"], [type="radio"], [type="range"]) {
+    forced-color-adjust: none;
+    background-color: canvas;
+    border-color: canvastext;
+  }
+
+  :where([type="checkbox"], [type="radio"]):checked {
+    background-color: highlight;
+    border-color: highlight;
+    box-shadow: inset 0 0 0 .2em canvas;
+  }
+
+  :where([type="checkbox"]):indeterminate {
+    background: canvas linear-gradient(highlight 0 0) center / 55% 2px no-repeat;
+  }
+
+  :where([role="switch"]) {
+    --_knob: CanvasText;
+    background-color: canvas;
+  }
+
+  :where([role="switch"]):checked {
+    --_knob: HighlightText;
+    box-shadow: none;
+    background-color: highlight;
+  }
+
+  [type="range"]::-webkit-slider-runnable-track {
+    background: canvastext;
+  }
+
+  [type="range"]::-webkit-slider-thumb {
+    background: highlight;
+    border-color: canvas;
+  }
+
+  [type="range"]::-moz-range-track {
+    background: canvastext;
+  }
+
+  [type="range"]::-moz-range-thumb {
+    background: highlight;
+    border-color: canvas;
+  }
+
+  :where(input, select, textarea):focus-visible {
+    outline-color: highlight;
+  }
 }
 
 :where(button, [type="submit"], [type="button"], [type="reset"], .button, [role="button"]) {
@@ -1465,6 +1529,28 @@ textarea {
   }
 }
 
+@media (forced-colors: active) {
+  :where(button, [type="submit"], [type="button"], [type="reset"], .button, [role="button"]) {
+    border-color: buttontext;
+  }
+
+  :where(button, .button, [role="button"])[aria-pressed="true"] {
+    forced-color-adjust: none;
+    color: selecteditemtext;
+    background: selecteditem;
+    border-color: selecteditem;
+  }
+
+  :where(button, [type="submit"], [type="button"], [type="reset"], .button, [role="button"]):where(:disabled, [aria-disabled="true"]) {
+    color: graytext;
+    border-color: graytext;
+  }
+
+  :focus-visible {
+    outline-color: highlight;
+  }
+}
+
 :where(img, video) {
   vertical-align: middle;
   max-width: 100%;
@@ -1532,6 +1618,12 @@ textarea {
 
 :where(progress:indeterminate)::-moz-progress-bar {
   background: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(progress:indeterminate) {
+    background: color-mix(in srgb, var(--owg-accent) 40%, var(--owg-surface-3));
+  }
 }
 
 @keyframes owg-progress {
