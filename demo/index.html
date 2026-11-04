@@ -175,11 +175,9 @@
         <dt>control borders</dt>
         <dd>Inputs, selects, textareas, checkboxes and radios have a boundary of at least 3:1 against what surrounds them, in every look (WCAG 1.4.11). The same check measures it.</dd>
         <dt>focus</dt>
-        <dd>Every focusable element gets a solid 2px <code>:focus-visible</code> outline: links, buttons, every input type, selects, summaries, sidebar and table-of-contents links, top-bar controls. The outline is at least 3:1 against its surroundings, with one known exception below.</dd>
+        <dd>Every focusable element gets a solid 2px <code>:focus-visible</code> outline: links, buttons, every input type, selects, summaries, sidebar and table-of-contents links, top-bar controls. The outline is at least 3:1 against its surroundings in every look, the top bar included.</dd>
         <dt>forced colours</dt>
         <dd>With <code>forced-colors: active</code> (Windows High Contrast), controls, checked states, focus outlines and the current sidebar or table-of-contents item stay visible in system colours. Checked with Chromium's emulation only, not on a real Windows machine.</dd>
-        <dt>right-to-left</dt>
-        <dd>The chrome uses logical properties, so with <code>&lt;html dir="rtl"&gt;</code> the sidebar, drawer, rails and table of contents mirror to the other side.</dd>
         <dt>narrow screens</dt>
         <dd>A wide table scrolls sideways inside its own box instead of stretching the page. At 320px and 390px none of the demo pages scrolls sideways.</dd>
         <dt>your overrides</dt>
@@ -197,7 +195,7 @@
         <dt>not covered</dt>
         <dd>Disabled controls are deliberately dim and below 4.5:1, as WCAG allows for inactive controls.</dd>
         <dt>right-to-left</dt>
-        <dd>Code (<code>pre</code>, <code>code</code>, <code>kbd</code>, <code>samp</code>) stays left-to-right and isolated; badges take their direction from their own text. Hidden tooltips take no space, and shown ones stay inside the viewport.</dd>
+        <dd>The chrome uses logical properties, so with <code>&lt;html dir="rtl"&gt;</code> the sidebar, drawer, rails and table of contents mirror to the other side. Code (<code>pre</code>, <code>code</code>, <code>kbd</code>, <code>samp</code>) stays left-to-right and isolated; badges take their direction from their own text. Hidden tooltips take no space, and shown ones stay inside the viewport.</dd>
       </dl>
     </section>
 
