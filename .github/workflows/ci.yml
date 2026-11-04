@@ -1,4 +1,4 @@
-# Build, size budget and contrast checks on every PR and push.
+# Build, size budget and contrast checks on every PR and push; fail if committed dist/ is stale.
 name: ci
 
 on:
@@ -15,7 +15,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: jdx/mise-action@v2
-      - run: npm ci
+      # Same as local `mise run setup` (npm ci + Playwright's Chromium, version from the lockfile),
+      # plus the system libraries Chromium needs on a bare runner (needs root, so CI only).
+      - run: mise run setup
+      - run: npx playwright install-deps chromium
       - run: mise run check
-      - name: dist/ is up to date
-        run: git diff --quiet -- dist/ || echo "::warning::dist/ differs from a fresh build; run mise run build and commit it"
+      # dist/ is what jsDelivr serves from a tag, so it must match the sources.
+      # sizes.json is a build report (gzip sizes vary with the runner's zlib), not served code.
+      - name: dist/ matches a fresh build
+        run: |
+          git diff --stat --exit-code -- dist/ ':(exclude)dist/sizes.json' || {
+            echo "::error::dist/ is stale: run 'mise run build' and commit dist/"
+            exit 1
+          }
