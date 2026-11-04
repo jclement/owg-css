@@ -8,14 +8,16 @@
          <details open><summary>Group</summary><ul>...</ul></details>   collapsible group
        </nav>
      </aside>
-   >= 960px: fixed sidebar under the top bar, scrolls on its own, main and footer shift right.
+   >= 960px: fixed sidebar under the top bar, scrolls on its own, main and footer shift over.
    <  960px: off-canvas drawer opened by #sidebar:target (no JS). The .sidebar-toggle link
    (href="#sidebar") opens it; .sidebar-close or the dimmed backdrop closes it. Point the close
-   link at a fragment that matches nothing (href="#_"): a bare "#" also works but jumps to top. */
+   link at a fragment that matches nothing (href="#_"): a bare "#" also works but jumps to top.
+   Logical properties throughout: with dir="rtl" the sidebar and drawer sit on the right.
+   Specificity: type selectors only; classes, attributes and states inside :where(). */
 
 /* ---- Page frame --------------------------------------------------------- */
 
-:where(body:has(> main)) {
+body:has(> main) {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -30,10 +32,14 @@ body > main {
   padding-block: var(--owg-space-6) var(--owg-space-7);
 }
 
-@media (max-width: 639.98px) {
-  body > main {
-    width: calc(100% - 2 * var(--owg-space-4));
-  }
+/* Prose keeps a readable line (--owg-measure); code, tables, figures, grids, cards and h2
+   (whose hairline marks the section) use the full column. Direct children of main, of a
+   section or of the article only, and only unclassed ones, so components (.label, .steps,
+   .kv ...) and nav blocks keep their own width.
+   Zero specificity: any author rule may lift it. */
+:where(body > main, body > main > :is(article, section), body > main > article > section)
+  > :where(p, ul, ol, dl, blockquote, h1, h3, h4, h5, h6):where(:not([class])) {
+  max-width: var(--owg-measure);
 }
 
 /* ---- Sidebar ------------------------------------------------------------ */
@@ -42,7 +48,8 @@ body > aside {
   --_bg: var(--owg-surface);
   --_shade: color-mix(in srgb, var(--owg-text) 12%, transparent);
   position: fixed;
-  inset: 0 auto 0 0;
+  inset-block: 0;
+  inset-inline-start: 0;
   z-index: 40;
   box-sizing: border-box;
   width: var(--owg-sidebar-width);
@@ -50,7 +57,7 @@ body > aside {
   padding: var(--owg-space-4) var(--owg-space-3) var(--owg-space-7);
   overflow-y: auto;
   overscroll-behavior: contain;
-  border-right: var(--owg-border-width) solid var(--owg-border);
+  border-inline-end: var(--owg-border-width) solid var(--owg-border);
   font-size: var(--owg-text-sm);
   line-height: 1.45;
   scrollbar-width: thin;
@@ -68,8 +75,7 @@ body:has(> header) > aside {
   top: var(--owg-topbar-height);
 }
 
-body > aside > :first-child:not(.sidebar-close),
-body > aside > .sidebar-close + * {
+body > aside > :where(:first-child:not(.sidebar-close), .sidebar-close + *) {
   margin-top: 0;
 }
 
@@ -102,27 +108,24 @@ body > aside nav > details > summary {
   text-transform: lowercase;
 }
 
-body > aside nav > :first-child,
-body > aside nav > details:first-child > summary {
+body > aside nav > :where(:first-child),
+body > aside nav > details:where(:first-child) > summary {
   margin-top: 0;
 }
 
+/* The label owns ::before (core's details chevron lives there too, so reset its box). */
 body > aside nav > :is(h2, h3, h4, h5, h6, p)::before,
 body > aside nav > details > summary::before {
   content: "//\a0";
-  color: var(--owg-accent);
-}
-
-/* Core draws its details chevron in summary::before; the label owns ::before here. */
-body > aside nav > details > summary::before {
   width: auto;
   height: auto;
   margin: 0;
   border: 0;
   transform: none;
+  color: var(--owg-accent);
 }
 
-/* Collapsible group: the label is the summary, a chevron on the right. */
+/* Collapsible group: the label is the summary, a chevron at the end. */
 body > aside nav > details {
   margin: 0;
   padding: 0;
@@ -146,39 +149,67 @@ body > aside nav > details > summary::-webkit-details-marker {
 
 body > aside nav > details > summary::after {
   content: "›";
-  margin-left: auto;
+  margin-inline-start: auto;
   color: var(--owg-muted);
   transition: transform var(--owg-transition);
 }
 
-body > aside nav > details[open] > summary::after {
+body > aside nav > details:where([open]) > summary::after {
   transform: rotate(90deg);
 }
 
-body > aside nav > details > summary:hover {
+body > aside nav > details > summary:where(:dir(rtl))::after {
+  content: "‹";
+}
+
+body > aside nav > details:where([open]) > summary:where(:dir(rtl))::after {
+  transform: rotate(-90deg);
+}
+
+body > aside nav > details > summary:where(:hover) {
   color: var(--owg-text);
 }
 
-/* Links: a 2px rail on the left lights up for the active page. */
+/* Links: a 2px rail on the inline-start edge lights up for the active page.
+   Order matters (equal specificity): base, hover, nested, nested hover, current. */
 body > aside nav a {
   display: block;
   padding: 0.3rem var(--owg-space-2);
-  border-left: 2px solid transparent;
-  border-radius: 0 var(--owg-radius) var(--owg-radius) 0;
+  border-inline-start: 2px solid transparent;
+  border-radius: 0;
+  border-start-end-radius: var(--owg-radius);
+  border-end-end-radius: var(--owg-radius);
   color: var(--owg-text);
   text-decoration: none;
   overflow-wrap: anywhere;
   transition: background-color var(--owg-transition), color var(--owg-transition);
 }
 
-body > aside nav a:hover {
+body > aside nav a:where(:hover) {
   background: var(--owg-surface-2);
   color: var(--owg-text-strong);
   text-decoration: none;
 }
 
-body > aside nav a[aria-current] {
-  border-left-color: var(--owg-accent);
+/* Nested lists hang off a hairline; the active rail sits on top of it. */
+body > aside nav li > :is(ul, ol) {
+  margin-block: 0.125rem 0.25rem;
+  margin-inline-start: var(--owg-space-3);
+  border-inline-start: var(--owg-border-width) solid var(--owg-border);
+}
+
+body > aside nav :where(li li) > a {
+  margin-inline-start: calc(-1 * var(--owg-border-width));
+  color: var(--owg-muted);
+}
+
+body > aside nav :where(li li) > a:where(:hover) {
+  border-inline-start-color: var(--owg-border-strong);
+  color: var(--owg-text-strong);
+}
+
+body > aside nav a:where([aria-current]) {
+  border-inline-start-color: var(--owg-accent);
   background: var(--owg-accent-soft);
   color: var(--owg-accent);
   font-weight: var(--owg-weight-medium);
@@ -189,22 +220,7 @@ body > aside :is(a, summary):focus-visible {
   outline-offset: -2px;
 }
 
-/* Nested lists hang off a hairline; the active rail sits on top of it. */
-body > aside nav li > :is(ul, ol) {
-  margin: 0.125rem 0 0.25rem var(--owg-space-3);
-  border-left: var(--owg-border-width) solid var(--owg-border);
-}
-
-body > aside nav li li > a {
-  margin-left: calc(-1 * var(--owg-border-width));
-  color: var(--owg-muted);
-}
-
-body > aside nav li li > a:hover {
-  border-left-color: var(--owg-border-strong);
-}
-
-/* ---- Drawer controls ---------------------------------------------------- */
+/* ---- Drawer controls (public classes) ----------------------------------- */
 
 .sidebar-toggle,
 .sidebar-close {
@@ -221,8 +237,7 @@ body > aside nav li li > a:hover {
   text-decoration: none;
 }
 
-.sidebar-toggle:hover,
-.sidebar-close:hover {
+:where(.sidebar-toggle, .sidebar-close):hover {
   background: color-mix(in srgb, currentColor 12%, transparent);
   text-decoration: none;
 }
@@ -231,7 +246,7 @@ body > aside nav li li > a:hover {
 
 @media (min-width: 960px) {
   body:has(> aside) {
-    padding-left: var(--owg-sidebar-width);
+    padding-inline-start: var(--owg-sidebar-width);
   }
 }
 
@@ -243,40 +258,43 @@ body > aside nav li li > a:hover {
     display: inline-flex;
   }
 
-  body > header > .sidebar-toggle {
-    margin-left: calc(-1 * var(--owg-space-2));
+  body > header > :where(.sidebar-toggle) {
+    margin-inline-start: calc(-1 * var(--owg-space-2));
   }
 
   body > aside,
   body:has(> header) > aside {
     --_w: min(20rem, 85vw);
     top: 0;
-    left: calc(-1 * var(--_w) - 1rem);
+    inset-inline-start: calc(-1 * var(--_w) - 1rem);
     z-index: 60;
     width: var(--_w);
     padding-top: var(--owg-space-3);
     visibility: hidden;
     box-shadow: var(--owg-shadow);
-    transition: left 180ms ease, visibility 0s linear 180ms;
+    transition: inset-inline-start 180ms ease, visibility 0s linear 180ms;
   }
 
-  body > aside:target {
-    left: 0;
+  body > aside:where(:target),
+  body:has(> header) > aside:where(:target) {
+    inset-inline-start: 0;
     visibility: visible;
-    transition: left 180ms ease, visibility 0s;
+    transition: inset-inline-start 180ms ease, visibility 0s;
   }
 
-  body > aside > .sidebar-close {
-    float: right;
-    margin: 0 0 var(--owg-space-2) var(--owg-space-2);
+  body > aside > :where(.sidebar-close) {
+    float: inline-end;
+    margin: 0 0 var(--owg-space-2);
+    margin-inline-start: var(--owg-space-2);
     color: var(--owg-muted);
   }
 
   /* The backdrop is part of the close link, so a tap anywhere outside closes the drawer. */
-  body > aside:target > .sidebar-close::before {
+  body > aside:where(:target) > :where(.sidebar-close)::before {
     content: "";
     position: fixed;
-    inset: 0 0 0 var(--_w);
+    inset-block: 0;
+    inset-inline: var(--_w) 0;
     background: color-mix(in srgb, var(--owg-bg) 70%, transparent);
     -webkit-backdrop-filter: blur(2px);
     backdrop-filter: blur(2px);
@@ -295,12 +313,22 @@ body > aside nav li li > a:hover {
 
 @media (prefers-reduced-motion: reduce) {
   body > aside,
-  body > aside:target,
+  body:has(> header) > aside,
   body > aside nav a,
   body > aside nav > details > summary::after {
-    transition: none;
+    transition: none !important;
   }
-  body > aside:target > .sidebar-close::before {
+  body > aside > :where(.sidebar-close)::before {
     animation: none;
+  }
+}
+
+/* Windows High Contrast and friends: tints vanish, so the active item becomes a system highlight. */
+@media (forced-colors: active) {
+  body > aside nav a:where([aria-current]) {
+    forced-color-adjust: none;
+    border-inline-start-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
   }
 }

@@ -30,6 +30,11 @@ why in your report (and update this file in your branch).
 - The top bar has its own tokens (`--owg-topbar-bg/-text/-title/-accent/-border`) so a
   variant can colour it independently (hotdog does). Layout must use them, not surface/text.
 - Use `:where()` for element defaults so author CSS wins easily (keep specificity low).
+  Layout selectors are type selectors only (`body > aside nav a`), with every class, attribute
+  and state inside `:where()` (`a:where([aria-current])`, `nav:where(.toc)`): any single
+  author class overrides them, while bare author element rules (`a {}`, `h2 {}`) do not leak
+  into the chrome. Exception: top-bar controls keep real `:hover`/`[aria-pressed]` to beat
+  core's button states.
 
 ## Files and who owns them
 
@@ -70,7 +75,11 @@ Do not hand-edit `dist/`. If two branches both rebuild `dist/`, the lead rebuild
 - The title (`body > header > :first-child`, typically `<a>`, `<strong>` or `<span>`) is
   bold, `--owg-text-strong`; a `<span>` inside it is drawn in the accent (`owg<span>://</span>css`).
 - `nav` may hold bare `<a>`s or a `<ul><li><a>` list; `aria-current="page"` marks the active link.
-  On narrow screens the nav scrolls sideways (faded right edge); the title never truncates.
+  Space in the bar: the title and the controls keep their natural width; the nav fills what
+  is left (it can shrink to nothing) and scrolls sideways, with a faded end on phones. The
+  title is never truncated while the nav still has space. Only when the title plus the
+  controls alone are wider than the bar (very long titles on ~320px phones) does the title
+  shrink with an ellipsis; the page itself never scrolls sideways because of the bar.
 - Buttons/selects in the bar are drawn quiet (transparent, `--owg-topbar-*` colours), sized to it.
 - The top bar is `position: fixed`, `--owg-topbar-height` tall, translucent `--owg-topbar-bg`
   with backdrop blur, a bottom border. `body` gets `padding-top` so content is not hidden, and
@@ -131,7 +140,17 @@ Do not hand-edit `dist/`. If two branches both rebuild `dist/`, the lead rebuild
   entries only, flowing into columns).
 - The current section is marked `aria-current="true"` (or `.active`) on its TOC link, set by a
   scroll-spy script if the page wants one (CSS cannot know it); it lights the accent rail.
-- Prose width is capped at `--owg-measure`.
+- Prose width is capped at `--owg-measure`: unclassed `p`, lists, `dl`, `blockquote`, `h1` and
+  `h3`-`h6` that are direct children of `main`, `main > article|section` or `main > article > section`.
+  Code, tables, figures, `.grid`, cards and `h2` (its hairline marks the section) use the
+  full column.
+- Above 1200px the docs frame widens (up to `--owg-container-wide`) to an article column of
+  `--owg-container` plus the TOC column, and `body > footer` follows that width.
+- `nav.toc` also accepts the list one `<nav>` deeper (Hugo's `{{ .TableOfContents }}`:
+  `<nav class="toc"><h2>…</h2><nav id="TableOfContents"><ul>…`). A `main > nav.breadcrumb`
+  stays above the compact TOC.
+- Logical properties throughout the chrome: with `dir="rtl"` the sidebar, drawer, rails and
+  TOC mirror.
 
 ### Footer, grid
 

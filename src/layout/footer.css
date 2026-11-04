@@ -1,6 +1,7 @@
 /* owg-css: layout/footer
-   `body > footer`: small, muted, a hairline above, aligned with `main`.
-   Children sit on one line and wrap: <p>© 2026</p><nav><a>GitHub</a>...</nav> */
+   `body > footer`: small, muted, a hairline above, aligned with `main` (including the wider
+   docs frame). Children sit on one line and wrap: <p>© 2026</p><nav><a>GitHub</a>...</nav>
+   Specificity: type selectors only, so one author class overrides it. */
 
 body > footer {
   display: flex;
@@ -16,6 +17,13 @@ body > footer {
   color: var(--owg-muted);
   font-size: var(--owg-text-sm);
   line-height: 1.5;
+}
+
+@media (min-width: 1200px) {
+  body:has(> main > nav:where(.toc)) > footer {
+    width: min(100% - 2 * var(--owg-gutter), var(--owg-container-wide),
+      var(--owg-container) + var(--owg-toc-width) + var(--owg-space-7));
+  }
 }
 
 body > footer > * {
@@ -41,13 +49,7 @@ body > footer a {
   text-decoration: none;
 }
 
-body > footer a:hover {
+body > footer a:where(:hover) {
   color: var(--owg-link-hover);
   text-decoration: underline;
-}
-
-@media (max-width: 639.98px) {
-  body > footer {
-    width: calc(100% - 2 * var(--owg-space-4));
-  }
 }
