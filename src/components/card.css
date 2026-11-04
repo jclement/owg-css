@@ -1,0 +1,56 @@
+/* Card
+   <div class="card">
+     <header><strong>Title</strong> <span class="badge">new</span></header>   optional, ruled
+     <p>Body.</p>
+     <footer><a href="#">Open &rarr;</a></footer>                             optional, ruled
+   </div>
+   a.card / .card.link: the whole card is a link (hover lifts the border to the accent).
+   Classless <article> is NOT a card. */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin-block: 0 var(--owg-flow);
+  padding: var(--owg-space-4);
+  border: var(--owg-border-width) solid var(--owg-border);
+  border-radius: var(--owg-radius);
+  background: var(--owg-surface);
+  color: var(--owg-text);
+}
+.card > :last-child:not(footer) { margin-bottom: 0; }
+.card > header,
+.card > footer {
+  display: flex;
+  align-items: center;
+  gap: var(--owg-space-2);
+  flex-wrap: wrap;
+  margin-inline: calc(-1 * var(--owg-space-4));
+  padding: var(--owg-space-2) var(--owg-space-4);
+  background: var(--owg-surface-2);
+  font-size: var(--owg-text-sm);
+}
+.card > header {
+  margin-top: calc(-1 * var(--owg-space-4));
+  margin-bottom: var(--owg-space-3);
+  border-bottom: var(--owg-border-width) solid var(--owg-border);
+  border-radius: var(--owg-radius) var(--owg-radius) 0 0;
+  color: var(--owg-text-strong);
+}
+.card > header > :is(h1, h2, h3, h4, h5, h6) { margin: 0; font-size: var(--owg-text-base); }
+.card > footer {
+  margin-top: auto;
+  margin-bottom: calc(-1 * var(--owg-space-4));
+  border-top: var(--owg-border-width) solid var(--owg-border);
+  border-radius: 0 0 var(--owg-radius) var(--owg-radius);
+  color: var(--owg-muted);
+}
+.card > :not(footer):nth-last-child(2):has(+ footer) { margin-bottom: var(--owg-space-3); }
+.grid > .card { margin-bottom: 0; }
+
+a.card, .card.link {
+  text-decoration: none;
+  transition: border-color var(--owg-transition), background-color var(--owg-transition);
+}
+a.card:hover, .card.link:hover { border-color: var(--owg-accent); background: var(--owg-accent-soft); }
+a.card:focus-visible { outline: var(--owg-focus-width) solid var(--owg-focus); outline-offset: 2px; }

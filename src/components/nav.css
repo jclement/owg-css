@@ -1,0 +1,60 @@
+/* Breadcrumb and pagination
+   <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
+     <li><a href="/">home</a></li><li><a href="/docs/">docs</a></li>
+     <li aria-current="page">themes</li>
+   </ol></nav>
+     Path-like: items joined by a muted "/". A bare list of <a>s works too.
+   <nav class="pagination" aria-label="Pages">
+     <a href="?p=1" rel="prev">&larr; prev</a>
+     <a href="?p=1">1</a> <a href="?p=2" aria-current="page">2</a> <span>&hellip;</span>
+     <a href="?p=3" rel="next">next &rarr;</a>
+   </nav>
+     Joined boxes; aria-current="page" is filled; [aria-disabled="true"] is dimmed. */
+
+.breadcrumb { margin-block: 0 var(--owg-flow); font-size: var(--owg-text-sm); color: var(--owg-muted); }
+.breadcrumb > :is(ol, ul) {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.breadcrumb li { margin: 0; padding: 0; }
+.breadcrumb li::marker { content: none; }
+.breadcrumb li + li::before { content: "/"; margin-inline: 0.6ch; color: var(--owg-muted); }
+.breadcrumb a { color: var(--owg-muted); text-decoration: none; }
+.breadcrumb a:hover { color: var(--owg-accent); text-decoration: underline; }
+.breadcrumb [aria-current] { color: var(--owg-text); }
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--owg-space-1);
+  margin-block: 0 var(--owg-flow);
+  font-size: var(--owg-text-sm);
+}
+.pagination > :is(a, span) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 var(--owg-space-2);
+  border: var(--owg-border-width) solid var(--owg-border);
+  border-radius: var(--owg-radius);
+  background: var(--owg-surface);
+  color: var(--owg-text);
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+}
+.pagination > span { border-color: transparent; background: none; color: var(--owg-muted); }
+.pagination > a:hover { border-color: var(--owg-accent); color: var(--owg-accent); }
+.pagination > a:focus-visible { outline: var(--owg-focus-width) solid var(--owg-focus); outline-offset: 1px; }
+.pagination > [aria-current] {
+  border-color: var(--owg-accent);
+  background: var(--owg-accent);
+  color: var(--owg-accent-ink);
+}
+.pagination > [aria-current]:hover { color: var(--owg-accent-ink); }
+.pagination > [rel="next"] { margin-left: auto; }
+.pagination > [aria-disabled="true"] { opacity: 0.45; pointer-events: none; }

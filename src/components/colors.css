@@ -1,0 +1,13 @@
+/* Colour classes shared by .badge, .dot and anything else that paints with --_c.
+   <span class="badge green">ok</span>  <span class="dot red"></span>
+   They only set a private custom property, so they do nothing on other elements.
+   Imported after the components so they win over each component's default --_c. */
+
+.accent { --_c: var(--owg-accent); }
+.blue { --_c: var(--owg-blue); }
+.green { --_c: var(--owg-green); }
+.amber { --_c: var(--owg-amber); }
+.red { --_c: var(--owg-red); }
+.purple { --_c: var(--owg-purple); }
+.pink { --_c: var(--owg-pink); }
+.cyan { --_c: var(--owg-cyan); }

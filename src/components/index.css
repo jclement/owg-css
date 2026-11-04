@@ -1,2 +1,16 @@
-/* owg-css components — owned by the components agent (see SPEC.md).
-   Add one file per component in src/components/ and @import it here. */
+/* owg-css components (opt-in classes). Each file documents its markup in its header. */
+@import "./badge.css";
+@import "./callout.css";
+@import "./card.css";
+@import "./label.css";
+@import "./terminal.css";
+@import "./cmdline.css";
+@import "./file.css";
+@import "./steps.css";
+@import "./tooltip.css";
+@import "./kv.css";
+@import "./stat.css";
+@import "./avatar.css";
+@import "./nav.css";
+@import "./misc.css";
+@import "./colors.css";

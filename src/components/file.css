@@ -1,0 +1,34 @@
+/* File block: a code block with a filename tab.
+   <figure class="file">
+     <figcaption>src/app.ts</figcaption>       a <span> inside is right-aligned and muted (e.g. "ts", "12 lines")
+     <pre><code>...</code></pre>
+   </figure> */
+
+figure.file {
+  margin: 0 0 var(--owg-flow);
+  padding: 0;
+  border: var(--owg-border-width) solid var(--owg-border);
+  border-radius: var(--owg-radius);
+  background: var(--owg-code-bg);
+  overflow: hidden;
+}
+figure.file > figcaption {
+  display: flex;
+  align-items: center;
+  gap: var(--owg-space-2);
+  margin: 0;
+  padding: var(--owg-space-1) var(--owg-space-3);
+  border-bottom: var(--owg-border-width) solid var(--owg-border);
+  background: var(--owg-surface-2);
+  color: var(--owg-text);
+  font-size: var(--owg-text-xs);
+  text-align: left;
+}
+figure.file > figcaption::before { content: "\25A4"; color: var(--owg-accent); }
+figure.file > figcaption > span { margin-left: auto; color: var(--owg-muted); }
+figure.file > pre {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}

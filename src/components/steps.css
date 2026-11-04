@@ -1,0 +1,52 @@
+/* Steps: a numbered procedure on a connected vertical rail.
+   <ol class="steps">
+     <li><strong>Install</strong><p>npm i owg-css</p></li>
+     <li><strong>Link it</strong><p>...</p></li>
+   </ol>
+   The first child of each step reads as its title (bold, text-strong). */
+
+ol.steps {
+  counter-reset: owg-step;
+  margin: 0 0 var(--owg-flow);
+  padding: 0;
+  list-style: none;
+}
+ol.steps > li {
+  counter-increment: owg-step;
+  position: relative;
+  margin: 0;
+  padding: 0 0 var(--owg-space-5) 2.75rem;
+  min-height: 2rem;
+}
+ol.steps > li::marker { content: none; }
+ol.steps > li::before {
+  content: counter(owg-step);
+  position: absolute;
+  left: 0;
+  top: -0.1rem;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: var(--owg-border-width) solid var(--owg-accent);
+  border-radius: var(--owg-radius);
+  background: var(--owg-accent-soft);
+  color: var(--owg-accent);
+  font-size: var(--owg-text-sm);
+  font-weight: var(--owg-weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+ol.steps > li::after {
+  content: "";
+  position: absolute;
+  left: calc(0.875rem - 0.5px);
+  top: 1.85rem;
+  bottom: 0.25rem;
+  width: var(--owg-border-width);
+  background: var(--owg-border-strong);
+}
+ol.steps > li:last-child { padding-bottom: 0; }
+ol.steps > li:last-child::after { content: none; }
+ol.steps > li > :first-child { display: block; margin-top: 0; color: var(--owg-text-strong); }
+ol.steps > li > :last-child { margin-bottom: 0; }
+ol.steps > li > :not(:first-child) { margin-top: var(--owg-space-1); }

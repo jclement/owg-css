@@ -1,0 +1,39 @@
+/* Badge
+   <span class="badge">v1.2</span>
+   <span class="badge green">passing</span>   colours: accent blue green amber red purple pink cyan
+   <span class="badge red solid">breaking</span>   .solid = filled
+   <span class="badge green dot">online</span>     .dot = leading status dot
+   Neutral by default. Sits on the text baseline inside headings, tables, links and buttons. */
+
+.badge {
+  --_c: var(--owg-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.05em 0.5em;
+  border: var(--owg-border-width) solid color-mix(in srgb, var(--_c) 28%, transparent);
+  border-radius: var(--owg-radius);
+  background: color-mix(in srgb, var(--_c) var(--owg-tint), var(--owg-surface));
+  color: var(--_c);
+  font-size: var(--owg-text-xs);
+  font-weight: var(--owg-weight-medium);
+  line-height: 1.5;
+  white-space: nowrap;
+  vertical-align: 0.12em;
+  text-decoration: none;
+}
+a.badge:hover { border-color: var(--_c); }
+
+/* Colour classes (.accent .blue ...) live in colors.css and set --_c. */
+
+/* Filled: text is the surface colour, so it stays readable in light and dark. */
+.badge.solid { background: var(--_c); border-color: var(--_c); color: var(--owg-surface); }
+.badge.solid.accent { color: var(--owg-accent-ink); }
+
+.badge.dot::before {
+  content: "";
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: currentColor;
+}

@@ -194,6 +194,14 @@ spinner; `[disabled]`. `[role=group]` joins buttons.
 - **Avatar**: `img.avatar` (square-ish 3px radius, grayscale until hover, as owg.me).
 - Components may add more (e.g. `.breadcrumb`, `.pagination`, `.empty`), documented in
   the component file's header comment and in the demo.
+- Added by the components agent (markup in each file's header):
+  `.cmdline` (owg.me prompt bar: `.user .host .path .cmd` spans + blinking cursor; named
+  `cmdline`, not `prompt`, because `span.prompt` is the terminal's `$`), `.cursor` (blinking
+  block), `nav.breadcrumb`, `nav.pagination`, `.empty`, `ul.tags` / `a.tag`,
+  `.card.link` / `a.card`, `.stat small.up|.down`, `.dot.pulse`, `img.avatar.small|.large|.color`.
+- Colour classes `.accent .blue .green .amber .red .purple .pink .cyan` are shared
+  (`src/components/colors.css`): they only set the private `--_c` property, so they are inert
+  on elements that don't paint with it.
 
 ## Plugins (optional, separate files)
 

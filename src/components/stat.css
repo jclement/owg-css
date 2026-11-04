@@ -1,0 +1,49 @@
+/* Stat and status dot
+   <div class="stat"><strong>99.98%</strong><span>uptime, 30d</span></div>
+     first child = the number (large, tabular), the rest = label (small, muted).
+     .stat small.up / small.down = a delta in green / red.
+     Lay several out with .grid.
+   <span class="dot green"></span> online
+     status dot; colours: accent blue green amber red purple pink cyan (colors.css; default muted).
+     .dot.pulse = a slow ping (still under reduced motion).
+     Not the same as .badge.dot (a badge with a leading dot). */
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--owg-space-1);
+  min-width: 0;
+  color: var(--owg-muted);
+  font-size: var(--owg-text-xs);
+}
+.stat > :first-child {
+  color: var(--owg-text-strong);
+  font-size: var(--owg-text-3xl);
+  font-weight: var(--owg-weight-bold);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--owg-tracking-tight);
+  line-height: 1.1;
+}
+.stat small { font-size: inherit; }
+.stat small.up { color: var(--owg-green); }
+.stat small.up::before { content: "\25B2 "; }
+.stat small.down { color: var(--owg-red); }
+.stat small.down::before { content: "\25BC "; }
+
+:where(.dot:not(.badge)) { --_c: var(--owg-muted); }
+.dot:not(.badge) {
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--_c);
+  vertical-align: 0.05em;
+}
+.dot.pulse:not(.badge) { animation: owg-pulse 2s ease-out infinite; }
+@keyframes owg-pulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--_c) 60%, transparent); }
+  100% { box-shadow: 0 0 0 0.45rem transparent; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dot.pulse:not(.badge) { animation: none; }
+}

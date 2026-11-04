@@ -1,0 +1,89 @@
+/* Callout
+   <aside class="callout note">
+     <p class="callout-title">Note</p>      optional; the glyph is added by CSS
+     <p>Body text.</p>
+   </aside>
+   Types: note tip important warning danger   (aliases: info = note, success = tip, caution = danger)
+   Collapsible: <details class="callout warning"><summary>Title</summary><p>...</p></details>
+   GitHub Markdown alerts are styled too:
+   <div class="markdown-alert markdown-alert-note"><p class="markdown-alert-title">Note</p>...</div>
+   (GitHub's own <svg> icon in the title is hidden; the CSS glyph replaces it.) */
+
+:is(.callout, .markdown-alert) {
+  --_c: var(--owg-info);
+  --_g: "i";
+  margin-block: 0 var(--owg-flow);
+  padding: var(--owg-space-3) var(--owg-space-4);
+  border: var(--owg-border-width) solid color-mix(in srgb, var(--_c) 22%, var(--owg-border));
+  border-left: 3px solid var(--_c);
+  border-radius: var(--owg-radius);
+  background: color-mix(in srgb, var(--_c) var(--owg-tint), var(--owg-surface));
+  color: var(--owg-text);
+}
+:is(.callout, .markdown-alert) > :last-child { margin-bottom: 0; }
+
+:is(.callout-title, .markdown-alert-title, details.callout > summary) {
+  display: flex;
+  align-items: center;
+  gap: var(--owg-space-2);
+  margin: 0 0 var(--owg-space-2);
+  color: var(--_c);
+  font-size: var(--owg-text-sm);
+  font-weight: var(--owg-weight-bold);
+  letter-spacing: var(--owg-tracking-caps);
+  text-transform: uppercase;
+}
+:is(.callout-title, .markdown-alert-title, details.callout > summary)::before {
+  content: var(--_g);
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: var(--owg-radius);
+  background: var(--_c);
+  color: var(--owg-surface);
+  font-size: var(--owg-text-xs);
+  font-weight: var(--owg-weight-bold);
+  letter-spacing: 0;
+  text-transform: none;
+}
+.markdown-alert-title > svg { display: none; }
+
+.callout:is(.tip, .success), .markdown-alert-tip {
+  --_c: var(--owg-success); --_g: "\2713";
+}
+.callout.important, .markdown-alert-important {
+  --_c: var(--owg-important); --_g: "\2605";
+}
+.callout.warning, .markdown-alert-warning {
+  --_c: var(--owg-warning); --_g: "!";
+}
+.callout:is(.danger, .caution), .markdown-alert-caution {
+  --_c: var(--owg-danger); --_g: "\00d7";
+}
+
+/* Collapsible: reset the base details box, keep the callout look. */
+details.callout { padding-block: var(--owg-space-2); }
+details.callout > summary {
+  margin: 0;
+  padding: var(--owg-space-1) 0;
+  list-style: none;
+  cursor: pointer;
+  background: none;
+  border: 0;
+}
+details.callout > summary::-webkit-details-marker { display: none; }
+details.callout > summary::after {
+  content: "+";
+  margin-left: auto;
+  color: var(--_c);
+  font-weight: var(--owg-weight-normal);
+}
+details.callout[open] > summary { margin-bottom: var(--owg-space-2); }
+details.callout[open] > summary::after { content: "\2212"; }
+details.callout > summary:focus-visible {
+  outline: var(--owg-focus-width) solid var(--owg-focus);
+  outline-offset: 2px;
+  border-radius: var(--owg-radius);
+}

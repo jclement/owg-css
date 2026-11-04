@@ -1,0 +1,22 @@
+/* Avatar (owg.me): square-ish, hairline border, grayscale until hover.
+   <img class="avatar" src="me.jpg" alt="Jeff">     4rem
+   .avatar.small (2rem), .avatar.large (6rem), .avatar.color (never grayscale) */
+
+img.avatar {
+  display: inline-block;
+  width: 4rem;
+  height: 4rem;
+  object-fit: cover;
+  border: var(--owg-border-width) solid var(--owg-border-strong);
+  border-radius: var(--owg-radius);
+  background: var(--owg-surface-2);
+  filter: grayscale(1);
+  transition: filter 300ms ease;
+  vertical-align: middle;
+}
+img.avatar:hover, img.avatar.color { filter: none; }
+img.avatar.small { width: 2rem; height: 2rem; }
+img.avatar.large { width: 6rem; height: 6rem; }
+@media (prefers-reduced-motion: reduce) {
+  img.avatar { transition: none; }
+}
