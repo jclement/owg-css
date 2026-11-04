@@ -70,6 +70,8 @@ Do not hand-edit `dist/`. If two branches both rebuild `dist/`, the lead rebuild
 - The title (`body > header > :first-child`, typically `<a>`, `<strong>` or `<span>`) is
   bold, `--owg-text-strong`; a `<span>` inside it is drawn in the accent (`owg<span>://</span>css`).
 - `nav` may hold bare `<a>`s or a `<ul><li><a>` list; `aria-current="page"` marks the active link.
+  On narrow screens the nav scrolls sideways (faded right edge); the title never truncates.
+- Buttons/selects in the bar are drawn quiet (transparent, `--owg-topbar-*` colours), sized to it.
 - The top bar is `position: fixed`, `--owg-topbar-height` tall, translucent `--owg-topbar-bg`
   with backdrop blur, a bottom border. `body` gets `padding-top` so content is not hidden, and
   `scroll-padding-top` so anchor jumps land below it.
@@ -85,7 +87,7 @@ Do not hand-edit `dist/`. If two branches both rebuild `dist/`, the lead rebuild
     <nav>...</nav>
   </header>
   <aside id="sidebar">                       <!-- body > aside = fixed left sidebar -->
-    <a href="#" class="sidebar-close" aria-label="Close menu">×</a>  <!-- shown < 960px -->
+    <a href="#_" class="sidebar-close" aria-label="Close menu">×</a>  <!-- shown < 960px -->
     <nav>
       <h2>Getting started</h2>               <!-- any h2-h6 or <p> = group label -->
       <ul>
@@ -94,8 +96,7 @@ Do not hand-edit `dist/`. If two branches both rebuild `dist/`, the lead rebuild
           <ul><li><a href="#themes">Themes</a></li></ul>   <!-- nested = indented, ruled -->
         </li>
       </ul>
-      <h2>Reference</h2>
-      <ul>...</ul>
+      <details open><summary>Reference</summary><ul>...</ul></details>  <!-- collapsible group -->
     </nav>
   </aside>
   <main> ... </main>
@@ -106,8 +107,10 @@ Do not hand-edit `dist/`. If two branches both rebuild `dist/`, the lead rebuild
 - `body:has(> aside)` switches on the shell: sidebar fixed under the top bar, own scroll,
   `--owg-sidebar-width` wide; `main` and `footer` shift right.
 - Under 960px the sidebar is an off-canvas drawer opened by `#sidebar:target` (works with no JS;
-  the `.sidebar-toggle` link opens it, `.sidebar-close` / `href="#"` closes it). Toggle and close
-  links are hidden on wide screens. `plugins/owg-theme.js` may enhance it (Esc, click-outside)
+  the `.sidebar-toggle` link opens it; `.sidebar-close` closes it, and so does a tap on the dimmed
+  backdrop, which is drawn as part of the close link). Point the close link at a fragment that
+  matches nothing (`href="#_"`): a bare `href="#"` also closes it but jumps to the top of the
+  page. Toggle and close links are hidden on wide screens. `plugins/owg-theme.js` may enhance it (Esc, click-outside)
   but must not be required.
 - Group labels look like owg.me section labels: small, muted, `//` prefix in the accent.
 
@@ -124,7 +127,10 @@ Do not hand-edit `dist/`. If two branches both rebuild `dist/`, the lead rebuild
 ```
 
 - `main:has(> nav.toc)` becomes a two-column grid (article + sticky TOC, `--owg-toc-width`)
-  above 1200px; below that the TOC sits above the article as a compact block.
+  above 1200px; below that the TOC sits above the article as a compact block (top-level
+  entries only, flowing into columns).
+- The current section is marked `aria-current="true"` (or `.active`) on its TOC link, set by a
+  scroll-spy script if the page wants one (CSS cannot know it); it lights the accent rail.
 - Prose width is capped at `--owg-measure`.
 
 ### Footer, grid
