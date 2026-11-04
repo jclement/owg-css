@@ -27,6 +27,9 @@
   font-weight: var(--owg-weight-medium);
   line-height: 1.5;
   white-space: nowrap;
+  /* Isolated, direction from its own text: "~14 KB gzip" stays in order on an RTL page,
+     an Arabic label stays RTL. (isolate alone keeps the page's RTL inside the badge.) */
+  unicode-bidi: plaintext;
   vertical-align: 0.12em;
   text-decoration: none;
 }

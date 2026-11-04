@@ -24,7 +24,7 @@
   letter-spacing: var(--owg-tracking-tight);
   line-height: 1.1;
 }
-.stat :where(small) { font-size: inherit; }
+.stat :where(small) { font-size: inherit; unicode-bidi: plaintext; }
 :where(.stat small).up { color: var(--owg-green); }
 :where(.stat small).up::before { content: "\25B2 "; }
 :where(.stat small).down { color: var(--owg-red); }

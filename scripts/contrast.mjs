@@ -33,7 +33,7 @@ const STATUSES = ["ok", "warn", "error", "info"];
 const html = `<!doctype html><html><head><meta charset="utf-8">
 <link rel="stylesheet" href="${pathToFileURL(css).href}">
 <style>*,*::before,*::after{transition:none!important;animation:none!important}</style></head><body>
-<header><a href="#">site<span>://</span>x</a><nav><a href="#" aria-current="page" data-k="topbar current link">cur</a><a href="#">link</a></nav></header>
+<header><a href="#">site<span>://</span>x</a><nav><a href="#" aria-current="page" data-k="topbar current link">cur</a><a href="#">link</a></nav><select data-k="topbar select" aria-label="theme"><option>auto</option></select></header>
 <aside id="sidebar"><nav><h2>Group</h2><ul><li><a href="#" aria-current="page" data-k="sidebar current link">cur</a></li><li><a href="#" data-k="sidebar link">other</a></li></ul></nav></aside>
 <main><article>
 ${["", ...PALETTE, "accent"].map((c) => `<span class="badge ${c}" data-k="badge ${c || "neutral"}">b</span>`).join("")}
@@ -250,7 +250,7 @@ try {
       await tab.evaluate(install);
       const rows = await tab.evaluate(measure, { PALETTE, CALLOUTS, ALERTS, ASIDES, STATUSES, TEXT, NONTEXT });
       // Keyboard modality first, so :focus-visible applies as it does for a keyboard user.
-      for (const k of ["input", "button", "checkbox"]) {
+      for (const k of ["input", "button", "checkbox", "topbar select"]) {
         await tab.keyboard.press("Shift");
         await tab.focus(`[data-k="${k}"]`);
         rows.push(...(await tab.evaluate(measureFocus, { k, NONTEXT })));
