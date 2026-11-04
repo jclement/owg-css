@@ -1,1 +1,109 @@
-/* owg-css: base/media — owned by the core agent (see SPEC.md). */
+/* owg-css: base/media — owned by the core agent (see SPEC.md).
+   Responsive images and video, framed iframes, thin progress and meter bars. */
+
+:where(img, video) {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;                  /* inline badges (shields.io) sit on the text line */
+}
+
+:where(video, iframe, embed, object) {
+  display: block;
+  max-width: 100%;
+}
+
+:where(figure) > :where(img, video, picture, svg) {
+  display: block;
+}
+
+:where(iframe) {
+  width: 100%;
+  border: 1px solid var(--owg-border);
+  border-radius: var(--owg-radius);
+  background: var(--owg-surface);
+}
+
+:where(audio) {
+  display: block;
+  width: 100%;
+}
+
+/* ---- Progress ------------------------------------------------------------------------------ */
+:where(progress, meter) {
+  display: block;
+  width: 100%;
+  height: 0.5em;
+  margin-bottom: var(--owg-flow);
+  overflow: hidden;
+  vertical-align: middle;
+  background: var(--owg-surface-3);
+  border: 0;
+  border-radius: var(--owg-radius);
+  appearance: none;
+}
+
+:where(progress)::-webkit-progress-bar {
+  background: var(--owg-surface-3);
+  border-radius: var(--owg-radius);
+}
+
+:where(progress)::-webkit-progress-value {
+  background: var(--owg-accent);
+  border-radius: var(--owg-radius);
+}
+
+:where(progress)::-moz-progress-bar {
+  background: var(--owg-accent);
+  border-radius: var(--owg-radius);
+}
+
+:where(progress:indeterminate) {
+  background: var(--owg-surface-3)
+    linear-gradient(to right, var(--owg-accent) 30%, transparent 30%) 0 0 / 150% 100% no-repeat;
+  animation: owg-progress 1.2s linear infinite;
+}
+
+:where(progress:indeterminate)::-webkit-progress-bar {
+  background: transparent;
+}
+
+:where(progress:indeterminate)::-moz-progress-bar {
+  background: transparent;
+}
+
+@keyframes owg-progress {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+/* ---- Meter: optimum = success, sub-optimum = warning, worst = danger ---------------------- */
+:where(meter)::-webkit-meter-bar {
+  height: 0.5em;
+  background: var(--owg-surface-3);
+  border: 0;
+  border-radius: var(--owg-radius);
+}
+
+:where(meter)::-webkit-meter-optimum-value {
+  background: var(--owg-success);
+}
+
+:where(meter)::-webkit-meter-suboptimum-value {
+  background: var(--owg-warning);
+}
+
+:where(meter)::-webkit-meter-even-less-good-value {
+  background: var(--owg-danger);
+}
+
+:where(meter):-moz-meter-optimum::-moz-meter-bar {
+  background: var(--owg-success);
+}
+
+:where(meter):-moz-meter-sub-optimum::-moz-meter-bar {
+  background: var(--owg-warning);
+}
+
+:where(meter):-moz-meter-sub-sub-optimum::-moz-meter-bar {
+  background: var(--owg-danger);
+}

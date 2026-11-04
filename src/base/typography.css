@@ -1,1 +1,316 @@
-/* owg-css: base/typography — owned by the core agent (see SPEC.md). */
+/* owg-css: base/typography — owned by the core agent (see SPEC.md).
+   Dense prose at 14px mono: tight headings, accent list markers, quiet rules, keycaps. */
+
+/* ---- Vertical rhythm: blocks space below, the last one in a box does not -------------- */
+:where(p, ul, ol, dl, blockquote, pre, table, figure, details, fieldset, form, .table-wrap) {
+  margin-top: 0;
+  margin-bottom: var(--owg-flow);
+}
+
+:where(p, ul, ol, dl, blockquote, pre, table, figure, details, fieldset, form, .table-wrap):last-child {
+  margin-bottom: 0;
+}
+
+:where(p) {
+  text-wrap: pretty;
+}
+
+/* ---- Headings ------------------------------------------------------------------------- */
+:where(h1, h2, h3, h4, h5, h6) {
+  margin: var(--owg-space-6) 0 var(--owg-space-3);
+  color: var(--owg-text-strong);
+  font-weight: var(--owg-weight-bold);
+  line-height: var(--owg-line-height-tight);
+  letter-spacing: var(--owg-tracking-tight);
+  text-wrap: balance;
+}
+
+:where(h1) {
+  font-size: var(--owg-text-3xl);
+  font-weight: 700;
+  margin-bottom: var(--owg-space-4);
+}
+
+:where(h2) {
+  font-size: var(--owg-text-2xl);
+  margin-top: var(--owg-space-7);
+  padding-bottom: var(--owg-space-2);
+  border-bottom: 1px solid var(--owg-border);
+}
+
+:where(h3) { font-size: var(--owg-text-xl); }
+:where(h4) { font-size: var(--owg-text-lg); }
+:where(h5) { font-size: var(--owg-text-base); }
+
+:where(h6) {
+  font-size: var(--owg-text-sm);
+  font-weight: var(--owg-weight-medium);
+  color: var(--owg-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--owg-tracking-caps);
+}
+
+:where(h1, h2, h3, h4, h5, h6):first-child {
+  margin-top: 0;
+}
+
+:where(h1, h2, h3, h4, h5, h6) + :where(h1, h2, h3, h4, h5, h6) {
+  margin-top: var(--owg-space-3);
+}
+
+/* ---- Links ---------------------------------------------------------------------------- */
+:where(a) {
+  color: var(--owg-link);
+  text-decoration: none;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+:where(a:hover) {
+  color: var(--owg-link-hover);
+  text-decoration: underline;
+}
+
+/* In running text a faint underline keeps links findable without relying on colour alone
+   (WCAG 1.4.1). Navigation lists are left alone. */
+:where(p, li, dd, td, blockquote, figcaption) :where(a:not(nav a, .button, [role="button"])) {
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+}
+
+:where(p, li, dd, td, blockquote, figcaption) :where(a:not(nav a, .button, [role="button"]):hover) {
+  text-decoration-color: currentColor;
+}
+
+/* ---- Inline semantics ----------------------------------------------------------------- */
+:where(strong, b) {
+  font-weight: var(--owg-weight-bold);
+  color: var(--owg-text-strong);
+}
+
+:where(small) {
+  font-size: var(--owg-text-sm);
+}
+
+:where(mark) {
+  padding: 0 0.15em;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--owg-accent) 22%, transparent);
+  color: var(--owg-text-strong);
+}
+
+:where(abbr[title]) {
+  text-decoration: underline dotted;
+  text-underline-offset: 0.2em;
+  cursor: help;
+}
+
+:where(sub, sup) {
+  font-size: 0.75em;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+:where(sup) { top: -0.5em; }
+:where(sub) { bottom: -0.25em; }
+
+:where(del, s) {
+  color: var(--owg-muted);
+  text-decoration-color: var(--owg-danger);
+}
+
+:where(ins) {
+  text-decoration: underline;
+  text-decoration-color: var(--owg-success);
+  text-underline-offset: 0.2em;
+}
+
+:where(var) {
+  font-style: italic;
+  color: var(--owg-accent);
+}
+
+:where(kbd) {
+  padding: 0.05em 0.4em;
+  font-size: var(--owg-text-sm);
+  font-weight: var(--owg-weight-medium);
+  color: var(--owg-text-strong);
+  background: var(--owg-surface);
+  border: 1px solid var(--owg-border-strong);
+  border-bottom-width: 2px;
+  border-radius: var(--owg-radius);
+}
+
+:where(kbd kbd) {
+  padding: 0;
+  border: 0;
+}
+
+/* ---- Lists ---------------------------------------------------------------------------- */
+:where(ul, ol) {
+  padding-inline-start: 2.5ch;
+}
+
+:where(ul) {
+  list-style-type: "- ";
+}
+
+:where(ul ul) {
+  list-style-type: "· ";
+}
+
+:where(ol) {
+  list-style-type: decimal-leading-zero;
+  padding-inline-start: 4ch;
+}
+
+:where(ol ol) {
+  list-style-type: lower-alpha;
+  padding-inline-start: 3ch;
+}
+
+:where(li)::marker {
+  color: var(--owg-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+:where(li + li) {
+  margin-top: 0.2em;
+}
+
+:where(li) > :where(ul, ol) {
+  margin: 0.2em 0 0;
+}
+
+/* GitHub-style task lists: the checkbox takes the marker's place. */
+:where(li):has(> input[type="checkbox"]:first-child) {
+  list-style: none;
+}
+
+:where(li) > :where(input[type="checkbox"]:first-child) {
+  margin: 0 0.6ch 0 -2.5ch;
+  vertical-align: -0.2em;
+}
+
+:where(ul, ol)[role="list"],
+:where(nav ul, nav ol) {
+  list-style: none;
+  padding-inline-start: 0;
+}
+
+/* ---- Description lists ------------------------------------------------------------------ */
+:where(dt) {
+  font-weight: var(--owg-weight-bold);
+  color: var(--owg-text-strong);
+}
+
+:where(dd) {
+  margin: 0 0 var(--owg-space-2) 2.5ch;
+}
+
+/* <dl class="inline">: two-column term / definition grid. */
+:where(dl.inline) {
+  display: grid;
+  grid-template-columns: minmax(8ch, max-content) 1fr;
+  gap: var(--owg-space-1) var(--owg-space-5);
+}
+
+:where(dl.inline) > :where(dd) {
+  margin: 0;
+}
+
+/* ---- Quotes, rules, figures ------------------------------------------------------------- */
+:where(blockquote) {
+  margin-inline: 0;
+  padding: var(--owg-space-1) 0 var(--owg-space-1) var(--owg-space-4);
+  border-left: 2px solid var(--owg-accent);
+  color: var(--owg-muted);
+}
+
+:where(blockquote) > :where(footer, cite) {
+  display: block;
+  margin-top: var(--owg-space-2);
+  font-size: var(--owg-text-sm);
+  font-style: normal;
+}
+
+:where(blockquote) > :where(footer)::before {
+  content: "— ";
+  color: var(--owg-accent);
+}
+
+:where(hr) {
+  height: 0;
+  margin: var(--owg-space-6) 0;
+  border: 0;
+  border-top: 1px dashed var(--owg-border-strong);
+  color: inherit;
+}
+
+:where(figure) {
+  margin-inline: 0;
+}
+
+:where(figcaption) {
+  margin-top: var(--owg-space-2);
+  font-size: var(--owg-text-sm);
+  color: var(--owg-muted);
+}
+
+/* ---- Details / summary ------------------------------------------------------------------ */
+:where(details) {
+  padding: 0 var(--owg-space-4);
+  background: var(--owg-surface);
+  border: 1px solid var(--owg-border);
+  border-radius: var(--owg-radius);
+}
+
+:where(details[open]) {
+  padding-bottom: var(--owg-space-3);
+}
+
+:where(details) > :where(summary) {
+  display: flex;
+  align-items: center;
+  gap: var(--owg-space-3);
+  margin: 0 calc(var(--owg-space-4) * -1);
+  padding: var(--owg-space-2) var(--owg-space-4);
+  list-style: none;
+  font-weight: var(--owg-weight-medium);
+  color: var(--owg-text-strong);
+  border-radius: var(--owg-radius);
+  cursor: pointer;
+}
+
+:where(details) > :where(summary)::-webkit-details-marker {
+  display: none;
+}
+
+/* Chevron drawn from two borders: points right, turns down when open. */
+:where(details) > :where(summary)::before {
+  content: "";
+  flex: none;
+  width: 0.4em;
+  height: 0.4em;
+  margin-inline: 0.15em;
+  border: solid var(--owg-accent);
+  border-width: 0 1.5px 1.5px 0;
+  transform: rotate(-45deg);
+  transition: transform var(--owg-transition);
+}
+
+:where(details[open]) > :where(summary)::before {
+  transform: translateY(-0.1em) rotate(45deg);
+}
+
+:where(details) > :where(summary:hover) {
+  background: var(--owg-surface-2);
+}
+
+:where(details[open]) > :where(summary) {
+  margin-bottom: var(--owg-space-3);
+  border-bottom: 1px solid var(--owg-border);
+  border-radius: var(--owg-radius) var(--owg-radius) 0 0;
+}
+
