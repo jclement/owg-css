@@ -38,8 +38,8 @@ no utility classes, no JavaScript in the core. Tailwind is great; this is not th
 ## Quick start
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist/owg-fonts.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist/owg.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.5.0/dist/owg-fonts.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.5.0/dist/owg.min.css">
 ```
 
 That's it. `owg-fonts.css` self-hosts Roboto Mono; leave it out to use the system monospace
@@ -57,7 +57,7 @@ A complete page:
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist/owg.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.5.0/dist/owg.min.css">
 </head>
 <body>
   <header>                                  <!-- fixed top bar -->
@@ -99,7 +99,7 @@ Every variant has a light and a dark form and keeps body text at 4.5:1 or better
 and applies it before the first paint. Load it in `<head>`, not deferred:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist/plugins/owg-theme.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.5.0/dist/plugins/owg-theme.js"></script>
 
 <div role="group" aria-label="Theme">
   <button data-theme-set="auto">auto</button>
@@ -169,8 +169,8 @@ a `nav.toc` (see [App shell](#app-shell-and-docs-layout)) when the docs grow pas
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ title }}</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist/owg-fonts.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist/owg.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.5.0/dist/owg-fonts.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.5.0/dist/owg.min.css">
 </head>
 <body>
   <header><a href="/">notes<span>://</span>docs</a></header>
@@ -205,7 +205,7 @@ import MarkdownIt from "markdown-it";
 import alerts from "markdown-it-github-alerts";
 
 const md = MarkdownIt({ html: true, linkify: true }).use(alerts);
-const cdn = "https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist";
+const cdn = "https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.5.0/dist";
 mkdirSync("site", { recursive: true });
 for (const f of readdirSync("docs").filter((f) => f.endsWith(".md"))) {
   const src = readFileSync(`docs/${f}`, "utf8");
@@ -233,7 +233,7 @@ Save the minimum template as `owg.html` with pandoc's variables, then
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>$pagetitle$</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist/owg.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.5.0/dist/owg.min.css">
 </head>
 <body>
   <header><a href="index.html">$pagetitle$</a></header>
@@ -333,7 +333,7 @@ All optional, all in `dist/plugins/`:
   taken from the theme tokens, so code follows the variant. Diffs are tinted.
 
   ```html
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist/plugins/owg-highlight.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.5.0/dist/plugins/owg-highlight.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
   <script>hljs.configure({ cssSelector: "pre code[class*=language-]" }); hljs.highlightAll();</script>
   ```
@@ -343,7 +343,7 @@ All optional, all in `dist/plugins/`:
 
   ```html
   <!-- imports mermaid@11.4.1 from jsDelivr on first use, or reuses window.mermaid -->
-  <script src="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist/plugins/owg-mermaid.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.5.0/dist/plugins/owg-mermaid.js" defer></script>
   ```
 
   Don't give any element `id="mermaid"`: browsers expose it as `window.mermaid`.

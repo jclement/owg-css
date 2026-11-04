@@ -74,20 +74,20 @@
       <p>
         owg-css is one stylesheet that makes plain HTML look like a well-kept terminal: dense,
         monospace, quiet. This page takes you from nothing to a themed docs site in about five
-        minutes. <span class="badge accent">v0.1.0</span> <span class="badge">&lt; 14 KB gzip</span>
+        minutes. <span class="badge accent">v0.5.0</span> <span class="badge">&lt; 14 KB gzip</span>
       </p>
 
       <h2 id="install">Install</h2>
       <p>There is nothing to install. Link the stylesheet from jsDelivr, pinned to a release:</p>
-<pre data-lang="html"><code class="language-html">&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist/owg-fonts.css"&gt;
-&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist/owg.min.css"&gt;</code></pre>
+<pre data-lang="html"><code class="language-html">&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.5.0/dist/owg-fonts.css"&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.5.0/dist/owg.min.css"&gt;</code></pre>
       <p>
         <code>owg-fonts.css</code> is optional: it self-hosts Roboto Mono. Leave it out and the
         stack falls back to your system monospace font (SF Mono, Menlo, Consolas, DejaVu).
       </p>
       <aside class="callout tip">
         <p class="callout-title">Tip</p>
-        <p>Use <code>@main</code> instead of <code>@v0.1.0</code> to follow the latest commit. Fine for a side project; pin a tag for anything you care about.</p>
+        <p>Use <code>@main</code> instead of <code>@v0.5.0</code> to follow the latest commit. Fine for a side project; pin a tag for anything you care about.</p>
       </aside>
       <p>Prefer to vendor it? Download <code>dist/</code> and <code>fonts/</code> and keep them side by side so the font paths resolve.</p>
 
@@ -124,7 +124,7 @@
       </p>
 <pre data-lang="html"><code class="language-html">&lt;html data-theme="dark"&gt;   &lt;!-- or "light"; omit for auto --&gt;</code></pre>
       <p>To give visitors a switch that remembers their choice, add the theme helper in <code>&lt;head&gt;</code> (not deferred, so it applies before the first paint) and mark up a few buttons:</p>
-<pre data-lang="html"><code class="language-html">&lt;script src="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist/plugins/owg-theme.js"&gt;&lt;/script&gt;
+<pre data-lang="html"><code class="language-html">&lt;script src="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.5.0/dist/plugins/owg-theme.js"&gt;&lt;/script&gt;
 
 &lt;div role="group" aria-label="Theme"&gt;
   &lt;button data-theme-set="auto"&gt;auto&lt;/button&gt;

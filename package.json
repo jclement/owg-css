@@ -1,6 +1,6 @@
 {
   "name": "owg-css",
-  "version": "0.1.0",
+  "version": "0.5.0",
   "description": "Classless-first, dense, monospace CSS for technical sites and docs.",
   "license": "MIT",
   "author": "Jeff Clement",
