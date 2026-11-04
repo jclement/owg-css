@@ -23,7 +23,7 @@
       <a href="https://github.com/jclement/owg-css">GitHub</a>
     </nav>
     <div role="group" aria-label="Colour theme" class="theme-set">
-      <button type="button" class="small ghost" data-theme-set="auto" aria-pressed="true" aria-label="Auto theme" data-tooltip="auto" data-placement="bottom">◐</button>
+      <button type="button" class="small ghost" data-theme-set="auto" aria-pressed="true" aria-label="Auto theme" data-tooltip="auto" data-placement="bottom">A</button>
       <button type="button" class="small ghost" data-theme-set="light" aria-pressed="false" aria-label="Light theme" data-tooltip="light" data-placement="bottom">☀&#xFE0E;</button>
       <button type="button" class="small ghost" data-theme-set="dark" aria-pressed="false" aria-label="Dark theme" data-tooltip="dark" data-placement="bottom">☾&#xFE0E;</button>
     </div>
@@ -74,7 +74,7 @@
       <p>
         owg-css is one stylesheet that makes plain HTML look like a well-kept terminal: dense,
         monospace, quiet. This page takes you from nothing to a themed docs site in about five
-        minutes. <span class="badge accent">v0.1.0</span> <span class="badge">~6 KB gzip</span>
+        minutes. <span class="badge accent">v0.1.0</span> <span class="badge">&lt; 14 KB gzip</span>
       </p>
 
       <h2 id="install">Install</h2>
@@ -189,12 +189,12 @@
       <h3 id="tokens">Tokens</h3>
       <p>Everything is a custom property on <code>:root</code>. Override a few to make it yours:</p>
 <pre data-lang="css"><code class="language-css">:root {
-  --owg-font-size: 15px;      /* everything scales from here */
+  --owg-font-size: 100%;      /* everything scales from here (default 87.5%) */
   --owg-radius: 0;            /* sharp corners */
   --owg-accent: #c2410c;      /* burnt orange links and buttons */
 }</code></pre>
       <dl class="kv">
-        <dt><code>--owg-font-size</code></dt><dd>14px root; every size is in <code>rem</code></dd>
+        <dt><code>--owg-font-size</code></dt><dd>87.5% root (14px unless the reader changed it); every size is in <code>rem</code></dd>
         <dt><code>--owg-accent</code></dt><dd>links, buttons, focus rings, markers</dd>
         <dt><code>--owg-measure</code></dt><dd>prose line length, 78ch</dd>
         <dt><code>--owg-sidebar-width</code></dt><dd>15rem</dd>

@@ -23,7 +23,7 @@
       <a href="https://github.com/jclement/owg-css">GitHub</a>
     </nav>
     <div role="group" aria-label="Colour theme" class="theme-set">
-      <button type="button" class="small ghost" data-theme-set="auto" aria-pressed="true" aria-label="Auto theme" data-tooltip="auto" data-placement="bottom">◐</button>
+      <button type="button" class="small ghost" data-theme-set="auto" aria-pressed="true" aria-label="Auto theme" data-tooltip="auto" data-placement="bottom">A</button>
       <button type="button" class="small ghost" data-theme-set="light" aria-pressed="false" aria-label="Light theme" data-tooltip="light" data-placement="bottom">☀&#xFE0E;</button>
       <button type="button" class="small ghost" data-theme-set="dark" aria-pressed="false" aria-label="Dark theme" data-tooltip="dark" data-placement="bottom">☾&#xFE0E;</button>
     </div>
@@ -106,15 +106,20 @@
       </p>
       <p>
         <span class="badge accent">classless-first</span>
-        <span class="badge green dot">~25 KB min</span>
+        <span class="badge green dot">&lt; 14 KB gzip</span>
         <span class="badge">0 dependencies</span>
         <span class="badge purple">7 variants</span>
         <span class="badge cyan">light / dark / auto</span>
       </p>
 <pre data-lang="html"><code>&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist/owg.min.css"&gt;</code></pre>
+      <p>
+        This page is the kitchen sink: every element and component. Also see
+        <a href="docs.html">a docs page</a> (sidebar, table of contents, breadcrumbs) and
+        <a href="plain.html">a classless page</a> (no classes, no JavaScript, what Markdown gives you).
+      </p>
       <div class="grid cols-3">
         <div class="stat"><strong>0</strong> <span>classes needed</span></div>
-        <div class="stat"><strong>14px</strong> <span>root size</span></div>
+        <div class="stat"><strong>87.5%</strong> <span>root size: 14px, or your browser setting</span></div>
         <div class="stat"><strong>4.5:1</strong> <span>min text contrast</span></div>
       </div>
     </section>
@@ -167,7 +172,7 @@
       <h5>h5. DNS-01 challenge</h5>
       <h6>h6. Propagation timeouts</h6>
       <p>
-        Paragraph text is set at 14px with a 1.6 line height and capped at a comfortable
+        Paragraph text is 87.5% of your browser size (14px by default) with a 1.6 line height and capped at a comfortable
         measure. The point is density without fatigue: you should be able to read a full
         runbook without zooming, and scan a config reference without scrolling past white
         space. Links like <a href="#typography">this one</a> use the accent and pick up an
