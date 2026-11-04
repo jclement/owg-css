@@ -129,3 +129,27 @@
     rotate: 1turn;
   }
 }
+
+/* ---- Windows high contrast / forced colours: every button keeps a visible frame, the
+   pressed toggle is drawn as a selected item, focus uses the system highlight. ---------- */
+@media (forced-colors: active) {
+  :where(button, [type="submit"], [type="button"], [type="reset"], .button, [role="button"]) {
+    border-color: ButtonText;
+  }
+
+  :where(button, .button, [role="button"])[aria-pressed="true"] {
+    forced-color-adjust: none;
+    color: SelectedItemText;
+    background: SelectedItem;
+    border-color: SelectedItem;
+  }
+
+  :where(button, [type="submit"], [type="button"], [type="reset"], .button, [role="button"]):where(:disabled, [aria-disabled="true"]) {
+    color: GrayText;
+    border-color: GrayText;
+  }
+
+  :focus-visible {
+    outline-color: Highlight;
+  }
+}

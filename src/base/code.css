@@ -56,8 +56,8 @@
 :where(pre[data-lang])::before {
   content: attr(data-lang);
   position: absolute;
-  top: 0;
-  right: 0;
+  inset-block-start: 0;
+  inset-inline-end: 0;
   padding: 0 0.7em;
   font-size: var(--owg-text-xs);
   line-height: 1.6;
@@ -66,8 +66,10 @@
   color: var(--owg-muted);
   background: var(--owg-surface);
   border: solid var(--owg-border);
-  border-width: 0 0 1px 1px;
-  border-bottom-left-radius: var(--owg-radius);
+  border-width: 0;
+  border-block-end-width: 1px;
+  border-inline-start-width: 1px;
+  border-end-start-radius: var(--owg-radius);
   user-select: none;
 }
 
