@@ -1,1 +1,321 @@
-/* owg-css: base/forms — owned by the core agent (see SPEC.md). */
+/* owg-css: base/forms — owned by the core agent (see SPEC.md).
+   Labels sit above controls; a label wrapping a checkbox/radio is inline. Helper text: a
+   <small> right after a control. States: :disabled, [aria-invalid="true|false"], :user-invalid.
+   Switch: <input type="checkbox" role="switch">. Joined: <div role="group"> (or role=search).
+   Side-by-side fields: <div class="row"> inside a form.
+   Text controls and buttons share padding + line-height, so they line up in a row or group.
+   --_ring is the state colour of a text control (accent, danger or success). */
+
+:where(label) {
+  display: block;
+  margin-bottom: var(--owg-space-1);
+  font-weight: var(--owg-weight-medium);
+  color: var(--owg-text-strong);
+}
+
+:where(label:has(> [type="checkbox"], > [type="radio"])) {
+  display: flex;
+  align-items: center;
+  gap: var(--owg-space-2);
+  width: fit-content;
+  margin-bottom: var(--owg-space-2);
+  font-weight: var(--owg-weight-normal);
+  color: var(--owg-text);
+}
+
+fieldset {
+  min-width: 0;
+  padding: var(--owg-space-3) var(--owg-space-4) var(--owg-space-4);
+  border: 1px solid var(--owg-border);
+  border-radius: var(--owg-radius);
+}
+
+/* Legends read as owg section labels: // LEGEND */
+legend {
+  padding: 0 var(--owg-space-2);
+  margin-left: calc(-1 * var(--owg-space-2));
+  font-size: var(--owg-text-sm);
+  font-weight: var(--owg-weight-medium);
+  letter-spacing: var(--owg-tracking-caps);
+  text-transform: uppercase;
+  color: var(--owg-muted);
+}
+
+legend::before {
+  content: "// ";
+  color: var(--owg-accent);
+}
+
+/* ---- Text-like controls (checkbox, radio, range, color, file are re-styled below) ---- */
+:where(input, select, textarea) {
+  --_ring: var(--owg-accent);
+  width: 100%;
+  margin-bottom: var(--owg-space-4);
+  padding: var(--owg-space-2) var(--owg-space-3);
+  line-height: var(--owg-line-height-tight);
+  background-color: var(--owg-surface);
+  border: 1px solid var(--owg-border-strong);
+  border-radius: var(--owg-radius);
+  appearance: none;
+  transition: border-color var(--owg-transition), box-shadow var(--owg-transition);
+}
+
+:where(label) > :where(input:not([type="checkbox"], [type="radio"]), select, textarea) {
+  margin-top: var(--owg-space-1);
+}
+
+:where(input, select, textarea):focus-visible {
+  outline: 0;
+  border-color: var(--_ring);
+  box-shadow: 0 0 0 var(--owg-focus-width) color-mix(in srgb, var(--_ring) 45%, transparent);
+}
+
+:where([aria-invalid="true"], :user-invalid) {
+  --_ring: var(--owg-danger);
+  border-color: var(--owg-danger);
+}
+
+:where([aria-invalid="false"]) {
+  --_ring: var(--owg-success);
+  border-color: var(--owg-success);
+}
+
+::placeholder {
+  color: var(--owg-muted);
+}
+
+textarea {
+  display: block;
+  min-height: 6.5em;
+  line-height: var(--owg-line-height);
+  resize: vertical;
+}
+
+/* Chevron drawn from two gradients so it follows the theme. */
+:where(select:not([multiple], [size])) {
+  padding-right: 2.25em;
+  background-image: linear-gradient(45deg, #0000 50%, var(--owg-muted) 0), linear-gradient(135deg, var(--owg-muted) 50%, #0000 0);
+  background-position: calc(100% - 1.15em) 52%, calc(100% - 0.8em) 52%;
+  background-size: 0.35em 0.35em;
+  background-repeat: no-repeat;
+  appearance: none;
+}
+
+/* Helper / error text right after a control. */
+:where(input, select, textarea, [role="group"]) + small {
+  display: block;
+  margin: calc(-1 * var(--owg-space-3)) 0 var(--owg-space-4);
+  color: var(--owg-muted);
+}
+
+:where([aria-invalid="true"], :user-invalid) + small {
+  color: var(--owg-danger);
+}
+
+:where([aria-invalid="false"]) + small {
+  color: var(--owg-success);
+}
+
+:where(label:has(> :disabled)),
+:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+:where(input, select, textarea):where(:disabled, [readonly]) {
+  background-color: var(--owg-surface-2);
+}
+
+/* ---- Checkbox, radio, switch: tokens only. Checked box = accent square in its frame. ---- */
+:where([type="checkbox"], [type="radio"]) {
+  flex: none;
+  border-color: color-mix(in srgb, var(--owg-border-strong), var(--owg-muted));
+  width: 1.15em;
+  height: 1.15em;
+  margin: 0;
+  padding: 0;
+  vertical-align: -0.2em;
+  appearance: none;
+  cursor: pointer;
+}
+
+[type="radio"] {
+  border-radius: 50%;
+}
+
+:where([type="checkbox"], [type="radio"]):where(:hover) {
+  border-color: var(--owg-accent);
+}
+
+:where([type="checkbox"], [type="radio"]):focus-visible {
+  outline: var(--owg-focus-width) solid var(--owg-focus);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+:where([type="checkbox"], [type="radio"]):checked {
+  background-color: var(--owg-accent);
+  border-color: var(--owg-accent);
+  box-shadow: inset 0 0 0 0.2em var(--owg-surface);
+}
+
+:where([type="checkbox"]):indeterminate {
+  border-color: var(--owg-accent);
+  background: linear-gradient(var(--owg-accent) 0 0) center / 55% 2px no-repeat var(--owg-surface);
+}
+
+/* Switch: the knob is a radial gradient, so no pseudo-elements (inputs cannot have them). */
+:where([role="switch"]) {
+  --_knob: var(--owg-muted);
+  width: 2.15em;
+  height: 1.2em;
+  border-radius: 1em;
+  background: radial-gradient(circle closest-side, var(--_knob) 80%, #0000 88%) 0 50% / 1.2em 1.2em no-repeat var(--owg-surface-3);
+  transition: background-position var(--owg-transition);
+}
+
+:where([role="switch"]):checked {
+  --_knob: var(--owg-accent-ink);
+  background-position: 100% 50%;
+  background-color: var(--owg-accent);
+  box-shadow: none;
+}
+
+/* ---- Range -------------------------------------------------------------------------- */
+[type="range"] {
+  height: 1.25em;
+  padding: 0;
+  background: none;
+  border: 0;
+  appearance: none;
+  cursor: pointer;
+}
+
+[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  background: var(--owg-surface-3);
+  border-radius: 2px;
+}
+
+[type="range"]::-moz-range-track {
+  height: 4px;
+  background: var(--owg-surface-3);
+  border-radius: 2px;
+}
+
+[type="range"]::-moz-range-progress {
+  height: 4px;
+  background: var(--owg-accent);
+}
+
+[type="range"]::-webkit-slider-thumb {
+  width: 1em;
+  height: 1em;
+  margin-top: calc(2px - 0.5em);
+  background: var(--owg-accent);
+  border: 2px solid var(--owg-surface);
+  border-radius: var(--owg-radius);
+  appearance: none;
+}
+
+[type="range"]::-moz-range-thumb {
+  width: 1em;
+  height: 1em;
+  background: var(--owg-accent);
+  border: 2px solid var(--owg-surface);
+  border-radius: var(--owg-radius);
+}
+
+/* ---- Color, file -------------------------------------------------------------------- */
+[type="color"] {
+  display: block;
+  width: 3.5em;
+  height: 2.4em;
+  padding: 3px;
+  cursor: pointer;
+}
+
+[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+[type="color"]::-webkit-color-swatch {
+  border: 0;
+  border-radius: 2px;
+}
+
+[type="color"]::-moz-color-swatch {
+  border: 0;
+  border-radius: 2px;
+}
+
+[type="file"] {
+  padding: 0;
+  font-size: var(--owg-text-sm);
+  color: var(--owg-muted);
+  background: none;
+  border: 0;
+}
+
+::file-selector-button {
+  margin-right: var(--owg-space-3);
+  padding: var(--owg-space-1) var(--owg-space-3);
+  font: inherit;
+  color: var(--owg-text);
+  background: var(--owg-surface-2);
+  border: 1px solid var(--owg-border-strong);
+  border-radius: var(--owg-radius);
+  cursor: pointer;
+}
+
+::file-selector-button:hover {
+  background: var(--owg-surface-3);
+}
+
+/* ---- Layout ------------------------------------------------------------------------- */
+:where(form .row) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
+  gap: 0 var(--owg-space-4);
+}
+
+/* Joined controls: <div role="group"><input><button>Go</button></div>; buttons alone too. */
+:where([role="group"], [role="search"]) {
+  display: inline-flex;
+  margin-bottom: var(--owg-space-4);
+  vertical-align: middle;
+}
+
+:where([role="group"]:has(input, select), [role="search"]) {
+  display: flex;
+}
+
+:where([role="group"], [role="search"]) > * {
+  margin: 0;
+  border-radius: 0;
+}
+
+:where([role="group"], [role="search"]) > :where(input, select) {
+  flex: 1;
+  min-width: 0;
+}
+
+:where([role="group"], [role="search"]) > :not(:first-child) {
+  margin-left: -1px;
+}
+
+:where([role="group"], [role="search"]) > :first-child {
+  border-radius: var(--owg-radius) 0 0 var(--owg-radius);
+}
+
+:where([role="group"], [role="search"]) > :last-child {
+  border-radius: 0 var(--owg-radius) var(--owg-radius) 0;
+}
+
+:where([role="group"], [role="search"]) > :where(:only-child) {
+  border-radius: var(--owg-radius);
+}
+
+:where([role="group"], [role="search"]) > :where(:hover, :focus-visible) {
+  position: relative;
+}

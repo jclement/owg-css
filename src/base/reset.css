@@ -1,1 +1,71 @@
-/* owg-css: base/reset — owned by the core agent (see SPEC.md). */
+/* owg-css: base/reset — owned by the core agent (see SPEC.md).
+   Minimal modern reset + document defaults. Everything element-level sits in :where()
+   (specificity 0) so any author rule wins. */
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+:where(html) {
+  font-family: var(--owg-font);
+  font-size: var(--owg-font-size);
+  line-height: var(--owg-line-height);
+  font-variant-ligatures: none;           /* owg.me: code reads as typed, never fused */
+  font-feature-settings: "liga" 0, "calt" 0;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  tab-size: 2;
+  background: var(--owg-bg);
+  color: var(--owg-text);
+  accent-color: var(--owg-accent);
+}
+
+:where(body) {
+  margin: 0;
+  min-height: 100dvh;
+  overflow-wrap: break-word;
+  background: var(--owg-bg);
+  color: var(--owg-text);
+}
+
+:where(button, input, select, textarea, optgroup) {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  margin: 0;
+}
+
+::selection {
+  background: var(--owg-selection);
+  color: var(--owg-text-strong);
+}
+
+/* One focus ring for everything interactive. */
+:focus-visible {
+  outline: var(--owg-focus-width) solid var(--owg-focus);
+  outline-offset: 2px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :where(html) {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

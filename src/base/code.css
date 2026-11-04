@@ -1,1 +1,70 @@
-/* owg-css: base/code — owned by the core agent (see SPEC.md). */
+/* owg-css: base/code — owned by the core agent (see SPEC.md).
+   Inline code is a quiet chip; <pre> is a hairline-bordered panel that scrolls sideways.
+   <pre data-lang="ts"> prints the language in the top-right corner. */
+
+:where(code, samp) {
+  font-family: var(--owg-font-mono);
+  font-size: 0.929em;                      /* 13px at the 14px root */
+}
+
+:where(code) {
+  padding: 0.1em 0.35em;
+  color: var(--owg-code-inline-text);
+  background: var(--owg-code-inline-bg);
+  border: 1px solid var(--owg-border);
+  border-radius: var(--owg-radius);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+:where(a, h1, h2, h3, h4, h5, h6) > :where(code) {
+  color: inherit;
+}
+
+:where(pre) {
+  position: relative;
+  overflow-x: auto;
+  padding: var(--owg-space-3) var(--owg-space-4);
+  font-family: var(--owg-font-mono);
+  font-size: 0.929rem;
+  line-height: 1.55;
+  white-space: pre;
+  overflow-wrap: normal;
+  color: var(--owg-code-text);
+  background: var(--owg-code-bg);
+  border: 1px solid var(--owg-border);
+  border-radius: var(--owg-radius);
+  scrollbar-width: thin;
+  scrollbar-color: var(--owg-border-strong) transparent;
+}
+
+:where(pre) :where(code, samp) {
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  border-radius: 0;
+}
+
+/* Language tag: <pre data-lang="bash"> labels the block in its top-right corner. */
+:where(pre[data-lang])::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0 0.7em;
+  font-size: var(--owg-text-xs);
+  letter-spacing: var(--owg-tracking-caps);
+  text-transform: uppercase;
+  color: var(--owg-muted);
+  background: var(--owg-surface);
+  border: solid var(--owg-border);
+  border-width: 0 0 1px 1px;
+  border-bottom-left-radius: var(--owg-radius);
+  user-select: none;
+}
+
+:where(samp) {
+  color: var(--owg-muted);
+}

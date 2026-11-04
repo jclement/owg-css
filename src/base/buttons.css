@@ -1,1 +1,117 @@
-/* owg-css: base/buttons — owned by the core agent (see SPEC.md). */
+/* owg-css: base/buttons — owned by the core agent (see SPEC.md).
+   <button>, input[type=submit|button|reset], a.button, [role=button]. Default: accent fill.
+   Modifiers compose: .secondary .outline .ghost .danger .small .large
+   (class="outline danger", class="ghost small"). [aria-busy="true"] = spinner.
+   [role=group] joins buttons (see forms.css).
+   Modifier classes only set private properties (--_c colour, --_ink text on it, --_h hover,
+   --_bg / --_fg / --_bd overrides), so they are harmless on non-button elements. */
+
+:where(button, [type="submit"], [type="button"], [type="reset"], .button, [role="button"]) {
+  --_c: var(--owg-accent);
+  --_ink: var(--owg-accent-ink);
+  --_h: var(--owg-accent-hover);
+  --_fg: initial;                         /* reset so nothing leaks in from an ancestor */
+  --_bg: initial;
+  --_bd: initial;
+  --_hbg: initial;
+  --_hbd: initial;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--owg-space-2);
+  width: auto;
+  margin: 0;
+  padding: var(--owg-space-2) var(--owg-space-4);
+  font-weight: var(--owg-weight-medium);
+  line-height: var(--owg-line-height-tight);
+  text-decoration: none;
+  white-space: nowrap;
+  color: var(--_fg, var(--_ink));
+  background: var(--_bg, var(--_c));
+  border: 1px solid var(--_bd, var(--_c));
+  border-radius: var(--owg-radius);
+  box-shadow: none;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color var(--owg-transition), border-color var(--owg-transition), color var(--owg-transition);
+}
+
+:where(button, [type="submit"], [type="button"], [type="reset"], .button, [role="button"]):hover {
+  color: var(--_fg, var(--_ink));
+  text-decoration: none;
+  background: var(--_hbg, var(--_h));
+  border-color: var(--_hbd, var(--_h));
+}
+
+:where(button, [type="submit"], [type="button"], [type="reset"], .button, [role="button"]):focus-visible {
+  outline: var(--owg-focus-width) solid var(--owg-focus);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+:where(button, [type="submit"], [type="button"], [type="reset"], .button, [role="button"]):active {
+  translate: 0 1px;
+}
+
+/* ---- Modifiers ------------------------------------------------------------------------ */
+:where(.secondary, [type="reset"]) {
+  --_c: var(--owg-surface-2);
+  --_ink: var(--owg-text);
+  --_h: var(--owg-surface-3);
+  --_bd: var(--owg-border-strong);
+  --_hbd: var(--owg-muted);
+}
+
+:where(.outline, .ghost) {
+  --_fg: var(--_c);
+  --_bg: transparent;
+  --_hbg: color-mix(in srgb, var(--_c) 12%, transparent);
+  --_hbd: var(--_c);
+}
+
+:where(.ghost) {
+  --_c: var(--owg-text);
+  --_bd: transparent;
+  --_hbd: transparent;
+}
+
+:where(.danger) {
+  --_c: var(--owg-danger);
+  --_h: color-mix(in srgb, var(--owg-danger) 82%, var(--owg-text-strong));
+}
+
+:where(button, [type="submit"], [type="button"], [type="reset"], .button, [role="button"]):where(.small) {
+  padding: var(--owg-space-1) var(--owg-space-3);
+  font-size: var(--owg-text-sm);
+}
+
+:where(button, [type="submit"], [type="button"], [type="reset"], .button, [role="button"]):where(.large) {
+  padding: var(--owg-space-3) var(--owg-space-5);
+  font-size: var(--owg-text-lg);
+}
+
+/* ---- States --------------------------------------------------------------------------- */
+:where(button, [type="submit"], [type="button"], [type="reset"], .button, [role="button"]):where(:disabled, [aria-disabled="true"]) {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+:where(button, .button, [role="button"])[aria-busy="true"] {
+  pointer-events: none;
+}
+
+:where(button, .button, [role="button"])[aria-busy="true"]::before {
+  content: "";
+  width: 1em;
+  height: 1em;
+  border: 2px solid;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: owg-spin 0.7s linear infinite;
+}
+
+@keyframes owg-spin {
+  to {
+    rotate: 1turn;
+  }
+}

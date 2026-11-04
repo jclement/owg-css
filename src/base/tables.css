@@ -1,1 +1,91 @@
-/* owg-css: base/tables — owned by the core agent (see SPEC.md). */
+/* owg-css: base/tables — owned by the core agent (see SPEC.md).
+   Dense data tables: small-caps header over a strong rule, hairline rows, hover tint,
+   tabular numbers. Opt-ins: .striped .compact .bordered; td.num / th.num right-align.
+   Wide tables: wrap in <figure> or <div class="table-wrap"> to scroll sideways. */
+
+:where(table) {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: 0.929rem;
+  font-variant-numeric: tabular-nums;
+  text-indent: 0;
+}
+
+:where(caption) {
+  caption-side: bottom;
+  padding-top: var(--owg-space-2);
+  font-size: var(--owg-text-sm);
+  color: var(--owg-muted);
+  text-align: left;
+}
+
+:where(th, td) {
+  padding: var(--owg-space-2) var(--owg-space-3);
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--owg-border);
+}
+
+:where(th) {
+  font-weight: var(--owg-weight-bold);
+  color: var(--owg-text-strong);
+}
+
+:where(thead) :where(th, td) {
+  padding-top: var(--owg-space-1);
+  vertical-align: bottom;
+  font-size: var(--owg-text-sm);
+  font-weight: var(--owg-weight-medium);
+  letter-spacing: var(--owg-tracking-caps);
+  text-transform: uppercase;
+  color: var(--owg-muted);
+  border-bottom-color: var(--owg-border-strong);
+  white-space: nowrap;
+}
+
+:where(tfoot) :where(th, td) {
+  font-weight: var(--owg-weight-bold);
+  color: var(--owg-text-strong);
+  border-top: 1px solid var(--owg-border-strong);
+  border-bottom: 0;
+}
+
+:where(tbody tr:hover) {
+  background: color-mix(in srgb, var(--owg-accent) 6%, transparent);
+}
+
+:where(th.num, td.num) {
+  text-align: right;
+  white-space: nowrap;
+}
+
+:where(table.striped) :where(tbody tr:nth-child(even)) {
+  background: var(--owg-surface-2);
+}
+
+:where(table.compact) :where(th, td) {
+  padding: 0.15em var(--owg-space-2);
+}
+
+:where(table.bordered) {
+  border: 1px solid var(--owg-border-strong);
+}
+
+:where(table.bordered) :where(th, td) {
+  padding-inline: var(--owg-space-3);
+  border: 1px solid var(--owg-border);
+}
+
+:where(table.bordered) :where(thead th, thead td) {
+  background: var(--owg-surface-2);
+  border-bottom-color: var(--owg-border-strong);
+}
+
+/* Horizontal scroll for wide tables. */
+:where(.table-wrap, figure:has(> table)) {
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--owg-border-strong) transparent;
+}
