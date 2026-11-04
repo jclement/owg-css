@@ -1,6 +1,7 @@
 /* owg-css: layout/grid
-   .grid           responsive auto-fit columns, each at least 14rem
-   .grid.cols-2/3/4  fixed column counts; 4 drops to 2 under 960px, all drop to 1 under 640px */
+   .grid             responsive auto-fit columns, each at least 14rem
+   .grid.cols-2/3/4  fixed column counts; 4 drops to 2 under 960px, all drop to 1 under 640px
+   Specificity stays at one class (modifiers inside :where), so one author class wins. */
 
 .grid {
   display: grid;
@@ -8,19 +9,19 @@
   gap: var(--owg-space-4);
 }
 
-.grid > * {
+:where(.grid > *) {
   min-width: 0;
   margin: 0;
 }
 
-.grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.grid.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.grid:where(.cols-2) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid:where(.cols-3) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid:where(.cols-4) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
 @media (max-width: 959.98px) {
-  .grid.cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid:where(.cols-4) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 639.98px) {
-  .grid:is(.cols-2, .cols-3, .cols-4) { grid-template-columns: minmax(0, 1fr); }
+  .grid:where(.cols-2, .cols-3, .cols-4) { grid-template-columns: minmax(0, 1fr); }
 }

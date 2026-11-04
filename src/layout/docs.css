@@ -1,23 +1,32 @@
 /* owg-css: layout/docs
    Docs page: `main:has(> nav.toc)`.
      <main>
+       <nav class="breadcrumb">...</nav>    optional, stays first
        <article>...</article>
        <nav class="toc"><h2>On this page</h2><ul><li><a href="#a">A</a><ul>...</ul></li></ul></nav>
      </main>
-   >= 1200px: two columns, article + sticky TOC (--owg-toc-width) on the right.
-   <  1200px: the TOC sits above the article as a compact, ruled block.
-   Mark the current section with aria-current="true" (or .active) from a scroll-spy script. */
+   The list may also sit one <nav> deeper, as Hugo's {{ .TableOfContents }} renders it:
+     <nav class="toc"><h2>On this page</h2><nav id="TableOfContents"><ul>...</ul></nav></nav>
+   >= 1200px: the frame widens (up to --owg-container-wide) to an article column of
+              --owg-container plus a sticky TOC column (--owg-toc-width) at the inline end.
+   <  1200px: the TOC sits above the article (after any breadcrumb) as a compact block.
+   Mark the current section with aria-current="true" (or .active) from a scroll-spy script.
+   Specificity: type selectors only; .toc and states inside :where(), so one author class wins. */
 
-main:has(> nav.toc) {
+main:has(> nav:where(.toc)) {
   display: flex;
   flex-direction: column;
 }
 
-main:has(> nav.toc) > article {
+main:has(> nav:where(.toc)) > article {
   min-width: 0;
 }
 
-main > nav.toc {
+main:has(> nav:where(.toc)) > nav:where(.breadcrumb) {
+  order: -2;
+}
+
+main > nav:where(.toc) {
   order: -1;
   margin: 0 0 var(--owg-space-6);
   padding: var(--owg-space-3) var(--owg-space-4);
@@ -28,7 +37,7 @@ main > nav.toc {
   line-height: 1.45;
 }
 
-main > nav.toc > :is(h2, h3, h4, h5, h6, p) {
+main > nav:where(.toc) > :is(h2, h3, h4, h5, h6, p) {
   margin: 0 0 var(--owg-space-2);
   padding: 0;
   border: 0;
@@ -40,39 +49,44 @@ main > nav.toc > :is(h2, h3, h4, h5, h6, p) {
   text-transform: lowercase;
 }
 
-main > nav.toc > :is(h2, h3, h4, h5, h6, p)::before {
+main > nav:where(.toc) > :is(h2, h3, h4, h5, h6, p)::before {
   content: "//\a0";
   color: var(--owg-accent);
 }
 
-main > nav.toc :is(ul, ol) {
+main > nav:where(.toc) nav {
+  margin: 0;
+  padding: 0;
+}
+
+main > nav:where(.toc) :is(ul, ol) {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-main > nav.toc li {
+main > nav:where(.toc) li {
   margin: 0;
   padding: 0;
   break-inside: avoid;
 }
 
-main > nav.toc li::before {
+main > nav:where(.toc) li::before {
   content: none;
 }
 
-/* Compact: top-level entries flow into columns. */
-main > nav.toc > :is(ul, ol) {
+/* Compact: top-level entries only, flowing into columns. */
+main > nav:where(.toc) > :is(ul, ol),
+main > nav:where(.toc) > nav > :is(ul, ol) {
   column-width: 15rem;
   column-gap: var(--owg-space-5);
 }
 
-/* Compact mode lists top-level entries only; the wide column shows the full tree. */
-main > nav.toc li > :is(ul, ol) {
+main > nav:where(.toc) li > :is(ul, ol) {
   display: none;
 }
 
-main > nav.toc a {
+main > nav:where(.toc) a {
   display: block;
   padding: 0.15rem 0;
   color: var(--owg-muted);
@@ -81,37 +95,42 @@ main > nav.toc a {
   transition: color var(--owg-transition), border-color var(--owg-transition);
 }
 
-main > nav.toc a:hover {
+main > nav:where(.toc) a:where(:hover) {
   color: var(--owg-text-strong);
   text-decoration: none;
 }
 
-main > nav.toc a:is([aria-current], .active) {
+main > nav:where(.toc) a:where([aria-current], .active) {
   color: var(--owg-accent);
 }
 
-main > nav.toc a:focus-visible {
+main > nav:where(.toc) a:focus-visible {
   outline: var(--owg-focus-width) solid var(--owg-focus);
   outline-offset: 1px;
   border-radius: var(--owg-radius);
 }
 
-/* Wide: sticky right column with an indicator rail. */
+/* Wide: sticky column at the inline end with an indicator rail. */
 @media (min-width: 1200px) {
-  main:has(> nav.toc) {
+  body > main:has(> nav:where(.toc)) {
+    width: min(100% - 2 * var(--owg-gutter), var(--owg-container-wide),
+      var(--owg-container) + var(--owg-toc-width) + var(--owg-space-7));
+  }
+
+  main:has(> nav:where(.toc)) {
     display: grid;
     grid-template-columns: minmax(0, 1fr) var(--owg-toc-width);
     gap: var(--owg-space-7);
     align-items: start;
   }
 
-  main:has(> nav.toc) > :not(nav.toc) {
+  main:has(> nav:where(.toc)) > :where(:not(nav.toc)) {
     grid-column: 1;
   }
 
-  main > nav.toc {
+  main > nav:where(.toc) {
     position: sticky;
-    top: calc(var(--owg-space-6));
+    top: var(--owg-space-6);
     grid-column: 2;
     grid-row: 1 / span 99;
     max-height: calc(100vh - 2 * var(--owg-space-6));
@@ -124,45 +143,55 @@ main > nav.toc a:focus-visible {
     scrollbar-color: var(--owg-border-strong) transparent;
   }
 
-  body:has(> header) main > nav.toc {
+  body:has(> header) main > nav:where(.toc) {
     top: calc(var(--owg-topbar-height) + var(--owg-space-6));
     max-height: calc(100vh - var(--owg-topbar-height) - 2 * var(--owg-space-6));
   }
 
-  main > nav.toc > :is(ul, ol) {
+  main > nav:where(.toc) > :is(ul, ol),
+main > nav:where(.toc) > nav > :is(ul, ol) {
     column-width: auto;
-    border-left: var(--owg-border-width) solid var(--owg-border);
+    border-inline-start: var(--owg-border-width) solid var(--owg-border);
   }
 
-  main > nav.toc li > :is(ul, ol) {
+  main > nav:where(.toc) li > :is(ul, ol) {
     display: block;
   }
 
-  main > nav.toc a {
-    margin-left: calc(-1 * var(--owg-border-width));
-    padding-left: var(--owg-space-3);
-    border-left: 2px solid transparent;
+  main > nav:where(.toc) a {
+    margin-inline-start: calc(-1 * var(--owg-border-width));
+    padding-inline-start: var(--owg-space-3);
+    border-inline-start: 2px solid transparent;
   }
 
-  main > nav.toc li li > a {
-    padding-left: calc(var(--owg-space-3) + var(--owg-space-3));
+  main > nav:where(.toc) li li > a {
+    padding-inline-start: calc(2 * var(--owg-space-3));
   }
 
-  main > nav.toc li li li > a {
-    padding-left: calc(var(--owg-space-3) + 2 * var(--owg-space-3));
+  main > nav:where(.toc) li li li > a {
+    padding-inline-start: calc(3 * var(--owg-space-3));
   }
 
-  main > nav.toc a:hover {
-    border-left-color: var(--owg-border-strong);
+  main > nav:where(.toc) a:where(:hover) {
+    border-inline-start-color: var(--owg-border-strong);
   }
 
-  main > nav.toc a:is([aria-current], .active) {
-    border-left-color: var(--owg-accent);
+  main > nav:where(.toc) a:where([aria-current], .active) {
+    border-inline-start-color: var(--owg-accent);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  main > nav.toc a {
+  main > nav:where(.toc) a {
     transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  main > nav:where(.toc) a:where([aria-current], .active) {
+    forced-color-adjust: none;
+    border-inline-start-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
   }
 }
