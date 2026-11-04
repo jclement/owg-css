@@ -17,15 +17,21 @@ no utility classes, no JavaScript in the core. Tailwind is great; this is not th
 <details>
 <summary>More screenshots: docs layout, phone, every variant, hotdog</summary>
 
-![Docs page with sidebar and table of contents](docs/screenshots/docs-dark.png)
+| Docs page, light | Docs page, dark |
+|---|---|
+| ![Docs page with sidebar and table of contents, light](docs/screenshots/docs-light.png) | ![Docs page, dark](docs/screenshots/docs-dark.png) |
+
+![A classless page: plain HTML with only owg.min.css](docs/screenshots/plain-light.png)
 
 | Phone | Phone, dark | Drawer open |
 |---|---|---|
-| ![](docs/screenshots/phone-light.png) | ![](docs/screenshots/phone-dark.png) | ![](docs/screenshots/phone-drawer.png) |
+| ![Kitchen sink on a 390px phone, light](docs/screenshots/phone-light.png) | ![Kitchen sink on a phone, dark](docs/screenshots/phone-dark.png) | ![Sidebar drawer open on a phone](docs/screenshots/phone-drawer.png) |
 
 ![Every variant, light and dark](docs/screenshots/variants.png)
 
-![Hotdog Stand](docs/screenshots/hotdog.png)
+| Hotdog Stand | Hotdog Stand, after midnight |
+|---|---|
+| ![Hotdog Stand](docs/screenshots/hotdog.png) | ![Hotdog Stand, dark](docs/screenshots/hotdog-dark.png) |
 
 </details>
 

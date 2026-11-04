@@ -45,6 +45,7 @@
       <ul>
         <li><a href="#overview" aria-current="page">Overview</a></li>
         <li><a href="#themes">Themes &amp; variants</a></li>
+        <li><a href="#a11y">Accessibility</a></li>
       </ul>
       <h2>Elements</h2>
       <ul>
@@ -160,6 +161,31 @@
           <tr><td><code>hotdog</code></td><td>Hotdog Stand yellow</td><td>ketchup at midnight</td><td>regret</td></tr>
         </tbody>
       </table>
+    </section>
+
+    <!-- ================================================================== -->
+    <section id="a11y">
+      <p class="label">accessibility</p>
+      <h2>Accessibility</h2>
+      <p>What owg-css guarantees today. Press <kbd>Tab</kbd> to walk this page.</p>
+      <dl class="kv">
+        <dt>text contrast</dt>
+        <dd>Every text colour is at least 4.5:1 in all 14 theme &times; variant looks. <code>mise run check</code> renders each one and fails the build otherwise.</dd>
+        <dt>focus</dt>
+        <dd>On keyboard focus (<code>:focus-visible</code>), links, buttons, checkboxes, radios and summaries get a solid 2px accent outline. Text fields and selects get an accent border and ring.</dd>
+        <dt>reduced motion</dt>
+        <dd>With <code>prefers-reduced-motion: reduce</code>, transitions, smooth scrolling and animations (cursor, status pulse, spinner) stop.</dd>
+        <dt>no JavaScript</dt>
+        <dd>The core is CSS only. The sidebar drawer opens with a <code>#sidebar</code> link, <code>&lt;details&gt;</code> folds natively, and light/dark follows the OS. <code>owg-theme.js</code> only adds a remembered choice and <kbd>Esc</kbd> to close.</dd>
+        <dt>your font size</dt>
+        <dd>The root is 87.5% of the browser setting and every size is in <code>rem</code>, so a larger default text size scales the whole page.</dd>
+        <dt>state in markup</dt>
+        <dd>Styles hang off ARIA you'd write anyway: <code>aria-current</code>, <code>aria-invalid</code>, <code>aria-busy</code>, <code>aria-pressed</code>.</dd>
+        <dt>print</dt>
+        <dd>Dark text on white, no sidebar or table of contents, link URLs printed, code wrapped.</dd>
+        <dt>not covered</dt>
+        <dd>Disabled controls are deliberately dim and below 4.5:1, as WCAG allows for inactive controls.</dd>
+      </dl>
     </section>
 
     <!-- ================================================================== -->

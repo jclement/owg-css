@@ -3,7 +3,7 @@ node = "24"
 
 [tasks.setup]
 description = "Install dev dependencies (lightningcss, playwright) and the Chromium build Playwright needs"
-run = ["npm install", "npx playwright install chromium"]
+run = ["npm ci", "npx playwright install chromium"]
 
 [tasks.build]
 description = "Bundle and minify src/ into dist/ (owg.css, owg.min.css, plugins)"

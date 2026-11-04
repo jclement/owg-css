@@ -99,3 +99,11 @@ figcaption{font-size:var(--owg-text-sm);color:var(--owg-muted);padding:0 0 6px}f
 }
 
 await browser.close();
+
+// Every screenshot README.md links must be one this script writes.
+if (!only.size && out === join(root, "docs/screenshots")) {
+  const want = [...readFileSync(join(root, "README.md"), "utf8").matchAll(/docs\/screenshots\/([\w.-]+\.png)/g)].map((m) => m[1]);
+  const missing = [...new Set(want)].filter((f) => !existsSync(join(out, f)));
+  if (missing.length) { console.error(`README links screenshots this script did not produce: ${missing.join(", ")}`); process.exit(1); }
+  console.log(`README screenshot links ok (${new Set(want).size})`);
+}
