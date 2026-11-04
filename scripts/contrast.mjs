@@ -23,6 +23,10 @@ const VARIANTS = [null, "amber", "phosphor", "slate", "contrast", "doom", "hotdo
 const PALETTE = ["blue", "green", "amber", "red", "purple", "pink", "cyan"];
 const CALLOUTS = ["", "note", "tip", "important", "warning", "danger"];
 const ALERTS = ["note", "tip", "important", "warning", "caution"];
+// Semantic callouts (<aside> in main/article): every data-type and role, plus none.
+const ASIDES = ["", ...["note", "info", "tip", "success", "important", "warning", "danger", "caution"].map((t) => `data-type="${t}"`),
+  ...["note", "status", "alert"].map((r) => `role="${r}"`)];
+const STATUSES = ["ok", "warn", "error", "info"];
 
 // A full page skeleton (top bar, sidebar, TOC) so layout states are the real ones.
 // Transitions and animations are off so nothing is measured mid-transition.
@@ -36,6 +40,9 @@ ${["", ...PALETTE, "accent"].map((c) => `<span class="badge ${c}" data-k="badge 
 ${["", ...PALETTE, "accent"].map((c) => `<span class="badge solid ${c}" data-k="badge solid ${c || "neutral"}">b</span>`).join("")}
 ${CALLOUTS.map((c) => `<aside class="callout ${c}" data-k="callout ${c || "plain"}"><p class="callout-title">t</p><p>x</p></aside>`).join("")}
 ${ALERTS.map((c) => `<div class="markdown-alert markdown-alert-${c}" data-k="alert ${c}"><p class="markdown-alert-title">t</p><p>x</p></div>`).join("")}
+${ASIDES.map((a) => `<aside ${a} data-k="aside ${a.replace(/"/g, "") || "plain"}"><h3>t</h3><p>x</p></aside>`).join("")}
+<h3>h <mark data-k="mark badge">v1</mark></h3>
+<p>${STATUSES.map((s) => `<mark data-status="${s}" data-k="mark status ${s}">s</mark>`).join(" ")}</p>
 <pre><code data-k="pre code">x</code></pre><p><code data-k="inline code">x</code></p>
 <pre class="terminal" data-title="t"><span class="output" data-k="terminal output">x</span></pre>
 <div class="card"><header data-k="card header">h</header><p><input data-k="input on surface" value="v"></p><footer data-k="card footer">f</footer></div>
@@ -104,7 +111,7 @@ function install() {
 }
 
 // Everything that does not need focus. Returns [{cat, pair, min, fg, bg}].
-function measure({ PALETTE, CALLOUTS, ALERTS, TEXT, NONTEXT }) {
+function measure({ PALETTE, CALLOUTS, ALERTS, ASIDES, STATUSES, TEXT, NONTEXT }) {
   const { parse, over, tok, bgOf, el } = window.__owg;
   const color = (n) => parse(getComputedStyle(n).color);
   const rows = [];
@@ -156,6 +163,14 @@ function measure({ PALETTE, CALLOUTS, ALERTS, TEXT, NONTEXT }) {
     const n = el(`alert ${c}`);
     add("components", `alert ${c} title`, color(n.firstElementChild), bgOf(n));
   }
+  for (const a of ASIDES) {
+    const k = `aside ${a.replace(/"/g, "") || "plain"}`, n = el(k);
+    add("semantic", `${k} title`, color(n.firstElementChild), bgOf(n));
+    add("semantic", `${k} body`, color(n.lastElementChild), bgOf(n));
+    pseudo("semantic", `${k} glyph`, n.firstElementChild, "::before");
+  }
+  real("semantic", "mark badge");
+  for (const s of STATUSES) real("semantic", `mark status ${s}`);
   for (const k of ["terminal output", "card header", "card footer", "label", "kv key", "pagination current", "mermaid error"]) real("components", k);
   pseudo("components", "tooltip", el("tooltip"), "::after");
 
@@ -233,7 +248,7 @@ try {
         if (v) document.documentElement.dataset.variant = v;
       }, [theme, variant]);
       await tab.evaluate(install);
-      const rows = await tab.evaluate(measure, { PALETTE, CALLOUTS, ALERTS, TEXT, NONTEXT });
+      const rows = await tab.evaluate(measure, { PALETTE, CALLOUTS, ALERTS, ASIDES, STATUSES, TEXT, NONTEXT });
       // Keyboard modality first, so :focus-visible applies as it does for a keyboard user.
       for (const k of ["input", "button", "checkbox"]) {
         await tab.keyboard.press("Shift");
