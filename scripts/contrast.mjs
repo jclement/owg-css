@@ -25,7 +25,8 @@ const ALERTS = ["note", "tip", "important", "warning", "caution"];
 
 // The page: real components (so their computed colours are what users see) plus a probe.
 const html = `<!doctype html><html><head><meta charset="utf-8">
-<link rel="stylesheet" href="${pathToFileURL(css).href}"></head><body>
+<link rel="stylesheet" href="${pathToFileURL(css).href}">
+<style>*,*::before,*::after{transition:none!important;animation:none!important}</style></head><body>
 <header><a href="#">site<span>://</span>x</a><nav><a href="#">link</a></nav></header>
 <main>
 ${["", ...PALETTE, "accent"].map((c) => `<span class="badge ${c}" data-k="badge ${c || "neutral"}">b</span>`).join("")}

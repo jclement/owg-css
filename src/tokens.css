@@ -12,7 +12,7 @@
   --owg-font-mono: "Roboto Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo,
     Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace;
   --owg-font: var(--owg-font-mono);
-  --owg-font-size: 14px;            /* root size; everything else is rem */
+  --owg-font-size: 87.5%;           /* root size (14px at the browser default, respects user settings); everything else is rem */
   --owg-line-height: 1.6;
   --owg-line-height-tight: 1.25;
   --owg-weight-normal: 400;
@@ -134,6 +134,11 @@
   --owg-topbar-title: var(--owg-text-strong);  /* the site/page title */
   --owg-topbar-accent: var(--owg-accent);      /* <span> in the title, active link */
   --owg-topbar-border: var(--owg-border);
+}
+
+/* Tighter gutters on phones */
+@media (max-width: 640px) {
+  :root { --owg-gutter: var(--owg-space-4); }
 }
 
 /* ---- Colour: DARK -------------------------------------------------------

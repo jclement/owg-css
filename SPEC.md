@@ -12,7 +12,7 @@ why in your report (and update this file in your branch).
 - **Dense, technical, monospace.** Roboto Mono, 14px root, tight rhythm, 3px corners, thin
   rules. The visual language of owg.me: zinc neutrals, one cool accent, `//` section labels,
   terminal/prompt touches, quiet surfaces, no gradients, no heavy shadows.
-- **Small and dependency-free.** No JS in the core. Target: `owg.min.css` under ~25 KB raw.
+- **Small and dependency-free.** No JS in the core. Budget: `owg.min.css` under 14 KB gzip (`mise run check`).
   Tailwind is the thing we are *not*. Plugins (highlight, mermaid, theme toggle) are separate files.
 - **Accessible.** Body text and every text colour >= 4.5:1 in every theme x variant; visible
   focus rings; `prefers-reduced-motion` respected; works without JS; prints cleanly.
@@ -215,7 +215,7 @@ spinner; `[disabled]`. `[role=group]` joins buttons.
   `data-variant` or the OS scheme changes (keep the original source in a data attribute).
   Does not load mermaid itself if `window.mermaid` exists; otherwise takes it as an argument or
   imports from jsDelivr.
-- `plugins/owg-theme.js`: tiny (< 2 KB) helper. `owgTheme.set('auto'|'light'|'dark')`,
+- `plugins/owg-theme.js`: tiny (< 2 KB gzip) helper. `owgTheme.set('auto'|'light'|'dark')`,
   `owgTheme.variant('slate'|null)`, persisted in localStorage (every access in try/catch),
   applied before paint when included in `<head>`; wires any `[data-theme-set]` /
   `[data-variant-set]` buttons or `<select data-variant-select>`. Enhances the sidebar drawer

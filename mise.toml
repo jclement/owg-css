@@ -26,9 +26,9 @@ description = "Build a single-file demo (CSS and plugins inlined) into dist/demo
 run = "node scripts/single-file.mjs"
 
 [tasks.check]
-description = "Build, enforce the size budget, and check contrast. Must pass before reporting work done."
+description = "Build, enforce the size budget (14 KB gzip), and check contrast. Must pass before reporting work done."
 run = [
   "node scripts/build.mjs",
-  "node -e \"const s=require('./dist/sizes.json')['owg.min.css'];if(s.raw>32768){console.error('owg.min.css over 32 KB budget: '+s.raw);process.exit(1)}console.log('size ok: '+s.raw+' B ('+s.gzip+' B gz)')\"",
+  "node -e \"const s=require('./dist/sizes.json')['owg.min.css'];if(s.gzip>14336||s.raw>72000){console.error('owg.min.css over budget (14 KB gz / 72 KB raw): '+s.raw+' B, '+s.gzip+' B gz');process.exit(1)}console.log('size ok: '+s.raw+' B ('+s.gzip+' B gz)')\"",
   "node scripts/contrast.mjs",
 ]

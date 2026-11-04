@@ -1,10 +1,34 @@
 {
   "owg.css": {
-    "raw": 13885,
-    "gzip": 2820
+    "raw": 71754,
+    "gzip": 12693
   },
   "owg.min.css": {
-    "raw": 11718,
-    "gzip": 2450
+    "raw": 60144,
+    "gzip": 11691
+  },
+  "owg-fonts.css": {
+    "raw": 1459,
+    "gzip": 355
+  },
+  "owg-fonts.min.css": {
+    "raw": 1264,
+    "gzip": 340
+  },
+  "plugins/owg-highlight.css": {
+    "raw": 4907,
+    "gzip": 1549
+  },
+  "plugins/owg-highlight.min.css": {
+    "raw": 3818,
+    "gzip": 1230
+  },
+  "plugins/owg-mermaid.js": {
+    "raw": 7107,
+    "gzip": 2630
+  },
+  "plugins/owg-theme.js": {
+    "raw": 3790,
+    "gzip": 1517
   }
 }
