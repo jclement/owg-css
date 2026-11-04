@@ -2,6 +2,17 @@
    Inline code is a quiet chip; <pre> is a hairline-bordered panel that scrolls sideways.
    <pre data-lang="ts"> prints the language in the top-right corner. */
 
+/* Code is always left-to-right and isolated from the surrounding text, so an RTL page cannot
+   reorder '<link rel=...' into '<"link'. Inline code still flows as one unit inside RTL prose. */
+:where(pre, code, kbd, samp) {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+:where(pre) {
+  text-align: left;
+}
+
 :where(code, samp) {
   font-family: var(--owg-font-mono);
   font-size: 0.929em;                      /* 13px at the 14px root */
