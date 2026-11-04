@@ -2,11 +2,11 @@
 // Usage: node scripts/screenshots.mjs [--out dir] [name ...]   (mise run screenshots)
 // Run `mise run build` first: the demo loads ../dist/. CDN scripts (highlight.js, mermaid)
 // are used when the network allows; shots are still taken without them.
+// Writes only <out>/*.png (same names every run, overwritten in place); nothing else on disk.
 import { chromium } from "playwright";
-import { mkdirSync, writeFileSync, rmSync } from "node:fs";
-import { join, dirname } from "node:path";
+import { mkdirSync, readFileSync, existsSync } from "node:fs";
+import { join, dirname, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { tmpdir } from "node:os";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const args = process.argv.slice(2);
@@ -76,23 +76,25 @@ if (!only.size || only.has("variants")) {
       await ctx.close();
     }
   }
+  // Composite page is built in memory: CSS and fonts inlined, no temp file.
+  const read = (f) => (existsSync(join(root, f)) ? readFileSync(join(root, f), "utf8") : "");
+  const fonts = read("dist/owg-fonts.css").replace(/url\((["']?)([^"')]+\.woff2)\1\)/g, (m, _q, u) => {
+    const f = resolve(root, "dist", u);
+    return existsSync(f) ? `url("data:font/woff2;base64,${readFileSync(f).toString("base64")}")` : m;
+  });
   const html = `<!doctype html><html data-theme="dark"><head><meta charset="utf-8">
-<link rel="stylesheet" href="${pathToFileURL(join(root, "dist/owg-fonts.css")).href}">
-<link rel="stylesheet" href="${pathToFileURL(join(root, "dist/owg.css")).href}">
+<style>${fonts}\n${read("dist/owg.css")}</style>
 <style>body{margin:0;padding:24px;background:var(--owg-bg)}
 .g{display:grid;grid-template-columns:1fr 1fr;gap:20px 16px}
 figure{margin:0}img{display:block;width:100%;border:1px solid var(--owg-border-strong);border-radius:var(--owg-radius)}
 figcaption{font-size:var(--owg-text-sm);color:var(--owg-muted);padding:0 0 6px}figcaption b{color:var(--owg-accent)}</style>
 </head><body><div class="g">${tiles.map((x) => `<figure><figcaption><b>//</b> ${x.v} · ${x.t}</figcaption><img src="data:image/png;base64,${x.png}"></figure>`).join("")}</div></body></html>`;
-  const tmp = join(tmpdir(), `owg-variants-${process.pid}.html`);
-  writeFileSync(tmp, html);
   const ctx = await browser.newContext({ viewport: { width: 1140, height: 800 } });
   const p = await ctx.newPage();
-  await p.goto(pathToFileURL(tmp).href, { waitUntil: "load" });
+  await p.setContent(html, { waitUntil: "load" });
   await p.evaluate(() => document.fonts.ready);
   await p.screenshot({ path: join(out, "variants.png"), fullPage: true });
   await ctx.close();
-  rmSync(tmp, { force: true });
   console.log(`shot ${join(out, "variants.png")}`);
 }
 
