@@ -13,7 +13,14 @@
     Add data-manual to the <script> tag to stop the automatic start and call owgMermaid.init()
     yourself. owgMermaid.render() re-renders everything (e.g. after adding diagrams).
     Diagrams are pre.mermaid / .mermaid blocks; each block's source is kept in data-owg-src.
-    Re-renders on <html data-theme>, <html data-variant> and OS colour-scheme changes. */
+    Re-renders on <html data-theme>, <html data-variant> and OS colour-scheme changes.
+
+    Errors: a diagram that fails shows an inline error box (pre.mermaid[data-owg-error] with a
+    strong.mermaid-error line above its source) and fires a bubbling "owg:mermaid-error" event
+    (detail: { message, error, source }). init() and render() resolve with
+    { ok, rendered, errors }; init() rejects if mermaid cannot be loaded. Later renders still run.
+      document.addEventListener("owg:mermaid-error", (e) => console.warn(e.detail.message));
+      const r = await owgMermaid.render(); if (!r.ok) ... */
 (function () {
   "use strict";
   if (window.owgMermaid) return;
@@ -123,19 +130,50 @@
     if (mermaid) return Promise.resolve(mermaid);
     // Only a real mermaid: an element with id="mermaid" is also window.mermaid.
     var w = window.mermaid;
-    if (w && typeof w.initialize === "function" && typeof w.run === "function") return Promise.resolve(w);
+    if (w && typeof w.initialize === "function" && typeof w.render === "function") return Promise.resolve(w);
     return import(CDN).then(function (mod) { return mod.default || mod; });
   }
 
-  function doRender() {
+  var seq = 0;
+
+  // One diagram: parse first (throws a readable syntax error), then render to SVG.
+  // On failure the block shows an inline error box (styled by owg.css) with the source below it.
+  async function renderOne(el) {
+    var src = el.getAttribute("data-owg-src");
+    var id = "owg-mermaid-" + (++seq);
+    try {
+      await mermaid.parse(src);
+      var out = await mermaid.render(id, src);
+      el.innerHTML = out.svg;
+      if (out.bindFunctions) out.bindFunctions(el);
+      el.removeAttribute("data-owg-error");
+      el.setAttribute("data-processed", "true");
+      return null;
+    } catch (error) {
+      // mermaid.render leaves its temporary nodes (and its "bomb" SVG) in <body> on failure.
+      ["d" + id, id].forEach(function (k) { var n = document.getElementById(k); if (n && !el.contains(n)) n.remove(); });
+      var msg = String((error && (error.str || error.message)) || error).trim();
+      el.textContent = src;
+      var head = document.createElement("strong");
+      head.className = "mermaid-error";
+      head.textContent = "mermaid: " + msg;
+      el.prepend(head);
+      el.setAttribute("data-owg-error", "");
+      el.removeAttribute("data-processed");
+      el.dispatchEvent(new CustomEvent("owg:mermaid-error", {
+        bubbles: true, detail: { error: error, message: msg, source: src }
+      }));
+      return { element: el, error: error, message: msg, source: src };
+    }
+  }
+
+  async function doRender() {
     var nodes = Array.prototype.slice.call(document.querySelectorAll(SELECTOR))
-      // Mermaid puts class="mermaid" on nothing it generates, but skip nested matches anyway.
       .filter(function (el) { return !el.parentElement || !el.parentElement.closest(SELECTOR); });
-    if (!nodes.length) return Promise.resolve();
+    var errors = [];
+    if (!nodes.length) return { ok: true, rendered: 0, errors: errors };
     nodes.forEach(function (el) {
       if (!el.hasAttribute("data-owg-src")) el.setAttribute("data-owg-src", el.textContent);
-      el.textContent = el.getAttribute("data-owg-src");
-      el.removeAttribute("data-processed");
     });
     var vars = themeVariables();
     mermaid.initialize({
@@ -154,29 +192,49 @@
     var guard = document.createElement("style");
     guard.textContent = "*,::before,::after{transition:none!important}";
     document.head.appendChild(guard);
-    var done = function () { guard.remove(); };
-    return mermaid.run({ nodes: nodes, suppressErrors: true }).then(done, function (e) { done(); throw e; });
+    try {
+      for (var i = 0; i < nodes.length; i++) {
+        var e = await renderOne(nodes[i]);
+        if (e) errors.push(e);
+      }
+    } finally {
+      guard.remove();
+    }
+    return { ok: errors.length === 0, rendered: nodes.length - errors.length, errors: errors };
   }
 
   // Serialise renders: a theme flip during a render queues one more, never two at once.
+  // The returned promise resolves with { ok, rendered, errors: [{ element, message, error, source }] }
+  // and rejects only on an unexpected failure; either way the queue recovers for later renders.
   function render() {
-    queue = queue.then(function () { return mermaid && doRender(); }).catch(function (e) {
-      console.error("owg-mermaid:", e);
+    var p = queue.then(function () {
+      return mermaid ? doRender() : { ok: true, rendered: 0, errors: [] };
     });
-    return queue;
+    queue = p.catch(function () {});
+    return p;
   }
+
+  function report(error) {
+    console.error("owg-mermaid:", error);
+    document.dispatchEvent(new CustomEvent("owg:mermaid-error", {
+      detail: { error: error, message: String((error && error.message) || error), source: null }
+    }));
+  }
+  function background() { render().catch(report); }
 
   var watching = false;
   function watch() {
     if (watching) return;
     watching = true;
-    new MutationObserver(render).observe(document.documentElement, {
+    new MutationObserver(background).observe(document.documentElement, {
       attributes: true, attributeFilter: ["data-theme", "data-variant"]
     });
     var mq = window.matchMedia("(prefers-color-scheme: dark)");
-    if (mq.addEventListener) mq.addEventListener("change", render);
+    if (mq.addEventListener) mq.addEventListener("change", background);
   }
 
+  // Resolves with render()'s result; rejects (and fires owg:mermaid-error on document) if
+  // mermaid itself cannot be loaded.
   var started = false;
   function init(m) {
     started = true;
@@ -184,6 +242,9 @@
       mermaid = mm;
       watch();
       return render();
+    }, function (error) {
+      report(error);
+      throw error;
     });
   }
 
@@ -193,7 +254,7 @@
     // Deferred a tick so a module that imports this file and calls init(mermaid) wins.
     var start = function () {
       setTimeout(function () {
-        if (!started && document.querySelector(SELECTOR)) init().catch(function (e) { console.error("owg-mermaid:", e); });
+        if (!started && document.querySelector(SELECTOR)) init().catch(function () {});
       }, 0);
     };
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
