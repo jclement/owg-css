@@ -1,0 +1,808 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>owg://css — kitchen sink</title>
+  <meta name="description" content="owg-css: a classless-first, dense, monospace stylesheet for technical sites and docs. Every element and component on one page.">
+  <meta name="color-scheme" content="light dark">
+  <script src="../dist/plugins/owg-theme.js"></script>
+  <link rel="stylesheet" href="../dist/owg-fonts.css" onerror="this.onerror=null;this.href='https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,400..700;1,400&amp;display=swap'">
+  <link rel="stylesheet" href="../dist/owg.css">
+  <link rel="stylesheet" href="../dist/plugins/owg-highlight.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%2309090b'/%3E%3Ctext x='8' y='12' font-family='monospace' font-size='10' font-weight='700' text-anchor='middle' fill='%2338bdf8'%3E//%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+  <header>
+    <a href="#sidebar" class="sidebar-toggle" aria-label="Open menu">☰</a>
+    <a href="./">owg<span>://</span>css</a>
+    <nav>
+      <a href="./" aria-current="page">Kitchen sink</a>
+      <a href="docs.html">Docs</a>
+      <a href="plain.html">Plain</a>
+      <a href="https://github.com/jclement/owg-css">GitHub</a>
+    </nav>
+    <div role="group" aria-label="Colour theme" class="theme-set">
+      <button type="button" class="small ghost" data-theme-set="auto" aria-pressed="true" data-tooltip="Follow the OS" data-placement="bottom">auto</button>
+      <button type="button" class="small ghost" data-theme-set="light" aria-pressed="false">light</button>
+      <button type="button" class="small ghost" data-theme-set="dark" aria-pressed="false">dark</button>
+    </div>
+    <select data-variant-select aria-label="Variant">
+      <option value="">default</option>
+      <option value="amber">amber</option>
+      <option value="phosphor">phosphor</option>
+      <option value="slate">slate</option>
+      <option value="contrast">contrast</option>
+      <option value="doom">doom</option>
+      <option value="hotdog">hotdog</option>
+    </select>
+  </header>
+
+  <aside id="sidebar">
+    <a href="#" class="sidebar-close" aria-label="Close menu">×</a>
+    <nav>
+      <h2>Start</h2>
+      <ul>
+        <li><a href="#overview" aria-current="page">Overview</a></li>
+        <li><a href="#themes">Themes &amp; variants</a></li>
+      </ul>
+      <h2>Elements</h2>
+      <ul>
+        <li><a href="#typography">Typography</a>
+          <ul>
+            <li><a href="#inline">Inline text</a></li>
+            <li><a href="#lists">Lists</a></li>
+            <li><a href="#blockquote">Blockquote &amp; rule</a></li>
+            <li><a href="#dl">Definition lists</a></li>
+          </ul>
+        </li>
+        <li><a href="#details">Details</a></li>
+        <li><a href="#media">Figures &amp; media</a></li>
+        <li><a href="#code">Code</a></li>
+        <li><a href="#tables">Tables</a></li>
+        <li><a href="#forms">Forms</a></li>
+        <li><a href="#buttons">Buttons</a></li>
+        <li><a href="#progress">Progress &amp; meter</a></li>
+      </ul>
+      <h2>Components</h2>
+      <ul>
+        <li><a href="#badges">Badges</a></li>
+        <li><a href="#callouts">Callouts</a></li>
+        <li><a href="#cards">Cards &amp; grid</a></li>
+        <li><a href="#steps">Steps</a></li>
+        <li><a href="#kv">Key-value</a></li>
+        <li><a href="#stats">Stats &amp; status</a></li>
+        <li><a href="#tooltips">Tooltips</a></li>
+        <li><a href="#avatars">Avatars</a></li>
+        <li><a href="#terminal">Terminal &amp; prompt</a></li>
+      </ul>
+      <h2>Plugins</h2>
+      <ul>
+        <li><a href="#highlight">Syntax highlighting</a></li>
+        <li><a href="#mermaid">Mermaid diagrams</a></li>
+      </ul>
+      <h2>More</h2>
+      <ul>
+        <li><a href="docs.html">Docs page example</a></li>
+        <li><a href="plain.html">Classless page</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main>
+    <!-- ================================================================== -->
+    <section id="overview">
+      <p class="label">owg-css v0.1.0</p>
+      <h1>Dense, monospace CSS for things that run in a terminal</h1>
+      <p>
+        One stylesheet. Write plain HTML (or let Markdown write it) and it looks finished:
+        tight rhythm, Roboto Mono, thin rules, one cool accent. Classes are opt-in extras for
+        the bits Markdown can't express. No build step, no utility soup, no JavaScript in the core.
+      </p>
+      <p>
+        <span class="badge accent">classless-first</span>
+        <span class="badge green dot">~25 KB min</span>
+        <span class="badge">0 dependencies</span>
+        <span class="badge purple">7 variants</span>
+        <span class="badge cyan">light / dark / auto</span>
+      </p>
+<pre data-lang="html"><code>&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jclement/owg-css@v0.1.0/dist/owg.min.css"&gt;</code></pre>
+      <div class="grid cols-3">
+        <div class="stat"><strong>0</strong> <span>classes needed</span></div>
+        <div class="stat"><strong>14px</strong> <span>root size</span></div>
+        <div class="stat"><strong>4.5:1</strong> <span>min text contrast</span></div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <section id="themes">
+      <p class="label">themes</p>
+      <h2>Themes &amp; variants</h2>
+      <p>
+        Light or dark follows the OS by default. Force one with <code>data-theme</code> on
+        <code>&lt;html&gt;</code>; pick a look with <code>data-variant</code>. Variants only
+        swap tokens, so everything on this page follows. Try them here, or from the top bar.
+      </p>
+      <div role="group" aria-label="Theme">
+        <button type="button" class="secondary small" data-theme-set="auto">auto</button>
+        <button type="button" class="secondary small" data-theme-set="light">light</button>
+        <button type="button" class="secondary small" data-theme-set="dark">dark</button>
+      </div>
+      <p>
+        <button type="button" class="outline small" data-variant-set="">default</button>
+        <button type="button" class="outline small" data-variant-set="amber">amber</button>
+        <button type="button" class="outline small" data-variant-set="phosphor">phosphor</button>
+        <button type="button" class="outline small" data-variant-set="slate">slate</button>
+        <button type="button" class="outline small" data-variant-set="contrast">contrast</button>
+        <button type="button" class="outline small" data-variant-set="doom">doom</button>
+        <button type="button" class="outline small" data-variant-set="hotdog">hotdog</button>
+      </p>
+<pre data-lang="html"><code>&lt;html lang="en" data-theme="dark" data-variant="phosphor"&gt;</code></pre>
+      <table class="compact">
+        <thead><tr><th>Variant</th><th>Light</th><th>Dark</th><th>For</th></tr></thead>
+        <tbody>
+          <tr><td><code>default</code></td><td>zinc paper, sky links</td><td>near-black, sky</td><td>everything</td></tr>
+          <tr><td><code>amber</code></td><td>warm paper</td><td>amber CRT</td><td>status pages, logs</td></tr>
+          <tr><td><code>phosphor</code></td><td>pale green</td><td>P1 green phosphor</td><td>homelab dashboards</td></tr>
+          <tr><td><code>slate</code></td><td>blue-grey</td><td>deep slate</td><td>long-form docs</td></tr>
+          <tr><td><code>contrast</code></td><td>pure black on white</td><td>pure white on black</td><td>accessibility, projectors</td></tr>
+          <tr><td><code>doom</code></td><td>bone and blood</td><td>hellfire</td><td>incident retros</td></tr>
+          <tr><td><code>hotdog</code></td><td>Hotdog Stand yellow</td><td>ketchup at midnight</td><td>regret</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ================================================================== -->
+    <section id="typography">
+      <p class="label">elements / typography</p>
+      <h1>h1. Self-hosting a mail server, regrettably</h1>
+      <h2>h2. Reverse proxy and TLS</h2>
+      <h3>h3. Caddy configuration</h3>
+      <h4>h4. Wildcard certificates</h4>
+      <h5>h5. DNS-01 challenge</h5>
+      <h6>h6. Propagation timeouts</h6>
+      <p>
+        Paragraph text is set at 14px with a 1.6 line height and capped at a comfortable
+        measure. The point is density without fatigue: you should be able to read a full
+        runbook without zooming, and scan a config reference without scrolling past white
+        space. Links like <a href="#typography">this one</a> use the accent and pick up an
+        underline on hover. <a href="https://example.com">External links</a> look the same.
+      </p>
+      <p><small>Small print: the fine detail nobody reads until 3am, when it is the only thing that matters.</small></p>
+
+      <h3 id="inline">Inline text</h3>
+      <p>
+        <strong>strong</strong>, <em>emphasis</em>, <strong><em>both</em></strong>,
+        <code>inline code</code>, <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>,
+        <mark>highlighted</mark>, <abbr title="Domain Name System">DNS</abbr>,
+        <del>deleted</del> and <ins>inserted</ins>, H<sub>2</sub>O, 2<sup>10</sup> = 1024,
+        <samp>Segmentation fault (core dumped)</samp>, <var>$HOME</var>, <s>struck</s>,
+        <cite>RFC 9110</cite>, <q>quoted</q>, <time datetime="2026-11-04">2026-11-04</time>,
+        and a <a href="#inline"><code>linked_code()</code></a>.
+      </p>
+
+      <h3 id="lists">Lists</h3>
+      <div class="grid cols-3">
+        <div>
+          <p><strong>Unordered</strong></p>
+          <ul>
+            <li>Caddy for TLS</li>
+            <li>Postgres 17
+              <ul>
+                <li>WAL archiving</li>
+                <li>nightly <code>pg_dump</code></li>
+              </ul>
+            </li>
+            <li>Restic to B2</li>
+          </ul>
+        </div>
+        <div>
+          <p><strong>Ordered</strong></p>
+          <ol>
+            <li>Snapshot the volume</li>
+            <li>Stop the service
+              <ol>
+                <li><code>systemctl stop app</code></li>
+                <li>wait for drain</li>
+              </ol>
+            </li>
+            <li>Upgrade and restart</li>
+          </ol>
+        </div>
+        <div>
+          <p><strong>Task list</strong></p>
+          <ul>
+            <li><input type="checkbox" checked disabled> Rotate keys</li>
+            <li><input type="checkbox" checked disabled> Update DNS</li>
+            <li><input type="checkbox" disabled> Test restore</li>
+            <li><input type="checkbox" disabled> Write it down</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3 id="blockquote">Blockquote &amp; horizontal rule</h3>
+      <blockquote>
+        <p>There are two kinds of people: those who back up, and those who have never lost data yet.</p>
+        <footer>— <cite>every sysadmin, eventually</cite></footer>
+      </blockquote>
+      <hr>
+      <p>That was an <code>&lt;hr&gt;</code>. Quiet, like a good log level.</p>
+
+      <h3 id="dl">Definition lists</h3>
+      <dl>
+        <dt>RPO</dt>
+        <dd>Recovery point objective: how much data you can afford to lose. Ours is fifteen minutes.</dd>
+        <dt>RTO</dt>
+        <dd>Recovery time objective: how long until it's back. Ours is "before anyone notices".</dd>
+      </dl>
+      <p>With <code>dl.inline</code>, terms and values sit side by side:</p>
+      <dl class="inline">
+        <dt>host</dt><dd>relic.lan</dd>
+        <dt>kernel</dt><dd>6.8.0-139-generic</dd>
+        <dt>uptime</dt><dd>41 days, 3:12</dd>
+      </dl>
+    </section>
+
+    <!-- ================================================================== -->
+    <section id="details">
+      <p class="label">elements / details</p>
+      <h2>Details &amp; summary</h2>
+      <details>
+        <summary>Why is the container restarting every 30 seconds?</summary>
+        <p>The health check hits <code>/healthz</code> before the app has finished migrating. Raise <code>start_period</code> or make migrations a separate job.</p>
+      </details>
+      <details open>
+        <summary>Open by default: environment variables</summary>
+        <p><code>DATABASE_URL</code>, <code>SMTP_HOST</code> and <code>SECRET_KEY_BASE</code> are required. Everything else has a default.</p>
+      </details>
+    </section>
+
+    <!-- ================================================================== -->
+    <section id="media">
+      <p class="label">elements / media</p>
+      <h2>Figures &amp; images</h2>
+      <figure>
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 260'%3E%3Crect width='800' height='260' fill='%2318181b'/%3E%3Cg fill='none' stroke='%2338bdf8' stroke-width='2'%3E%3Cpolyline points='0,200 60,180 120,190 180,120 240,140 300,90 360,110 420,60 480,80 540,50 600,95 660,70 720,40 800,55'/%3E%3C/g%3E%3Cg fill='none' stroke='%234ade80' stroke-width='2' stroke-dasharray='4 4'%3E%3Cpolyline points='0,230 80,225 160,215 240,220 320,200 400,205 480,190 560,195 640,180 720,185 800,170'/%3E%3C/g%3E%3Cg stroke='%2326262b'%3E%3Cline x1='0' y1='65' x2='800' y2='65'/%3E%3Cline x1='0' y1='130' x2='800' y2='130'/%3E%3Cline x1='0' y1='195' x2='800' y2='195'/%3E%3C/g%3E%3Ctext x='16' y='28' font-family='monospace' font-size='14' fill='%239a9aa3'%3Ereq/s (solid) vs p99 ms (dashed), last 24h%3C/text%3E%3C/svg%3E" alt="Line chart of requests per second against p99 latency over 24 hours" width="800" height="260">
+        <figcaption>Fig. 1: requests per second against p99 latency, last 24 hours.</figcaption>
+      </figure>
+      <p>Images and video are responsive by default and never overflow their column.</p>
+    </section>
+
+    <!-- ================================================================== -->
+    <section id="code">
+      <p class="label">elements / code</p>
+      <h2>Code</h2>
+      <p>Inline: run <code>docker compose up -d</code>, then tail <code>docker compose logs -f app</code>.</p>
+      <p>A plain <code>&lt;pre&gt;</code> scrolls sideways rather than wrapping:</p>
+<pre><code>$ ss -tlnp | grep -E ':(80|443|5432)\b'
+LISTEN 0 4096   0.0.0.0:443    0.0.0.0:*  users:(("caddy",pid=812,fd=7))
+LISTEN 0 4096   0.0.0.0:80     0.0.0.0:*  users:(("caddy",pid=812,fd=6))
+LISTEN 0 244  127.0.0.1:5432   0.0.0.0:*  users:(("postgres",pid=640,fd=6))   # local only, as it should be</code></pre>
+      <p>With <code>data-lang</code>, the language shows top-right:</p>
+<pre data-lang="toml"><code>[server]
+listen = "127.0.0.1:8080"
+base_url = "https://notes.example.net"
+
+[storage]
+path = "/var/lib/notes"
+max_upload = "25MB"</code></pre>
+
+      <h3>File block</h3>
+      <figure class="file">
+        <figcaption>/etc/caddy/Caddyfile</figcaption>
+<pre><code>notes.example.net {
+	encode zstd gzip
+	reverse_proxy 127.0.0.1:8080
+	header Strict-Transport-Security "max-age=31536000"
+}</code></pre>
+      </figure>
+    </section>
+
+    <!-- ================================================================== -->
+    <section id="tables">
+      <p class="label">elements / tables</p>
+      <h2>Tables</h2>
+      <p>Dense by default, hairline rows, hover tint, numeric columns right-aligned with tabular figures.</p>
+      <figure>
+        <table>
+          <thead>
+            <tr><th>Service</th><th>Image</th><th>Status</th><th class="num">CPU %</th><th class="num">Mem</th><th class="num">Uptime</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>caddy</td><td><code>caddy:2.8</code></td><td><span class="badge green dot">running</span></td><td class="num">0.4</td><td class="num">38 MiB</td><td class="num">41d</td></tr>
+            <tr><td>postgres</td><td><code>postgres:17</code></td><td><span class="badge green dot">running</span></td><td class="num">2.1</td><td class="num">412 MiB</td><td class="num">41d</td></tr>
+            <tr><td>app</td><td><code>ghcr.io/jclement/notes:1.4.2</code></td><td><span class="badge amber dot">restarting</span></td><td class="num">87.3</td><td class="num">1.2 GiB</td><td class="num">32s</td></tr>
+            <tr><td>restic</td><td><code>restic/restic:0.17</code></td><td><span class="badge dot">exited (0)</span></td><td class="num">0.0</td><td class="num">0 B</td><td class="num">—</td></tr>
+            <tr><td>grafana</td><td><code>grafana/grafana:11</code></td><td><span class="badge red dot">unhealthy</span></td><td class="num">1.0</td><td class="num">96 MiB</td><td class="num">3h</td></tr>
+          </tbody>
+          <tfoot>
+            <tr><th>5 services</th><td></td><td></td><td class="num">90.8</td><td class="num">1.7 GiB</td><td></td></tr>
+          </tfoot>
+        </table>
+      </figure>
+      <div class="grid cols-2">
+        <div>
+          <p><code>table.striped.compact</code></p>
+          <table class="striped compact">
+            <thead><tr><th>Port</th><th>Proto</th><th>Use</th></tr></thead>
+            <tbody>
+              <tr><td class="num">22</td><td>tcp</td><td>ssh</td></tr>
+              <tr><td class="num">53</td><td>udp</td><td>dns</td></tr>
+              <tr><td class="num">443</td><td>tcp</td><td>https</td></tr>
+              <tr><td class="num">51820</td><td>udp</td><td>wireguard</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <p><code>table.bordered</code></p>
+          <table class="bordered">
+            <thead><tr><th>Flag</th><th>Default</th></tr></thead>
+            <tbody>
+              <tr><td><code>--verbose</code></td><td><code>false</code></td></tr>
+              <tr><td><code>--jobs</code></td><td><code>nproc</code></td></tr>
+              <tr><td><code>--timeout</code></td><td><code>30s</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <section id="forms">
+      <p class="label">elements / forms</p>
+      <h2>Forms</h2>
+      <form onsubmit="return false">
+        <div class="grid cols-2">
+          <label>Hostname
+            <input type="text" name="host" placeholder="relic.lan" autocomplete="off">
+            <small>Short name or FQDN.</small>
+          </label>
+          <label>Admin email
+            <input type="email" name="email" value="ops@example.net">
+          </label>
+        </div>
+        <div class="grid cols-2">
+          <label>API token
+            <input type="password" name="token" value="hunter2hunter2" aria-invalid="true" aria-describedby="token-err">
+            <small id="token-err">Token is too short: at least 32 characters.</small>
+          </label>
+          <label>Webhook URL
+            <input type="url" name="hook" value="https://hooks.example.net/deploy" aria-invalid="false" aria-describedby="hook-ok">
+            <small id="hook-ok">Reachable, returned 204.</small>
+          </label>
+        </div>
+        <div class="grid cols-3">
+          <label>Workers
+            <input type="number" name="workers" value="4" min="1" max="64">
+          </label>
+          <label>Region
+            <select name="region">
+              <option>ca-central-1</option>
+              <option selected>us-west-2</option>
+              <option>eu-north-1</option>
+            </select>
+          </label>
+          <label>Backup window
+            <input type="time" name="window" value="03:30">
+          </label>
+        </div>
+        <div class="grid cols-3">
+          <label>Search
+            <input type="search" name="q" placeholder="grep the logs…">
+          </label>
+          <label>Start date
+            <input type="date" name="start" value="2026-11-04">
+          </label>
+          <label>Disabled
+            <input type="text" value="read-only replica" disabled>
+          </label>
+        </div>
+        <label>Notes
+          <textarea name="notes" rows="3" placeholder="What changed, and how to roll it back."></textarea>
+        </label>
+        <label>Log retention: 30 days
+          <input type="range" name="retention" min="1" max="90" value="30">
+        </label>
+        <div class="grid cols-2">
+          <label>Accent colour
+            <input type="color" name="colour" value="#38bdf8">
+          </label>
+          <label>Restore from archive
+            <input type="file" name="archive">
+          </label>
+        </div>
+        <div class="grid cols-2">
+          <fieldset>
+            <legend>Notifications</legend>
+            <label><input type="checkbox" name="n1" checked> Email on failure</label>
+            <label><input type="checkbox" name="n2"> Email on success</label>
+            <label><input type="checkbox" name="n3" role="switch" checked> Push to phone</label>
+            <label><input type="checkbox" name="n4" role="switch"> Page the on-call</label>
+          </fieldset>
+          <fieldset>
+            <legend>Schedule</legend>
+            <label><input type="radio" name="sched" value="hourly"> Hourly</label>
+            <label><input type="radio" name="sched" value="nightly" checked> Nightly</label>
+            <label><input type="radio" name="sched" value="weekly"> Weekly</label>
+            <label><input type="radio" name="sched" value="never" disabled> Never (disabled)</label>
+          </fieldset>
+        </div>
+        <p><strong>Grouped input</strong></p>
+        <div role="group">
+          <input type="text" aria-label="Subdomain" placeholder="notes">
+          <button type="button">Check</button>
+        </div>
+        <p>
+          <button type="submit">Save changes</button>
+          <button type="reset" class="secondary">Reset</button>
+        </p>
+      </form>
+    </section>
+
+    <!-- ================================================================== -->
+    <section id="buttons">
+      <p class="label">elements / buttons</p>
+      <h2>Buttons</h2>
+      <p>
+        <button type="button">Deploy</button>
+        <button type="button" class="secondary">Preview</button>
+        <button type="button" class="outline">Diff</button>
+        <button type="button" class="ghost">Cancel</button>
+        <button type="button" class="danger">Destroy</button>
+      </p>
+      <p>
+        <button type="button" class="small">small</button>
+        <button type="button">default</button>
+        <button type="button" class="large">large</button>
+        <a href="#buttons" class="button">a.button</a>
+        <a href="#buttons" class="button secondary">a.button.secondary</a>
+        <input type="submit" value="input submit" onclick="return false">
+        <input type="reset" value="input reset" onclick="return false">
+      </p>
+      <p>
+        <button type="button" aria-busy="true">Deploying…</button>
+        <button type="button" class="secondary" aria-busy="true">Waiting</button>
+        <button type="button" disabled>Disabled</button>
+        <button type="button" class="outline" disabled>Disabled outline</button>
+      </p>
+      <div role="group" aria-label="Environment">
+        <button type="button" class="secondary">dev</button>
+        <button type="button">staging</button>
+        <button type="button" class="secondary">prod</button>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <section id="progress">
+      <p class="label">elements / progress</p>
+      <h2>Progress &amp; meter</h2>
+      <label>Uploading snapshot (62%)
+        <progress value="62" max="100">62%</progress>
+      </label>
+      <label>Indeterminate: waiting for the lock
+        <progress></progress>
+      </label>
+      <div class="grid cols-3">
+        <label>Disk /var (41%) <meter value="0.41" low="0.7" high="0.9" optimum="0.2">41%</meter></label>
+        <label>Disk /home (78%) <meter value="0.78" low="0.7" high="0.9" optimum="0.2">78%</meter></label>
+        <label>Disk /tmp (96%) <meter value="0.96" low="0.7" high="0.9" optimum="0.2">96%</meter></label>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <section id="badges">
+      <p class="label">components / badges</p>
+      <h2>Badges <span class="badge accent">v1.4.2</span></h2>
+      <p>
+        <span class="badge">neutral</span>
+        <span class="badge accent">accent</span>
+        <span class="badge blue">blue</span>
+        <span class="badge green">green</span>
+        <span class="badge amber">amber</span>
+        <span class="badge red">red</span>
+        <span class="badge purple">purple</span>
+        <span class="badge pink">pink</span>
+        <span class="badge cyan">cyan</span>
+      </p>
+      <p>
+        <span class="badge solid">neutral</span>
+        <span class="badge solid accent">accent</span>
+        <span class="badge solid blue">blue</span>
+        <span class="badge solid green">green</span>
+        <span class="badge solid amber">amber</span>
+        <span class="badge solid red">red</span>
+        <span class="badge solid purple">purple</span>
+        <span class="badge solid pink">pink</span>
+        <span class="badge solid cyan">cyan</span>
+      </p>
+      <p>
+        <span class="badge green dot">operational</span>
+        <span class="badge amber dot">degraded</span>
+        <span class="badge red dot">outage</span>
+        <span class="badge blue dot">maintenance</span>
+        <a href="#badges"><span class="badge accent">linked badge</span></a>
+      </p>
+    </section>
+
+    <!-- ================================================================== -->
+    <section id="callouts">
+      <p class="label">components / callouts</p>
+      <h2>Callouts</h2>
+      <aside class="callout note">
+        <p class="callout-title">Note</p>
+        <p>The CLI reads <code>~/.config/notes/config.toml</code> before environment variables.</p>
+      </aside>
+      <aside class="callout tip">
+        <p class="callout-title">Tip</p>
+        <p>Set <code>NOTES_LOG=debug</code> to see every SQL statement with its timing.</p>
+      </aside>
+      <aside class="callout important">
+        <p class="callout-title">Important</p>
+        <p>Version 2 changes the on-disk format. Run <code>notes migrate</code> once after upgrading.</p>
+      </aside>
+      <aside class="callout warning">
+        <p class="callout-title">Warning</p>
+        <p>Port 5432 is open to the world in the default compose file. Bind it to <code>127.0.0.1</code>.</p>
+      </aside>
+      <aside class="callout danger">
+        <p class="callout-title">Danger</p>
+        <p><code>notes purge --all</code> deletes every note and attachment. There is no undo.</p>
+      </aside>
+      <aside class="callout">
+        <p>A bare <code>.callout</code> with no title and no type: just a quiet box for an aside.</p>
+      </aside>
+      <details class="callout warning">
+        <summary>Collapsible: known issues in 1.4</summary>
+        <p>Attachments over 2 GB fail on 32-bit ARM builds. Use the 64-bit image on a Pi 4 or newer.</p>
+      </details>
+      <p>Aliases <code>info</code>, <code>success</code> and <code>caution</code>, and GitHub's Markdown alert output, work too:</p>
+      <div class="grid cols-3">
+        <aside class="callout info"><p class="callout-title">Info</p><p>Same as note.</p></aside>
+        <aside class="callout success"><p class="callout-title">Success</p><p>Same as tip.</p></aside>
+        <aside class="callout caution"><p class="callout-title">Caution</p><p>Same as danger.</p></aside>
+      </div>
+      <div class="markdown-alert markdown-alert-note">
+        <p class="markdown-alert-title">Note</p>
+        <p>Rendered by GitHub-flavoured Markdown from <code>&gt; [!NOTE]</code>.</p>
+      </div>
+      <div class="markdown-alert markdown-alert-tip">
+        <p class="markdown-alert-title">Tip</p>
+        <p>Pin a version in production: <code>@v0.1.0</code>, not <code>@main</code>.</p>
+      </div>
+      <div class="markdown-alert markdown-alert-important">
+        <p class="markdown-alert-title">Important</p>
+        <p>The theme script must load in <code>&lt;head&gt;</code> or you will see a flash.</p>
+      </div>
+      <div class="markdown-alert markdown-alert-warning">
+        <p class="markdown-alert-title">Warning</p>
+        <p>Self-signed certificates break the webhook client.</p>
+      </div>
+      <div class="markdown-alert markdown-alert-caution">
+        <p class="markdown-alert-title">Caution</p>
+        <p>Don't run the migration twice.</p>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <section id="cards">
+      <p class="label">components / cards &amp; grid</p>
+      <h2>Cards &amp; grid</h2>
+      <p><code>.grid</code> auto-fits columns of at least 14rem; <code>.cols-2/3/4</code> fix the count and collapse under 640px.</p>
+      <div class="grid">
+        <article class="card">
+          <header><strong>relic</strong> <span class="badge green dot">up</span></header>
+          <p>Ubuntu 24.04 · 16 cores · 64 GB. Builds, CI runners, the odd Minecraft server.</p>
+          <footer><a href="#cards">ssh relic</a></footer>
+        </article>
+        <article class="card">
+          <header><strong>nas</strong> <span class="badge amber dot">scrubbing</span></header>
+          <p>TrueNAS · 4 × 8 TB raidz1. Scrub 61% done, ETA 3h.</p>
+          <footer><a href="#cards">open dashboard</a></footer>
+        </article>
+        <article class="card">
+          <header><strong>edge</strong> <span class="badge red dot">down</span></header>
+          <p>Raspberry Pi 4 running WireGuard. Last seen 2026-11-03 22:14.</p>
+          <footer><a href="#cards">view logs</a></footer>
+        </article>
+      </div>
+      <div class="grid cols-4">
+        <div class="card"><p>cols-4</p></div>
+        <div class="card"><p>cols-4</p></div>
+        <div class="card"><p>cols-4</p></div>
+        <div class="card"><p>cols-4</p></div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <section id="steps">
+      <p class="label">components / steps</p>
+      <h2>Steps</h2>
+      <ol class="steps">
+        <li><strong>Install the CLI</strong><p><code>curl -fsSL https://get.example.net | sh</code></p></li>
+        <li><strong>Log in</strong><p><code>notes login</code> opens a browser and stores a token in your keyring.</p></li>
+        <li><strong>Create a vault</strong><p><code>notes init ~/notes</code>, then commit the generated <code>.notes/</code> folder.</p></li>
+        <li><strong>Sync</strong><p>Run <code>notes sync</code> or leave <code>notes daemon</code> running.</p></li>
+      </ol>
+    </section>
+
+    <!-- ================================================================== -->
+    <section id="kv">
+      <p class="label">components / key-value</p>
+      <h2>Key-value rows</h2>
+      <div class="grid cols-2">
+        <dl class="kv">
+          <dt>name</dt><dd>Jeff Clement</dd>
+          <dt>based</dt><dd>Calgary, AB</dd>
+          <dt>rides</dt><dd>Onewheel GT-S</dd>
+          <dt>editor</dt><dd>neovim, mostly</dd>
+          <dt>uptime</dt><dd>41d 3h 12m</dd>
+        </dl>
+        <dl class="kv">
+          <dt>version</dt><dd><span class="badge accent">0.1.0</span></dd>
+          <dt>commit</dt><dd><code>cc07d88</code></dd>
+          <dt>built</dt><dd><time datetime="2026-11-04">2026-11-04</time></dd>
+          <dt>licence</dt><dd>MIT</dd>
+          <dt>status</dt><dd><span class="dot green"></span> all systems normal</dd>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <section id="stats">
+      <p class="label">components / stats &amp; status</p>
+      <h2>Stats &amp; status dots</h2>
+      <div class="grid cols-4">
+        <div class="stat"><strong>99.97%</strong> <span>uptime, 30d</span></div>
+        <div class="stat"><strong>142ms</strong> <span>p99 latency</span></div>
+        <div class="stat"><strong>1.2k</strong> <span>req/min</span></div>
+        <div class="stat"><strong>0</strong> <span>open incidents</span></div>
+      </div>
+      <p>
+        <span class="dot green"></span> api
+        &nbsp; <span class="dot amber"></span> worker
+        &nbsp; <span class="dot red"></span> mailer
+        &nbsp; <span class="dot blue"></span> cron
+        &nbsp; <span class="dot"></span> unknown
+      </p>
+    </section>
+
+    <!-- ================================================================== -->
+    <section id="tooltips">
+      <p class="label">components / tooltips</p>
+      <h2>Tooltips</h2>
+      <p>
+        CSS-only, on hover and focus:
+        <button type="button" class="secondary small" data-tooltip="Pulls, builds and restarts">deploy</button>
+        <button type="button" class="secondary small" data-tooltip="Below, for things near the top" data-placement="bottom">bottom</button>
+        and on any element, like <abbr data-tooltip="Time to first byte" tabindex="0">TTFB</abbr>.
+      </p>
+    </section>
+
+    <!-- ================================================================== -->
+    <section id="avatars">
+      <p class="label">components / avatars</p>
+      <h2>Avatars</h2>
+      <p>Square-ish, greyscale until you hover.</p>
+      <p>
+        <img class="avatar" alt="JC" width="48" height="48" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' fill='%230369a1'/%3E%3Ctext x='24' y='31' font-family='monospace' font-size='18' font-weight='700' text-anchor='middle' fill='%23fff'%3EJC%3C/text%3E%3C/svg%3E">
+        <img class="avatar" alt="OW" width="48" height="48" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' fill='%23166534'/%3E%3Ctext x='24' y='31' font-family='monospace' font-size='18' font-weight='700' text-anchor='middle' fill='%23fff'%3EOW%3C/text%3E%3C/svg%3E">
+        <img class="avatar" alt="CI" width="48" height="48" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' fill='%237e22ce'/%3E%3Ctext x='24' y='31' font-family='monospace' font-size='18' font-weight='700' text-anchor='middle' fill='%23fff'%3ECI%3C/text%3E%3C/svg%3E">
+      </p>
+    </section>
+
+    <!-- ================================================================== -->
+    <section id="terminal">
+      <p class="label">components / terminal &amp; prompt</p>
+      <h2>Terminal &amp; prompt</h2>
+<pre class="terminal" data-title="jsc@relic: ~/code/notes"><code><span class="prompt">$</span> notes --version
+<span class="output">notes 1.4.2 (cc07d88, linux/amd64)</span>
+<span class="prompt">$</span> notes sync --dry-run
+<span class="output">→ 3 notes changed, 1 attachment added
+→ would upload 2.4 MiB to s3://notes-backup/jsc</span>
+<span class="prompt">$</span> <span class="output"></span></code></pre>
+      <p>A one-line prompt in running text: <code><span class="prompt">$</span> mise run check</code></p>
+    </section>
+
+    <!-- ================================================================== -->
+    <section id="highlight">
+      <p class="label">plugins / highlight</p>
+      <h2>Syntax highlighting</h2>
+      <p>
+        Load highlight.js (or Prism, or Shiki) and <code>plugins/owg-highlight.css</code>.
+        Colours come from the theme tokens, so every variant highlights in its own palette.
+      </p>
+<pre data-lang="yaml"><code class="language-yaml"># compose.yaml
+services:
+  app:
+    image: ghcr.io/jclement/notes:1.4.2
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgres://notes@db/notes
+      NOTES_LOG: info
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on: [db]
+  db:
+    image: postgres:17
+    volumes: ["pg:/var/lib/postgresql/data"]
+volumes:
+  pg: {}</code></pre>
+<pre data-lang="go"><code class="language-go">// healthz reports ready only once migrations have finished.
+func healthz(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)
+		defer cancel()
+		if err := db.PingContext(ctx); err != nil {
+			http.Error(w, "db: "+err.Error(), http.StatusServiceUnavailable)
+			return
+		}
+		w.WriteHeader(http.StatusNoContent) // 204
+	}
+}</code></pre>
+<pre data-lang="bash"><code class="language-bash">#!/usr/bin/env bash
+set -euo pipefail
+# Nightly backup: dump, encrypt, ship.
+stamp=$(date +%F)
+pg_dump --format=custom notes &gt; "/tmp/notes-$stamp.dump"
+restic backup "/tmp/notes-$stamp.dump" --tag nightly
+rm -f "/tmp/notes-$stamp.dump"
+echo "backup ok: $stamp"</code></pre>
+<pre data-lang="diff"><code class="language-diff">--- a/compose.yaml
++++ b/compose.yaml
+@@ -9,7 +9,7 @@ services:
+     environment:
+       DATABASE_URL: postgres://notes@db/notes
+-      NOTES_LOG: debug
++      NOTES_LOG: info
+     ports:
+-      - "8080:8080"
++      - "127.0.0.1:8080:8080"</code></pre>
+<pre data-lang="json"><code class="language-json">{
+  "name": "notes",
+  "version": "1.4.2",
+  "private": true,
+  "workers": 4,
+  "features": ["sync", "attachments", null]
+}</code></pre>
+    </section>
+
+    <!-- ================================================================== -->
+    <section id="mermaid">
+      <p class="label">plugins / mermaid</p>
+      <h2>Mermaid diagrams</h2>
+      <p>
+        <code>plugins/owg-mermaid.js</code> feeds mermaid the live theme tokens and re-renders
+        when you switch theme or variant. Flip the top-bar controls and watch.
+      </p>
+<pre class="mermaid">flowchart LR
+  user([browser]) -->|HTTPS| caddy[Caddy]
+  caddy -->|:8080| app[notes app]
+  app --> db[(Postgres)]
+  app -.->|nightly| restic[restic]
+  restic -.-> b2[(B2 bucket)]</pre>
+<pre class="mermaid">sequenceDiagram
+  participant CLI as notes CLI
+  participant API as notes API
+  participant DB as Postgres
+  CLI->>API: POST /sync (3 changes)
+  API->>DB: BEGIN; UPSERT notes
+  DB-->>API: ok
+  API-->>CLI: 200 {"synced": 3}
+  Note over CLI,API: retries with backoff on 5xx</pre>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      owg-css · MIT · Roboto Mono under the SIL OFL ·
+      <a href="https://github.com/jclement/owg-css">github.com/jclement/owg-css</a> ·
+      made for <a href="https://owg.me">owg.me</a> and <a href="https://onewheelgeek.me">OneWheelGeek://blog</a>
+    </p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+  <script>window.hljs && hljs.highlightAll();</script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+  <script src="../dist/plugins/owg-mermaid.js"></script>
+</body>
+</html>

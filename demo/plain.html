@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plain — owg://css</title>
+  <meta name="description" content="A page with no classes and no JavaScript: what Markdown output looks like with only owg.min.css.">
+  <link rel="stylesheet" href="../dist/owg-fonts.css" onerror="this.onerror=null;this.href='https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,400..700;1,400&amp;display=swap'">
+  <link rel="stylesheet" href="../dist/owg.min.css">
+</head>
+<body>
+  <!-- No classes, no scripts below this line. This is what a Markdown renderer gives you. -->
+  <header>
+    <a href="./">OneWheelGeek<span>://</span>blog</a>
+    <nav>
+      <a href="./">Kitchen sink</a>
+      <a href="docs.html">Docs</a>
+      <a href="plain.html" aria-current="page">Plain</a>
+    </nav>
+  </header>
+
+  <main>
+    <article>
+      <h1>Moving the homelab to a single NUC</h1>
+      <p><small>2026-11-02 · 6 min read · tagged <a href="#">homelab</a>, <a href="#">self-hosting</a></small></p>
+
+      <p>
+        For three years the "lab" was four machines, two of which existed mostly to keep the
+        other two company. This weekend I collapsed everything onto one Intel NUC with 64 GB of
+        RAM and a pair of NVMe drives. Here is what moved, what broke, and what I'd do again.
+      </p>
+
+      <h2>What runs where</h2>
+      <p>Everything is a container now, managed by one <code>compose.yaml</code> per service and a <code>Makefile</code> that ties them together.</p>
+      <table>
+        <thead>
+          <tr><th>Service</th><th>Before</th><th>After</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Caddy</td><td>pi-edge</td><td>nuc</td><td>wildcard cert via DNS-01</td></tr>
+          <tr><td>Postgres</td><td>old-tower</td><td>nuc</td><td>17, WAL to restic</td></tr>
+          <tr><td>Home Assistant</td><td>pi-ha</td><td>nuc</td><td>Zigbee stick passed through</td></tr>
+          <tr><td>Jellyfin</td><td>old-tower</td><td>nuc</td><td>QuickSync transcode</td></tr>
+        </tbody>
+      </table>
+
+      <h2>The migration</h2>
+      <ol>
+        <li>Snapshot every volume with <code>restic backup</code>.</li>
+        <li>Bring services up on the NUC one at a time, pointed at a <em>copy</em> of the data.</li>
+        <li>Flip DNS. Wait. Flip it back twice.</li>
+        <li>Power off the old machines and enjoy the silence.</li>
+      </ol>
+
+      <p>The only real surprise was Postgres. A straight <code>pg_dump</code> of 40 GB took long enough that I switched to streaming it:</p>
+<pre><code>ssh old-tower 'pg_dump -Fc notes' | pg_restore -d notes --no-owner -j 4</code></pre>
+
+      <blockquote>
+        <p><strong>Lesson:</strong> test the restore before you need it. The backup you have never restored is a rumour.</p>
+      </blockquote>
+
+      <h3>Caddy config</h3>
+      <p>The whole edge is now ten lines:</p>
+<pre><code>*.lab.example.net {
+	tls {
+		dns cloudflare {env.CF_API_TOKEN}
+	}
+	@ha host ha.lab.example.net
+	reverse_proxy @ha 127.0.0.1:8123
+	@jf host tv.lab.example.net
+	reverse_proxy @jf 127.0.0.1:8096
+}</code></pre>
+
+      <h3>Power draw</h3>
+      <ul>
+        <li>Before: about <strong>210 W</strong> at idle across four boxes.</li>
+        <li>After: <strong>18 W</strong> idle, 45 W while transcoding.</li>
+        <li>Saving: roughly 1,600 kWh a year, which pays for the NUC in under two.</li>
+      </ul>
+
+      <details>
+        <summary>Hardware list</summary>
+        <ul>
+          <li>Intel NUC 13 Pro, i7-1360P</li>
+          <li>2 × 32 GB DDR4-3200</li>
+          <li>2 × 2 TB NVMe, mirrored with ZFS</li>
+        </ul>
+      </details>
+
+      <figure>
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 160'%3E%3Crect width='600' height='160' fill='%2318181b'/%3E%3Crect x='40' y='30' width='90' height='100' fill='%2338bdf8'/%3E%3Crect x='470' y='112' width='90' height='18' fill='%234ade80'/%3E%3Ctext x='85' y='150' font-family='monospace' font-size='12' text-anchor='middle' fill='%239a9aa3'%3Ebefore 210W%3C/text%3E%3Ctext x='515' y='150' font-family='monospace' font-size='12' text-anchor='middle' fill='%239a9aa3'%3Eafter 18W%3C/text%3E%3C/svg%3E" alt="Bar chart: 210 watts before, 18 watts after" width="600" height="160">
+        <figcaption>Idle power, before and after.</figcaption>
+      </figure>
+
+      <hr>
+      <p>Next week: making Home Assistant survive a reboot without me noticing. Press <kbd>j</kbd> / <kbd>k</kbd> to go between posts, if I ever wire that up.</p>
+    </article>
+  </main>
+
+  <footer>
+    <p>© 2026 Jeff Clement · <a href="https://onewheelgeek.me">onewheelgeek.me</a> · styled with nothing but owg.min.css</p>
+  </footer>
+</body>
+</html>
