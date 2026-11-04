@@ -89,7 +89,7 @@ Every variant has a light and a dark form and keeps body text at 4.5:1 or better
 
 ### The theme switch (optional)
 
-`plugins/owg-theme.js` (~3 KB, ~1.2 KB gzipped, no dependencies) remembers the visitor's choice
+`plugins/owg-theme.js` (~3.8 KB, ~1.5 KB gzipped, no dependencies) remembers the visitor's choice
 and applies it before the first paint. Load it in `<head>`, not deferred:
 
 ```html
@@ -110,7 +110,8 @@ and applies it before the first paint. Load it in `<head>`, not deferred:
 Buttons get `aria-pressed` to match the current state. From script:
 `owgTheme.set('auto'|'light'|'dark')`, `owgTheme.variant('slate'|null)`, `owgTheme.get()`;
 an `owg:theme` event fires on `document` after each change. It also closes the sidebar drawer
-on <kbd>Esc</kbd> or a click outside.
+on <kbd>Esc</kbd> or a click outside, and marks the `nav.toc` link of the section in view with
+`aria-current="true"`.
 
 ## App shell and docs layout
 
@@ -125,13 +126,14 @@ JavaScript off.
   <nav><a href="/docs/" aria-current="page">Docs</a></nav>
 </header>
 <aside id="sidebar">
-  <a href="#" class="sidebar-close" aria-label="Close menu">×</a>
+  <a href="#_" class="sidebar-close" aria-label="Close menu">×</a>
   <nav>
     <h2>Getting started</h2>                <!-- group label, drawn as // label -->
     <ul>
       <li><a href="#install" aria-current="page">Install</a></li>
       <li><a href="#usage">Usage</a><ul><li><a href="#themes">Themes</a></li></ul></li>
     </ul>
+    <details open><summary>Reference</summary><ul>...</ul></details>  <!-- collapsible group -->
   </nav>
 </aside>
 <main>
@@ -216,7 +218,7 @@ Element defaults sit in `:where()`, so your own CSS wins without a fight.
 | File | Raw | Gzip |
 |---|---|---|
 | `owg.min.css` | target < 25 KB | ~6 KB |
-| `owg-theme.js` | 3.0 KB | 1.2 KB |
+| `owg-theme.js` | 3.8 KB | 1.5 KB |
 
 Exact numbers for every file are in [`dist/sizes.json`](dist/sizes.json), written by each build.
 `mise run check` fails if `owg.min.css` passes 32 KB.

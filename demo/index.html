@@ -23,9 +23,9 @@
       <a href="https://github.com/jclement/owg-css">GitHub</a>
     </nav>
     <div role="group" aria-label="Colour theme" class="theme-set">
-      <button type="button" class="small ghost" data-theme-set="auto" aria-pressed="true" data-tooltip="Follow the OS" data-placement="bottom">auto</button>
-      <button type="button" class="small ghost" data-theme-set="light" aria-pressed="false">light</button>
-      <button type="button" class="small ghost" data-theme-set="dark" aria-pressed="false">dark</button>
+      <button type="button" class="small ghost" data-theme-set="auto" aria-pressed="true" aria-label="Auto theme" data-tooltip="auto" data-placement="bottom">◐</button>
+      <button type="button" class="small ghost" data-theme-set="light" aria-pressed="false" aria-label="Light theme" data-tooltip="light" data-placement="bottom">☀&#xFE0E;</button>
+      <button type="button" class="small ghost" data-theme-set="dark" aria-pressed="false" aria-label="Dark theme" data-tooltip="dark" data-placement="bottom">☾&#xFE0E;</button>
     </div>
     <select data-variant-select aria-label="Variant">
       <option value="">default</option>
@@ -39,7 +39,7 @@
   </header>
 
   <aside id="sidebar">
-    <a href="#" class="sidebar-close" aria-label="Close menu">×</a>
+    <a href="#_" class="sidebar-close" aria-label="Close menu">×</a>
     <nav>
       <h2>Start</h2>
       <ul>
@@ -76,16 +76,20 @@
         <li><a href="#avatars">Avatars</a></li>
         <li><a href="#terminal">Terminal &amp; prompt</a></li>
       </ul>
-      <h2>Plugins</h2>
-      <ul>
-        <li><a href="#highlight">Syntax highlighting</a></li>
-        <li><a href="#mermaid">Mermaid diagrams</a></li>
-      </ul>
-      <h2>More</h2>
-      <ul>
-        <li><a href="docs.html">Docs page example</a></li>
-        <li><a href="plain.html">Classless page</a></li>
-      </ul>
+      <details open>
+        <summary>Plugins</summary>
+        <ul>
+          <li><a href="#highlight">Syntax highlighting</a></li>
+          <li><a href="#mermaid">Mermaid diagrams</a></li>
+        </ul>
+      </details>
+      <details>
+        <summary>More pages</summary>
+        <ul>
+          <li><a href="docs.html">Docs page example</a></li>
+          <li><a href="plain.html">Classless page</a></li>
+        </ul>
+      </details>
     </nav>
   </aside>
 

@@ -1,6 +1,7 @@
 /*! owg-theme.js | owg-css | MIT. Load in <head> (no defer) so the saved choice lands before paint.
   owgTheme.set('auto'|'light'|'dark'), owgTheme.variant('slate'|null), owgTheme.get().
-  Wires [data-theme-set], [data-variant-set], select[data-variant-select]; Esc / click-outside close the sidebar drawer. */
+  Wires [data-theme-set], [data-variant-set], select[data-variant-select]; Esc / click-outside close the
+  sidebar drawer; marks the nav.toc link of the section in view aria-current="true". */
 (function (w, d) {
   var root = d.documentElement, T = "owg-theme", V = "owg-variant";
   function load(k) { try { return w.localStorage.getItem(k); } catch (e) { return null; } }
@@ -37,7 +38,21 @@
   });
   d.addEventListener("change", function (e) { if (e.target.matches("select[data-variant-select]")) variant(e.target.value); });
   d.addEventListener("keydown", function (e) { if (e.key === "Escape" && drawer()) close(); });
-  if (d.readyState === "loading") d.addEventListener("DOMContentLoaded", sync); else sync();
+  // TOC scroll-spy: the heading nearest the top marks its nav.toc link aria-current="true".
+  function spy() {
+    var a = d.querySelectorAll("nav.toc a[href^='#']"), m = {}, i, h;
+    if (!a.length || !w.IntersectionObserver) return;
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        for (var k in m) m[k].removeAttribute("aria-current");
+        m[e.target.id].setAttribute("aria-current", "true");
+      });
+    }, { rootMargin: "0px 0px -70% 0px" });
+    for (i = 0; i < a.length; i++) if ((h = d.getElementById(decodeURIComponent(a[i].hash.slice(1))))) { m[h.id] = a[i]; io.observe(h); }
+  }
+  function ready() { sync(); spy(); }
+  if (d.readyState === "loading") d.addEventListener("DOMContentLoaded", ready); else ready();
 
   w.owgTheme = { set: set, variant: variant, get: get };
 })(window, document);
