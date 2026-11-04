@@ -10,7 +10,7 @@
    <div class="markdown-alert markdown-alert-note"><p class="markdown-alert-title">Note</p>...</div>
    (GitHub's own <svg> icon in the title is hidden; the CSS glyph replaces it.) */
 
-:is(.callout, .markdown-alert) {
+.callout, .markdown-alert {
   --_c: var(--owg-muted);
   --_g: "\203A";
   margin-block: 0 var(--owg-flow);
@@ -21,9 +21,9 @@
   background: color-mix(in srgb, var(--_c) var(--owg-tint), var(--owg-surface));
   color: var(--owg-text);
 }
-:is(.callout, .markdown-alert) > :last-child { margin-bottom: 0; }
+:where(.callout, .markdown-alert) > :where(:last-child) { margin-bottom: 0; }
 
-:is(.callout-title, .markdown-alert-title, details.callout > summary) {
+.callout-title, .markdown-alert-title, :where(details.callout) > summary {
   display: flex;
   align-items: center;
   gap: var(--owg-space-2);
@@ -34,7 +34,7 @@
   letter-spacing: var(--owg-tracking-caps);
   text-transform: uppercase;
 }
-:is(.callout-title, .markdown-alert-title, details.callout > summary)::before {
+.callout-title::before, .markdown-alert-title::before, :where(details.callout) > summary::before {
   content: var(--_g);
   display: inline-grid;
   place-items: center;
@@ -49,7 +49,7 @@
   letter-spacing: 0;
   text-transform: none;
 }
-.markdown-alert-title > svg { display: none; }
+.markdown-alert-title > :where(svg) { display: none; }
 
 .callout:is(.note, .info), .markdown-alert-note {
   --_c: var(--owg-info); --_g: "i";
@@ -69,8 +69,8 @@
 
 /* Collapsible: undo the core details box and its chevron (core draws the chevron on
    summary::before with a border + rotate), keep the callout look. */
-details.callout { padding-block: var(--owg-space-2); }
-details.callout > summary {
+:where(details).callout { padding-block: var(--owg-space-2); }
+:where(details.callout) > summary {
   margin: 0;
   padding: var(--owg-space-1) 0;
   border: 0;
@@ -79,25 +79,25 @@ details.callout > summary {
   list-style: none;
   cursor: pointer;
 }
-details.callout > summary::-webkit-details-marker { display: none; }
-details.callout > summary::before {
+:where(details.callout) > summary::-webkit-details-marker { display: none; }
+:where(details.callout) > summary::before {
   margin: 0;
   border: 0;
   transform: none;
   transition: none;
 }
-details.callout > summary::after {
+:where(details.callout) > summary::after {
   content: "+";
   margin-left: auto;
   color: var(--_c);
   font-weight: var(--owg-weight-normal);
 }
-details.callout[open] > summary {
+:where(details.callout[open]) > summary {
   margin-bottom: var(--owg-space-2);
   border-bottom: 0;
 }
-details.callout[open] > summary::after { content: "\2212"; }
-details.callout > summary:focus-visible {
+:where(details.callout[open]) > summary::after { content: "\2212"; }
+:where(details.callout) > summary:focus-visible {
   outline: var(--owg-focus-width) solid var(--owg-focus);
   outline-offset: 2px;
   border-radius: var(--owg-radius);

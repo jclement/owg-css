@@ -12,19 +12,19 @@
      Joined boxes; aria-current="page" is filled; [aria-disabled="true"] is dimmed. */
 
 .breadcrumb { margin-block: 0 var(--owg-flow); font-size: var(--owg-text-sm); color: var(--owg-muted); }
-.breadcrumb > :is(ol, ul) {
+.breadcrumb > :where(ol, ul) {
   display: flex;
   flex-wrap: wrap;
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.breadcrumb li { margin: 0; padding: 0; }
-.breadcrumb li::marker { content: none; }
-.breadcrumb li + li::before { content: "/"; margin-inline: 0.6ch; color: var(--owg-muted); }
-.breadcrumb a { color: var(--owg-muted); text-decoration: none; }
-.breadcrumb a:hover { color: var(--owg-accent); text-decoration: underline; }
-.breadcrumb [aria-current] { color: var(--owg-text); }
+.breadcrumb :where(li) { margin: 0; padding: 0; }
+.breadcrumb :where(li)::marker { content: none; }
+.breadcrumb :where(li + li)::before { content: "/"; margin-inline: 0.6ch; color: var(--owg-muted); }
+.breadcrumb :where(a) { color: var(--owg-muted); text-decoration: none; }
+.breadcrumb :where(a:hover) { color: var(--owg-accent); text-decoration: underline; }
+.breadcrumb :where([aria-current]) { color: var(--owg-text); }
 
 .pagination {
   display: flex;
@@ -33,7 +33,7 @@
   margin-block: 0 var(--owg-flow);
   font-size: var(--owg-text-sm);
 }
-.pagination > :is(a, span) {
+.pagination > :where(a, span) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -47,14 +47,14 @@
   font-variant-numeric: tabular-nums;
   text-decoration: none;
 }
-.pagination > span { border-color: transparent; background: none; color: var(--owg-muted); }
-.pagination > a:hover { border-color: var(--owg-accent); color: var(--owg-accent); }
-.pagination > a:focus-visible { outline: var(--owg-focus-width) solid var(--owg-focus); outline-offset: 1px; }
-.pagination > [aria-current] {
+.pagination > :where(span) { border-color: transparent; background: none; color: var(--owg-muted); }
+.pagination > :where(a:hover) { border-color: var(--owg-accent); color: var(--owg-accent); }
+.pagination > :where(a):focus-visible { outline: var(--owg-focus-width) solid var(--owg-focus); outline-offset: 1px; }
+.pagination > :where([aria-current]) {
   border-color: var(--owg-accent);
   background: var(--owg-accent);
   color: var(--owg-accent-ink);
 }
-.pagination > [aria-current]:hover { color: var(--owg-accent-ink); }
-.pagination > [rel="next"] { margin-left: auto; }
-.pagination > [aria-disabled="true"] { opacity: 0.45; pointer-events: none; }
+.pagination > :where([aria-current]:hover) { color: var(--owg-accent-ink); }
+.pagination > :where([rel="next"]) { margin-left: auto; }
+.pagination > :where([aria-disabled="true"]) { opacity: 0.45; pointer-events: none; }

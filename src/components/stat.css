@@ -16,7 +16,7 @@
   color: var(--owg-muted);
   font-size: var(--owg-text-xs);
 }
-.stat > :first-child {
+.stat > :where(:first-child) {
   color: var(--owg-text-strong);
   font-size: var(--owg-text-3xl);
   font-weight: var(--owg-weight-bold);
@@ -24,14 +24,14 @@
   letter-spacing: var(--owg-tracking-tight);
   line-height: 1.1;
 }
-.stat small { font-size: inherit; }
-.stat small.up { color: var(--owg-green); }
-.stat small.up::before { content: "\25B2 "; }
-.stat small.down { color: var(--owg-red); }
-.stat small.down::before { content: "\25BC "; }
+.stat :where(small) { font-size: inherit; }
+:where(.stat small).up { color: var(--owg-green); }
+:where(.stat small).up::before { content: "\25B2 "; }
+:where(.stat small).down { color: var(--owg-red); }
+:where(.stat small).down::before { content: "\25BC "; }
 
 :where(.dot:not(.badge)) { --_c: var(--owg-muted); }
-.dot:not(.badge) {
+.dot:where(:not(.badge)) {
   display: inline-block;
   width: 0.55rem;
   height: 0.55rem;
@@ -39,11 +39,11 @@
   background: var(--_c);
   vertical-align: 0.05em;
 }
-.dot.pulse:not(.badge) { animation: owg-pulse 2s ease-out infinite; }
+.dot.pulse:where(:not(.badge)) { animation: owg-pulse 2s ease-out infinite; }
 @keyframes owg-pulse {
   0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--_c) 60%, transparent); }
   100% { box-shadow: 0 0 0 0.45rem transparent; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .dot.pulse:not(.badge) { animation: none; }
+  .dot.pulse:where(:not(.badge)) { animation: none; }
 }

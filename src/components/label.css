@@ -4,7 +4,7 @@
    Works on any element; the "//" is the accent, the rule runs to the end of the line.
    Skipped inside <svg>: mermaid (and others) use class="label" on SVG groups. */
 
-.label:not(svg *) {
+.label:where(:not(svg *)) {
   display: flex;
   align-items: center;
   gap: var(--owg-space-2);
@@ -17,13 +17,13 @@
   letter-spacing: 0.04em;
   line-height: var(--owg-line-height-tight);
 }
-.label:not(svg *)::before { content: "//"; color: var(--owg-accent); }
-.label:not(svg *)::after {
+.label:where(:not(svg *))::before { content: "//"; color: var(--owg-accent); }
+.label:where(:not(svg *))::after {
   content: "";
   flex: 1;
   height: var(--owg-border-width);
   background: var(--owg-border);
 }
-.label:not(svg *) > span { color: var(--owg-text); font-variant-numeric: tabular-nums; }
+.label:where(:not(svg *)) > span { color: var(--owg-text); font-variant-numeric: tabular-nums; }
 /* A label directly above a heading is its eyebrow: pull the heading up to it. */
-.label:not(svg *) + :is(h1, h2, h3, h4, h5, h6) { margin-top: var(--owg-space-2); }
+.label:where(:not(svg *)) + :where(h1, h2, h3, h4, h5, h6) { margin-top: var(--owg-space-2); }

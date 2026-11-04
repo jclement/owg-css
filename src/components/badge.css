@@ -22,7 +22,7 @@
   vertical-align: 0.12em;
   text-decoration: none;
 }
-a.badge:hover { border-color: var(--_c); }
+:where(a).badge:hover { border-color: var(--_c); }
 
 /* Colour classes (.accent .blue ...) live in colors.css and set --_c. */
 
