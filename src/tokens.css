@@ -71,6 +71,8 @@
   --owg-faint: #a1a1aa;              /* decorative only (rules, glyphs), never body text */
   --owg-border: #e4e4e7;
   --owg-border-strong: #cfcfd5;
+  /* Form control boundaries: derived so every theme x variant gets >= 3:1 against bg/surface/surface-2 */
+  --owg-control-border: color-mix(in srgb, var(--owg-text) 62%, var(--owg-surface));
 
   /* Accent (sky) */
   --owg-accent: #0369a1;             /* text-safe: >= 4.5:1 on bg/surface/surface-2 */
@@ -79,7 +81,7 @@
   --owg-accent-soft: color-mix(in srgb, var(--owg-accent) 10%, var(--owg-surface));
   --owg-link: var(--owg-accent);
   --owg-link-hover: var(--owg-accent-hover);
-  --owg-focus: color-mix(in srgb, var(--owg-accent) 70%, transparent);
+  --owg-focus: var(--owg-accent);   /* solid: >= 3:1 against every background (WCAG 1.4.11) */
   --owg-selection: color-mix(in srgb, var(--owg-accent) 22%, transparent);
 
   /* Palette: each is text-safe (>= 4.5:1) on bg, surface, surface-2 and on its own -soft tint */

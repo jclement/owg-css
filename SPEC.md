@@ -139,6 +139,14 @@ Do not hand-edit `dist/`. If two branches both rebuild `dist/`, the lead rebuild
 - `.grid`: responsive auto-fit columns (`min 14rem`), gap `--owg-space-4`. `.grid.cols-2/3/4`
   fixed column counts that collapse to one column under 640px.
 
+## Non-text contrast (WCAG 1.4.11)
+
+- Form control boundaries use `--owg-control-border` (>= 3:1 everywhere). `--owg-border`/`-strong` are for
+  decorative rules only.
+- Focus indicators use a solid `--owg-focus` outline (>= 3:1), never a translucent halo alone.
+- `@media (forced-colors: active)`: controls, checked states, focus and the active sidebar/TOC item stay
+  visible with system colours.
+
 ## Element styling (classless, core)
 
 Typography: `h1`-`h6` (tight, h1/h2 with a hairline under h2), `p`, `a` (accent, underline on
