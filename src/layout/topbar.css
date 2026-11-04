@@ -147,6 +147,31 @@ body > header button:hover {
   color: var(--owg-topbar-title);
 }
 
+/* A [role=group] of buttons is a segmented control: centred, joined, pressed = filled. */
+body > header [role="group"] {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-self: center;
+  margin: 0;
+}
+
+body > header [role="group"] > button {
+  min-width: 1.9rem;
+  padding-inline: var(--owg-space-2);
+  font-size: var(--owg-text-base);
+}
+
+body > header [role="group"] > :not(:first-child) {
+  margin-left: calc(-1 * var(--owg-border-width));
+}
+
+body > header button[aria-pressed="true"] {
+  position: relative;
+  border-color: var(--owg-topbar-accent);
+  background: var(--owg-topbar-accent);
+  color: var(--owg-topbar-bg);
+}
+
 @media (max-width: 639.98px) {
   body > header {
     gap: var(--owg-space-2);
@@ -154,6 +179,17 @@ body > header button:hover {
   }
   body > header nav a {
     padding-inline: var(--owg-space-1);
+  }
+  body > header :is(button, select) {
+    padding-inline: var(--owg-space-1);
+  }
+  body > header [role="group"] > button {
+    min-width: 1.6rem;
+  }
+  body > header select {
+    max-width: 5.5rem;
+    padding-right: var(--owg-space-5);
+    text-overflow: ellipsis;
   }
   /* Overflowing links scroll sideways; the fade hints there is more (mask is alpha only). */
   body > header nav {
