@@ -1,0 +1,36 @@
+/* Command line: owg.me's prompt bar, a one-line shell prompt with a blinking cursor.
+   <p class="cmdline"><span class="user">jeff</span>@<span class="host">owg</span>:<span class="path">~/code</span>$ <span class="cmd">cat README.md</span></p>
+   Every part is optional; plain text inside is muted, the named parts are the text colour,
+   the "@ : $" punctuation you type stays muted, .path is the accent. A cursor is drawn after
+   the line (blinks; static under reduced motion). Long lines truncate with an ellipsis.
+   .cmdline.rule adds owg.me's hairline underneath. */
+
+.cmdline {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  margin-block: 0 var(--owg-flow);
+  color: var(--owg-muted);
+  font-size: var(--owg-text-sm);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.cmdline > :is(.user, .host, .cmd) { color: var(--owg-text); }
+.cmdline > .path { color: var(--owg-accent); }
+.cmdline > .cmd { margin-left: 0.6ch; overflow: hidden; text-overflow: ellipsis; }
+.cmdline::after {
+  content: "";
+  flex: none;
+  width: 0.55em;
+  height: 1.1em;
+  margin-left: 2px;
+  background: var(--owg-accent);
+  animation: owg-blink 1.1s steps(1) infinite;
+}
+.cmdline.rule {
+  padding-bottom: var(--owg-space-3);
+  border-bottom: var(--owg-border-width) solid var(--owg-border);
+}
+@media (prefers-reduced-motion: reduce) {
+  .cmdline::after { animation: none; }
+}

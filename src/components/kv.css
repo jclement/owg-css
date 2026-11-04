@@ -1,0 +1,34 @@
+/* Key-value rows (owg.me)
+   <dl class="kv">
+     <dt>version</dt><dd>0.1.0</dd>
+     <dt>license</dt><dd><a href="#">MIT</a></dd>
+   </dl>
+   Key muted, value in the text colour, hairline between rows. Long values wrap; keys do not.
+   Stacks under 480px. */
+
+dl.kv {
+  display: grid;
+  grid-template-columns: minmax(6rem, max-content) minmax(0, 1fr);
+  column-gap: var(--owg-space-4);
+  margin: 0 0 var(--owg-flow);
+  padding: 0;
+  font-size: var(--owg-text-sm);
+}
+dl.kv > :is(dt, dd) {
+  margin: 0;
+  padding: var(--owg-space-1) 0;
+  border-top: var(--owg-border-width) solid var(--owg-border);
+}
+dl.kv > :is(dt, dd):nth-child(-n + 2) { border-top: 0; }
+dl.kv > dt {
+  color: var(--owg-muted);
+  font-weight: var(--owg-weight-normal);
+  white-space: nowrap;
+}
+dl.kv > dd { color: var(--owg-text); overflow-wrap: anywhere; }
+@media (max-width: 480px) {
+  dl.kv { grid-template-columns: minmax(0, 1fr); }
+  dl.kv > dd { padding-top: 0; border-top: 0; }
+  dl.kv > dt:first-child { border-top: 0; }
+  dl.kv > dt:not(:first-child) { border-top: var(--owg-border-width) solid var(--owg-border); }
+}

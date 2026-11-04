@@ -1,0 +1,52 @@
+/* Tooltip (CSS-only)
+   <abbr data-tooltip="Cascading Style Sheets">CSS</abbr>
+   <button data-tooltip="Copy" data-placement="bottom">⧉</button>
+   Shown on hover and keyboard focus, above by default. The host gets position: relative.
+   Keep the text short; for anything essential use visible text or aria-label too
+   (a tooltip is not announced by screen readers). Uses ::after on the host. */
+
+[data-tooltip] { position: relative; }
+[data-tooltip]:not(a, button, input, select, textarea, [tabindex]) {
+  border-bottom: var(--owg-border-width) dotted var(--owg-muted);
+  cursor: help;
+}
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  z-index: 50;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  width: max-content;
+  max-width: 18rem;
+  padding: var(--owg-space-1) var(--owg-space-2);
+  border: var(--owg-border-width) solid var(--owg-border-strong);
+  border-radius: var(--owg-radius);
+  background: var(--owg-text-strong);
+  color: var(--owg-bg);
+  box-shadow: var(--owg-shadow);
+  font-family: var(--owg-font);
+  font-size: var(--owg-text-xs);
+  font-weight: var(--owg-weight-normal);
+  letter-spacing: 0;
+  line-height: 1.4;
+  text-align: left;
+  white-space: normal;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 3px);
+  transition: opacity var(--owg-transition), transform var(--owg-transition), visibility var(--owg-transition);
+}
+[data-tooltip][data-placement="bottom"]::after {
+  top: calc(100% + 6px);
+  bottom: auto;
+  transform: translate(-50%, -3px);
+}
+[data-tooltip]:is(:hover, :focus-visible)::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-tooltip]::after { transition: none; }
+}

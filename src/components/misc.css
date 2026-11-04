@@ -1,0 +1,51 @@
+/* Empty state and tags
+   <div class="empty">
+     <strong>no results</strong>        first child = title
+     <p>Try a shorter query.</p>
+     <a class="button secondary small" href="#">clear filters</a>
+   </div>
+     Dashed box, centred, muted. Prefixed with a "∅" glyph.
+   <ul class="tags"><li><a href="/t/css">css</a></li><li>rust</li></ul>
+   <a class="tag" href="/t/css">css</a>
+     Hashtag chips: "#" in the accent, text muted, accent on hover.
+   Mermaid: pre.mermaid gets a surface background and a centred, responsive SVG once rendered. */
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--owg-space-2);
+  margin-block: 0 var(--owg-flow);
+  padding: var(--owg-space-6) var(--owg-space-4);
+  border: var(--owg-border-width) dashed var(--owg-border-strong);
+  border-radius: var(--owg-radius);
+  color: var(--owg-muted);
+  font-size: var(--owg-text-sm);
+  text-align: center;
+}
+.empty::before { content: "\2205"; color: var(--owg-muted); font-size: var(--owg-text-2xl); line-height: 1; }
+.empty > :first-child { color: var(--owg-text); font-size: var(--owg-text-base); }
+.empty > * { margin: 0; }
+
+ul.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--owg-space-1) var(--owg-space-3);
+  margin: 0 0 var(--owg-flow);
+  padding: 0;
+  list-style: none;
+}
+ul.tags > li { margin: 0; padding: 0; }
+ul.tags > li::marker { content: none; }
+:is(ul.tags > li, .tag) {
+  color: var(--owg-muted);
+  font-size: var(--owg-text-sm);
+}
+:is(ul.tags > li, .tag)::before { content: "#"; color: var(--owg-accent); }
+:is(ul.tags a, a.tag) { color: inherit; text-decoration: none; }
+:is(ul.tags a, a.tag):hover { color: var(--owg-accent); text-decoration: underline; }
+ul.tags > li:has(> a:hover) { color: var(--owg-accent); }
+
+/* Mermaid diagrams (see plugins/owg-mermaid.js). Before rendering the source shows as code. */
+pre.mermaid[data-processed] { background: var(--owg-surface); text-align: center; }
+.mermaid svg { max-width: 100%; height: auto; }

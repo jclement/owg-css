@@ -1,0 +1,58 @@
+/* Terminal
+   <pre class="terminal" data-title="~/code/owg-css"><span class="prompt">$</span> npm run build
+   <span class="output">built dist/owg.css in 41ms</span>
+   <span class="prompt">$</span> <span class="cursor"></span></pre>
+   data-title is optional (the chrome bar shows only the three dots without it).
+   .prompt = accent, .output = muted, .cursor = blinking block (static under reduced motion).
+   The chrome bar stays put when long lines scroll sideways. Uses ::before (do not combine
+   with pre[data-lang], which labels code blocks, not terminals). */
+
+.prompt { color: var(--owg-accent); user-select: none; }
+.output { color: var(--owg-muted); }
+
+pre.terminal {
+  position: relative;
+  padding: var(--owg-space-3) var(--owg-space-4);
+  border: var(--owg-border-width) solid var(--owg-border-strong);
+  border-radius: var(--owg-radius);
+  background: var(--owg-code-bg);
+  color: var(--owg-code-text);
+  box-shadow: var(--owg-shadow-sm);
+}
+pre.terminal::before {
+  content: attr(data-title);
+  position: sticky;
+  left: 0;
+  display: block;
+  margin: calc(-1 * var(--owg-space-3)) calc(-1 * var(--owg-space-4)) var(--owg-space-3);
+  padding: var(--owg-space-1) var(--owg-space-4) var(--owg-space-1) 4.25rem;
+  min-height: 1.9rem;
+  border-bottom: var(--owg-border-width) solid var(--owg-border);
+  background:
+    radial-gradient(circle at 1.1rem 50%, var(--owg-border-strong) 0.25rem, transparent 0.27rem),
+    radial-gradient(circle at 1.85rem 50%, var(--owg-border-strong) 0.25rem, transparent 0.27rem),
+    radial-gradient(circle at 2.6rem 50%, var(--owg-border-strong) 0.25rem, transparent 0.27rem),
+    var(--owg-surface-2);
+  color: var(--owg-muted);
+  font-size: var(--owg-text-xs);
+  line-height: 1.6rem;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+pre.terminal > code { background: none; padding: 0; }
+
+.cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -0.15em;
+  background: var(--owg-accent);
+  animation: owg-blink 1.1s steps(1) infinite;
+}
+@keyframes owg-blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .cursor { animation: none; }
+}

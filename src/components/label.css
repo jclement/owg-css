@@ -1,0 +1,26 @@
+/* Section label: owg.me's "// label ------------" divider.
+   <p class="label">projects</p>
+   <h2 class="label">projects <span>3</span></h2>   a trailing <span> (a count) is drawn in the text colour
+   Works on any element; the "//" is the accent, the rule runs to the end of the line. */
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: var(--owg-space-2);
+  margin: var(--owg-space-5) 0 var(--owg-space-2);
+  padding: 0;
+  border: 0;
+  color: var(--owg-muted);
+  font-size: var(--owg-text-xs);
+  font-weight: var(--owg-weight-normal);
+  letter-spacing: 0.04em;
+  line-height: var(--owg-line-height-tight);
+}
+.label::before { content: "//"; color: var(--owg-accent); }
+.label::after {
+  content: "";
+  flex: 1;
+  height: var(--owg-border-width);
+  background: var(--owg-border);
+}
+.label > span { color: var(--owg-text); font-variant-numeric: tabular-nums; }
