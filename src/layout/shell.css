@@ -1,1 +1,294 @@
-/* owg-css: layout/shell — owned by the layout agent (see SPEC.md). */
+/* owg-css: layout/shell
+   Page frame (`body > main`) and the app shell (`body:has(> aside)`).
+     <aside id="sidebar">
+       <a href="#_" class="sidebar-close" aria-label="Close menu">×</a>
+       <nav>
+         <h2>Group</h2>                       any h2-h6 or <p> = `// group` label
+         <ul><li><a aria-current="page">Item</a><ul>...</ul></li></ul>
+         <details open><summary>Group</summary><ul>...</ul></details>   collapsible group
+       </nav>
+     </aside>
+   >= 960px: fixed sidebar under the top bar, scrolls on its own, main and footer shift right.
+   <  960px: off-canvas drawer opened by #sidebar:target (no JS). The .sidebar-toggle link
+   (href="#sidebar") opens it; .sidebar-close or the dimmed backdrop closes it. Point the close
+   link at a fragment that matches nothing (href="#_"): a bare "#" also works but jumps to top. */
+
+/* ---- Page frame --------------------------------------------------------- */
+
+:where(body:has(> main)) {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+body > main {
+  flex: 1 0 auto;
+  box-sizing: border-box;
+  width: min(100% - 2 * var(--owg-gutter), var(--owg-container));
+  margin-inline: auto;
+  padding-block: var(--owg-space-6) var(--owg-space-7);
+}
+
+@media (max-width: 639.98px) {
+  body > main {
+    width: calc(100% - 2 * var(--owg-space-4));
+  }
+}
+
+/* ---- Sidebar ------------------------------------------------------------ */
+
+body > aside {
+  --_bg: var(--owg-surface);
+  --_shade: color-mix(in srgb, var(--owg-text) 12%, transparent);
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 40;
+  box-sizing: border-box;
+  width: var(--owg-sidebar-width);
+  margin: 0;
+  padding: var(--owg-space-4) var(--owg-space-3) var(--owg-space-7);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-right: var(--owg-border-width) solid var(--owg-border);
+  font-size: var(--owg-text-sm);
+  line-height: 1.45;
+  scrollbar-width: thin;
+  scrollbar-color: var(--owg-border-strong) transparent;
+  /* Scroll shadows: a soft edge appears only where there is more to scroll. */
+  background:
+    linear-gradient(var(--_bg) 40%, transparent) top / 100% 1.5rem no-repeat local,
+    linear-gradient(transparent, var(--_bg) 60%) bottom / 100% 1.5rem no-repeat local,
+    linear-gradient(var(--_shade), transparent) top / 100% 0.6rem no-repeat scroll,
+    linear-gradient(transparent, var(--_shade)) bottom / 100% 0.6rem no-repeat scroll,
+    var(--_bg);
+}
+
+body:has(> header) > aside {
+  top: var(--owg-topbar-height);
+}
+
+body > aside > :first-child:not(.sidebar-close),
+body > aside > .sidebar-close + * {
+  margin-top: 0;
+}
+
+body > aside nav :is(ul, ol) {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+body > aside nav li {
+  margin: 0;
+  padding: 0;
+}
+
+body > aside nav li::before {
+  content: none;
+}
+
+/* Group labels: owg.me section labels. */
+body > aside nav > :is(h2, h3, h4, h5, h6, p),
+body > aside nav > details > summary {
+  margin: var(--owg-space-5) 0 var(--owg-space-1);
+  padding: 0 var(--owg-space-2);
+  border: 0;
+  color: var(--owg-muted);
+  font-size: var(--owg-text-xs);
+  font-weight: var(--owg-weight-medium);
+  letter-spacing: var(--owg-tracking-caps);
+  line-height: 1.4;
+  text-transform: lowercase;
+}
+
+body > aside nav > :first-child,
+body > aside nav > details:first-child > summary {
+  margin-top: 0;
+}
+
+body > aside nav > :is(h2, h3, h4, h5, h6, p)::before,
+body > aside nav > details > summary::before {
+  content: "//\a0";
+  color: var(--owg-accent);
+}
+
+/* Collapsible group: the label is the summary, a chevron on the right. */
+body > aside nav > details {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+body > aside nav > details > summary {
+  display: flex;
+  cursor: pointer;
+  list-style: none;
+  border-radius: var(--owg-radius);
+}
+
+body > aside nav > details > summary::-webkit-details-marker {
+  display: none;
+}
+
+body > aside nav > details > summary::after {
+  content: "›";
+  margin-left: auto;
+  color: var(--owg-faint);
+  transition: transform var(--owg-transition);
+}
+
+body > aside nav > details[open] > summary::after {
+  transform: rotate(90deg);
+}
+
+body > aside nav > details > summary:hover {
+  color: var(--owg-text);
+}
+
+/* Links: a 2px rail on the left lights up for the active page. */
+body > aside nav a {
+  display: block;
+  padding: 0.3rem var(--owg-space-2);
+  border-left: 2px solid transparent;
+  border-radius: 0 var(--owg-radius) var(--owg-radius) 0;
+  color: var(--owg-text);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  transition: background-color var(--owg-transition), color var(--owg-transition);
+}
+
+body > aside nav a:hover {
+  background: var(--owg-surface-2);
+  color: var(--owg-text-strong);
+  text-decoration: none;
+}
+
+body > aside nav a[aria-current] {
+  border-left-color: var(--owg-accent);
+  background: var(--owg-accent-soft);
+  color: var(--owg-accent);
+  font-weight: var(--owg-weight-medium);
+}
+
+body > aside :is(a, summary):focus-visible {
+  outline: var(--owg-focus-width) solid var(--owg-focus);
+  outline-offset: -2px;
+}
+
+/* Nested lists hang off a hairline; the active rail sits on top of it. */
+body > aside nav li > :is(ul, ol) {
+  margin: 0.125rem 0 0.25rem var(--owg-space-3);
+  border-left: var(--owg-border-width) solid var(--owg-border);
+}
+
+body > aside nav li li > a {
+  margin-left: calc(-1 * var(--owg-border-width));
+  color: var(--owg-muted);
+}
+
+body > aside nav li li > a:hover {
+  border-left-color: var(--owg-border-strong);
+}
+
+/* ---- Drawer controls ---------------------------------------------------- */
+
+.sidebar-toggle,
+.sidebar-close {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--owg-radius);
+  color: inherit;
+  font-size: var(--owg-text-xl);
+  line-height: 1;
+  text-decoration: none;
+}
+
+.sidebar-toggle:hover,
+.sidebar-close:hover {
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  text-decoration: none;
+}
+
+/* ---- Wide: fixed column ------------------------------------------------- */
+
+@media (min-width: 960px) {
+  body:has(> aside) {
+    padding-left: var(--owg-sidebar-width);
+  }
+}
+
+/* ---- Narrow: off-canvas drawer ------------------------------------------ */
+
+@media (max-width: 959.98px) {
+  .sidebar-toggle,
+  .sidebar-close {
+    display: inline-flex;
+  }
+
+  body > header > .sidebar-toggle {
+    margin-left: calc(-1 * var(--owg-space-2));
+  }
+
+  body > aside,
+  body:has(> header) > aside {
+    --_w: min(20rem, 85vw);
+    top: 0;
+    left: calc(-1 * var(--_w) - 1rem);
+    z-index: 60;
+    width: var(--_w);
+    padding-top: var(--owg-space-3);
+    visibility: hidden;
+    box-shadow: var(--owg-shadow);
+    transition: left 180ms ease, visibility 0s linear 180ms;
+  }
+
+  body > aside:target {
+    left: 0;
+    visibility: visible;
+    transition: left 180ms ease, visibility 0s;
+  }
+
+  body > aside > .sidebar-close {
+    float: right;
+    margin: 0 0 var(--owg-space-2) var(--owg-space-2);
+    color: var(--owg-muted);
+  }
+
+  /* The backdrop is part of the close link, so a tap anywhere outside closes the drawer. */
+  body > aside:target > .sidebar-close::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 0 var(--_w);
+    background: color-mix(in srgb, var(--owg-bg) 70%, transparent);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    animation: owg-fade-in 180ms ease;
+    cursor: default;
+  }
+
+  html:has(> body > aside:target) {
+    overflow: hidden;
+  }
+}
+
+@keyframes owg-fade-in {
+  from { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body > aside,
+  body > aside:target,
+  body > aside nav a,
+  body > aside nav > details > summary::after {
+    transition: none;
+  }
+  body > aside:target > .sidebar-close::before {
+    animation: none;
+  }
+}
