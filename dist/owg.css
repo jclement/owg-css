@@ -1667,11 +1667,11 @@ textarea {
   background: var(--owg-danger);
 }
 
-:where(html:has( > body > header)) {
+html:has( > body > header) {
   scroll-padding-top: calc(var(--owg-topbar-height) + var(--owg-space-4));
 }
 
-:where(body:has( > header)) {
+body:has( > header) {
   padding-top: var(--owg-topbar-height);
 }
 
@@ -1694,24 +1694,25 @@ body > header {
   inset: 0 0 auto;
 }
 
-body > header > :first-child:not(.sidebar-toggle), body > header > .sidebar-toggle + * {
+body > header > :where(:first-child:not(.sidebar-toggle), .sidebar-toggle + *) {
   text-overflow: ellipsis;
-  max-width: 60%;
+  min-width: 0;
   color: var(--owg-topbar-title);
   font-size: var(--owg-text-base);
   font-weight: var(--owg-weight-bold);
   letter-spacing: var(--owg-tracking-tight);
-  flex: none;
-  margin: 0 auto 0 0;
+  flex: 0 auto;
+  margin: 0;
+  margin-inline-end: auto;
   text-decoration: none;
   overflow: hidden;
 }
 
-body > header > :first-child span, body > header > .sidebar-toggle + * span {
+body > header > :where(:first-child, .sidebar-toggle + *) span {
   color: var(--owg-topbar-accent);
 }
 
-body > header img, body > header svg {
+body > header :is(img, svg) {
   vertical-align: middle;
   width: auto;
   height: 1.25rem;
@@ -1729,9 +1730,13 @@ body > header nav, body > header nav ul {
 
 body > header nav {
   scrollbar-width: none;
-  flex: 0 100 auto;
+  flex: 1 1 0;
   min-width: 0;
   overflow-x: auto;
+}
+
+body > header nav > :where(:first-child) {
+  margin-inline-start: auto;
 }
 
 body > header nav li {
@@ -1744,13 +1749,14 @@ body > header nav a {
   padding: 0 var(--owg-space-2);
   color: var(--owg-topbar-text);
   transition: color var(--owg-transition);
+  flex-shrink: 0;
   align-items: center;
   text-decoration: none;
   display: flex;
   position: relative;
 }
 
-body > header nav a:hover {
+body > header nav a:where(:hover) {
   color: var(--owg-topbar-accent);
   text-decoration: none;
 }
@@ -1763,16 +1769,16 @@ body > header nav a:after {
   position: absolute;
 }
 
-body > header nav a[aria-current] {
+body > header nav a:where([aria-current]) {
   color: var(--owg-topbar-title);
   font-weight: var(--owg-weight-medium);
 }
 
-body > header nav a[aria-current]:after {
+body > header nav a:where([aria-current]):after {
   background: var(--owg-topbar-accent);
 }
 
-body > header a:focus-visible, body > header button:focus-visible {
+body > header :is(a, button):focus-visible {
   outline: var(--owg-focus-width) solid var(--owg-topbar-accent);
   outline-offset: -2px;
   border-radius: var(--owg-radius);
@@ -1796,21 +1802,38 @@ body > header button:hover {
   color: var(--owg-topbar-title);
 }
 
-body > header [role="group"] {
+body > header :where([role="group"]) {
   flex-shrink: 0;
   align-self: center;
   margin: 0;
   display: inline-flex;
 }
 
-body > header [role="group"] > button {
+body > header :where([role="group"]) > button {
   min-width: 1.9rem;
   padding-inline: var(--owg-space-2);
   font-size: var(--owg-text-base);
 }
 
-body > header [role="group"] > :not(:first-child) {
-  margin-left: calc(-1 * var(--owg-border-width));
+body > header :where([role="group"]) > :not(:first-child) {
+  margin: 0;
+  margin-inline-start: calc(-1 * var(--owg-border-width));
+}
+
+body > header :where([role="group"]) > :not(:first-child, :last-child) {
+  border-radius: 0;
+}
+
+body > header :where([role="group"]) > :first-child:not(:last-child) {
+  border-radius: 0;
+  border-start-start-radius: var(--owg-radius);
+  border-end-start-radius: var(--owg-radius);
+}
+
+body > header :where([role="group"]) > :last-child:not(:first-child) {
+  border-radius: 0;
+  border-start-end-radius: var(--owg-radius);
+  border-end-end-radius: var(--owg-radius);
 }
 
 body > header button[aria-pressed="true"] {
@@ -1830,24 +1853,36 @@ body > header button[aria-pressed="true"] {
     padding-inline: var(--owg-space-1);
   }
 
-  body > header [role="group"] > button {
+  body > header :where([role="group"]) > button {
     min-width: 1.6rem;
   }
 
   body > header select {
     max-width: 5.5rem;
-    padding-right: var(--owg-space-5);
     text-overflow: ellipsis;
+    padding-inline-end: var(--owg-space-5);
   }
 
   body > header nav {
-    padding-right: var(--owg-space-4);
+    padding-inline-end: var(--owg-space-4);
     -webkit-mask-image: linear-gradient(to left, #0000, #000 1.25rem);
     mask-image: linear-gradient(to left, #0000, #000 1.25rem);
   }
+
+  body > header nav:where(:dir(rtl)) {
+    -webkit-mask-image: linear-gradient(to right, #0000, #000 1.25rem);
+    mask-image: linear-gradient(to right, #0000, #000 1.25rem);
+  }
 }
 
-:where(body:has( > main)) {
+@media (forced-colors: active) {
+  body > header nav a:where([aria-current]):after {
+    forced-color-adjust: none;
+    background: highlight;
+  }
+}
+
+body:has( > main) {
   flex-direction: column;
   min-height: 100dvh;
   display: flex;
@@ -1861,10 +1896,8 @@ body > main {
   margin-inline: auto;
 }
 
-@media (width <= 639.98px) {
-  body > main {
-    width: calc(100% - 2 * var(--owg-space-4));
-  }
+:where(body > main, body > main > :is(article, section), body > main > article > section) > :where(p, ul, ol, dl, blockquote, h1, h3, h4, h5, h6):where(:not([class])) {
+  max-width: var(--owg-measure);
 }
 
 body > aside {
@@ -1875,7 +1908,7 @@ body > aside {
   width: var(--owg-sidebar-width);
   padding: var(--owg-space-4) var(--owg-space-3) var(--owg-space-7);
   overscroll-behavior: contain;
-  border-right: var(--owg-border-width) solid var(--owg-border);
+  border-inline-end: var(--owg-border-width) solid var(--owg-border);
   font-size: var(--owg-text-sm);
   scrollbar-width: thin;
   scrollbar-color: var(--owg-border-strong) transparent;
@@ -1887,7 +1920,8 @@ body > aside {
   margin: 0;
   line-height: 1.45;
   position: fixed;
-  inset: 0 auto 0 0;
+  inset-block: 0;
+  inset-inline-start: 0;
   overflow-y: auto;
 }
 
@@ -1895,7 +1929,7 @@ body:has( > header) > aside {
   top: var(--owg-topbar-height);
 }
 
-body > aside > :first-child:not(.sidebar-close), body > aside > .sidebar-close + * {
+body > aside > :where(:first-child:not(.sidebar-close), .sidebar-close + *) {
   margin-top: 0;
 }
 
@@ -1926,19 +1960,16 @@ body > aside nav > :is(h2, h3, h4, h5, h6, p), body > aside nav > details > summ
   line-height: 1.4;
 }
 
-body > aside nav > :first-child, body > aside nav > details:first-child > summary {
+body > aside nav > :where(:first-child), body > aside nav > details:where(:first-child) > summary {
   margin-top: 0;
 }
 
 body > aside nav > :is(h2, h3, h4, h5, h6, p):before, body > aside nav > details > summary:before {
   content: "// ";
-  color: var(--owg-accent);
-}
-
-body > aside nav > details > summary:before {
-  border: 0;
   width: auto;
   height: auto;
+  color: var(--owg-accent);
+  border: 0;
   margin: 0;
   transform: none;
 }
@@ -1968,36 +1999,62 @@ body > aside nav > details > summary:after {
   content: "›";
   color: var(--owg-muted);
   transition: transform var(--owg-transition);
-  margin-left: auto;
+  margin-inline-start: auto;
 }
 
-body > aside nav > details[open] > summary:after {
+body > aside nav > details:where([open]) > summary:after {
   transform: rotate(90deg);
 }
 
-body > aside nav > details > summary:hover {
+body > aside nav > details > summary:where(:dir(rtl)):after {
+  content: "‹";
+}
+
+body > aside nav > details:where([open]) > summary:where(:dir(rtl)):after {
+  transform: rotate(-90deg);
+}
+
+body > aside nav > details > summary:where(:hover) {
   color: var(--owg-text);
 }
 
 body > aside nav a {
   padding: .3rem var(--owg-space-2);
-  border-radius: 0 var(--owg-radius) var(--owg-radius) 0;
+  border-radius: 0;
   color: var(--owg-text);
   overflow-wrap: anywhere;
   transition: background-color var(--owg-transition), color var(--owg-transition);
-  border-left: 2px solid #0000;
+  border-inline-start: 2px solid #0000;
+  border-start-end-radius: var(--owg-radius);
+  border-end-end-radius: var(--owg-radius);
   text-decoration: none;
   display: block;
 }
 
-body > aside nav a:hover {
+body > aside nav a:where(:hover) {
   background: var(--owg-surface-2);
   color: var(--owg-text-strong);
   text-decoration: none;
 }
 
-body > aside nav a[aria-current] {
-  border-left-color: var(--owg-accent);
+body > aside nav li > :is(ul, ol) {
+  border-inline-start: var(--owg-border-width) solid var(--owg-border);
+  margin-block: .125rem .25rem;
+  margin-inline-start: var(--owg-space-3);
+}
+
+body > aside nav :where(li li) > a {
+  color: var(--owg-muted);
+  margin-inline-start: calc(-1 * var(--owg-border-width));
+}
+
+body > aside nav :where(li li) > a:where(:hover) {
+  border-inline-start-color: var(--owg-border-strong);
+  color: var(--owg-text-strong);
+}
+
+body > aside nav a:where([aria-current]) {
+  border-inline-start-color: var(--owg-accent);
   background: var(--owg-accent-soft);
   color: var(--owg-accent);
   font-weight: var(--owg-weight-medium);
@@ -2006,20 +2063,6 @@ body > aside nav a[aria-current] {
 body > aside :is(a, summary):focus-visible {
   outline: var(--owg-focus-width) solid var(--owg-focus);
   outline-offset: -2px;
-}
-
-body > aside nav li > :is(ul, ol) {
-  margin: .125rem 0 .25rem var(--owg-space-3);
-  border-left: var(--owg-border-width) solid var(--owg-border);
-}
-
-body > aside nav li li > a {
-  margin-left: calc(-1 * var(--owg-border-width));
-  color: var(--owg-muted);
-}
-
-body > aside nav li li > a:hover {
-  border-left-color: var(--owg-border-strong);
 }
 
 .sidebar-toggle, .sidebar-close {
@@ -2036,14 +2079,14 @@ body > aside nav li li > a:hover {
   display: none;
 }
 
-.sidebar-toggle:hover, .sidebar-close:hover {
+:where(.sidebar-toggle, .sidebar-close):hover {
   background: color-mix(in srgb, currentColor 12%, transparent);
   text-decoration: none;
 }
 
 @media (width >= 960px) {
   body:has( > aside) {
-    padding-left: var(--owg-sidebar-width);
+    padding-inline-start: var(--owg-sidebar-width);
   }
 }
 
@@ -2052,37 +2095,39 @@ body > aside nav li li > a:hover {
     display: inline-flex;
   }
 
-  body > header > .sidebar-toggle {
-    margin-left: calc(-1 * var(--owg-space-2));
+  body > header > :where(.sidebar-toggle) {
+    margin-inline-start: calc(-1 * var(--owg-space-2));
   }
 
   body > aside, body:has( > header) > aside {
     --_w: min(20rem, 85vw);
     top: 0;
-    left: calc(-1 * var(--_w) - 1rem);
     z-index: 60;
     width: var(--_w);
     padding-top: var(--owg-space-3);
     visibility: hidden;
     box-shadow: var(--owg-shadow);
-    transition: left .18s, visibility 0s linear .18s;
+    transition: inset-inline-start .18s, visibility 0s linear .18s;
+    inset-inline-start: calc(-1 * var(--_w) - 1rem);
   }
 
-  body > aside:target {
+  body > aside:where(:target), body:has( > header) > aside:where(:target) {
     visibility: visible;
-    transition: left .18s, visibility;
-    left: 0;
+    transition: inset-inline-start .18s, visibility;
+    inset-inline-start: 0;
   }
 
-  body > aside > .sidebar-close {
-    float: right;
-    margin: 0 0 var(--owg-space-2) var(--owg-space-2);
+  body > aside > :where(.sidebar-close) {
+    float: inline-end;
+    margin: 0 0 var(--owg-space-2);
     color: var(--owg-muted);
+    margin-inline-start: var(--owg-space-2);
   }
 
-  body > aside:target > .sidebar-close:before {
+  body > aside:where(:target) > :where(.sidebar-close):before {
     content: "";
-    inset: 0 0 0 var(--_w);
+    inset-block: 0;
+    inset-inline: var(--_w) 0;
     background: color-mix(in srgb, var(--owg-bg) 70%, transparent);
     backdrop-filter: blur(2px);
     cursor: default;
@@ -2102,25 +2147,38 @@ body > aside nav li li > a:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body > aside, body > aside:target, body > aside nav a, body > aside nav > details > summary:after {
-    transition: none;
+  body > aside, body:has( > header) > aside, body > aside nav a, body > aside nav > details > summary:after {
+    transition: none !important;
   }
 
-  body > aside:target > .sidebar-close:before {
+  body > aside > :where(.sidebar-close):before {
     animation: none;
   }
 }
 
-main:has( > nav.toc) {
+@media (forced-colors: active) {
+  body > aside nav a:where([aria-current]) {
+    forced-color-adjust: none;
+    color: highlighttext;
+    background: highlight;
+    border-inline-start-color: highlight;
+  }
+}
+
+main:has( > nav:where(.toc)) {
   flex-direction: column;
   display: flex;
 }
 
-main:has( > nav.toc) > article {
+main:has( > nav:where(.toc)) > article {
   min-width: 0;
 }
 
-main > nav.toc {
+main:has( > nav:where(.toc)) > nav:where(.breadcrumb) {
+  order: -2;
+}
+
+main > nav:where(.toc) {
   margin: 0 0 var(--owg-space-6);
   padding: var(--owg-space-3) var(--owg-space-4);
   border: var(--owg-border-width) solid var(--owg-border);
@@ -2131,7 +2189,7 @@ main > nav.toc {
   line-height: 1.45;
 }
 
-main > nav.toc > :is(h2, h3, h4, h5, h6, p) {
+main > nav:where(.toc) > :is(h2, h3, h4, h5, h6, p) {
   margin: 0 0 var(--owg-space-2);
   color: var(--owg-muted);
   font-size: var(--owg-text-xs);
@@ -2143,37 +2201,42 @@ main > nav.toc > :is(h2, h3, h4, h5, h6, p) {
   line-height: 1.4;
 }
 
-main > nav.toc > :is(h2, h3, h4, h5, h6, p):before {
+main > nav:where(.toc) > :is(h2, h3, h4, h5, h6, p):before {
   content: "// ";
   color: var(--owg-accent);
 }
 
-main > nav.toc :is(ul, ol) {
+main > nav:where(.toc) nav {
+  margin: 0;
+  padding: 0;
+}
+
+main > nav:where(.toc) :is(ul, ol) {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-main > nav.toc li {
+main > nav:where(.toc) li {
   break-inside: avoid;
   margin: 0;
   padding: 0;
 }
 
-main > nav.toc li:before {
+main > nav:where(.toc) li:before {
   content: none;
 }
 
-main > nav.toc > :is(ul, ol) {
+main > nav:where(.toc) > :is(ul, ol), main > nav:where(.toc) > nav > :is(ul, ol) {
   column-width: 15rem;
   column-gap: var(--owg-space-5);
 }
 
-main > nav.toc li > :is(ul, ol) {
+main > nav:where(.toc) li > :is(ul, ol) {
   display: none;
 }
 
-main > nav.toc a {
+main > nav:where(.toc) a {
   color: var(--owg-muted);
   overflow-wrap: anywhere;
   transition: color var(--owg-transition), border-color var(--owg-transition);
@@ -2182,35 +2245,40 @@ main > nav.toc a {
   display: block;
 }
 
-main > nav.toc a:hover {
+main > nav:where(.toc) a:where(:hover) {
   color: var(--owg-text-strong);
   text-decoration: none;
 }
 
-main > nav.toc a:is([aria-current], .active) {
+main > nav:where(.toc) a:where([aria-current], .active) {
   color: var(--owg-accent);
 }
 
-main > nav.toc a:focus-visible {
+main > nav:where(.toc) a:focus-visible {
   outline: var(--owg-focus-width) solid var(--owg-focus);
   outline-offset: 1px;
   border-radius: var(--owg-radius);
 }
 
 @media (width >= 1200px) {
-  main:has( > nav.toc) {
+  body > main:has( > nav:where(.toc)) {
+    width: min(100% - 2 * var(--owg-gutter), var(--owg-container-wide),
+      var(--owg-container) + var(--owg-toc-width) + var(--owg-space-7));
+  }
+
+  main:has( > nav:where(.toc)) {
     grid-template-columns: minmax(0, 1fr) var(--owg-toc-width);
     gap: var(--owg-space-7);
     align-items: start;
     display: grid;
   }
 
-  main:has( > nav.toc) > :not(nav.toc) {
+  main:has( > nav:where(.toc)) > :where(:not(nav.toc)) {
     grid-column: 1;
   }
 
-  main > nav.toc {
-    top: calc(var(--owg-space-6));
+  main > nav:where(.toc) {
+    top: var(--owg-space-6);
     max-height: calc(100vh - 2 * var(--owg-space-6));
     scrollbar-width: thin;
     scrollbar-color: var(--owg-border-strong) transparent;
@@ -2223,46 +2291,55 @@ main > nav.toc a:focus-visible {
     overflow-y: auto;
   }
 
-  body:has( > header) main > nav.toc {
+  body:has( > header) main > nav:where(.toc) {
     top: calc(var(--owg-topbar-height) + var(--owg-space-6));
     max-height: calc(100vh - var(--owg-topbar-height) - 2 * var(--owg-space-6));
   }
 
-  main > nav.toc > :is(ul, ol) {
+  main > nav:where(.toc) > :is(ul, ol), main > nav:where(.toc) > nav > :is(ul, ol) {
     column-width: auto;
-    border-left: var(--owg-border-width) solid var(--owg-border);
+    border-inline-start: var(--owg-border-width) solid var(--owg-border);
   }
 
-  main > nav.toc li > :is(ul, ol) {
+  main > nav:where(.toc) li > :is(ul, ol) {
     display: block;
   }
 
-  main > nav.toc a {
-    margin-left: calc(-1 * var(--owg-border-width));
-    padding-left: var(--owg-space-3);
-    border-left: 2px solid #0000;
+  main > nav:where(.toc) a {
+    border-inline-start: 2px solid #0000;
+    margin-inline-start: calc(-1 * var(--owg-border-width));
+    padding-inline-start: var(--owg-space-3);
   }
 
-  main > nav.toc li li > a {
-    padding-left: calc(var(--owg-space-3) + var(--owg-space-3));
+  main > nav:where(.toc) li li > a {
+    padding-inline-start: calc(2 * var(--owg-space-3));
   }
 
-  main > nav.toc li li li > a {
-    padding-left: calc(var(--owg-space-3) + 2 * var(--owg-space-3));
+  main > nav:where(.toc) li li li > a {
+    padding-inline-start: calc(3 * var(--owg-space-3));
   }
 
-  main > nav.toc a:hover {
-    border-left-color: var(--owg-border-strong);
+  main > nav:where(.toc) a:where(:hover) {
+    border-inline-start-color: var(--owg-border-strong);
   }
 
-  main > nav.toc a:is([aria-current], .active) {
-    border-left-color: var(--owg-accent);
+  main > nav:where(.toc) a:where([aria-current], .active) {
+    border-inline-start-color: var(--owg-accent);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  main > nav.toc a {
+  main > nav:where(.toc) a {
     transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  main > nav:where(.toc) a:where([aria-current], .active) {
+    forced-color-adjust: none;
+    color: highlighttext;
+    background: highlight;
+    border-inline-start-color: highlight;
   }
 }
 
@@ -2280,6 +2357,13 @@ body > footer {
   margin: 0 auto;
   line-height: 1.5;
   display: flex;
+}
+
+@media (width >= 1200px) {
+  body:has( > main > nav:where(.toc)) > footer {
+    width: min(100% - 2 * var(--owg-gutter), var(--owg-container-wide),
+      var(--owg-container) + var(--owg-toc-width) + var(--owg-space-7));
+  }
 }
 
 body > footer > * {
@@ -2304,15 +2388,9 @@ body > footer a {
   text-decoration: none;
 }
 
-body > footer a:hover {
+body > footer a:where(:hover) {
   color: var(--owg-link-hover);
   text-decoration: underline;
-}
-
-@media (width <= 639.98px) {
-  body > footer {
-    width: calc(100% - 2 * var(--owg-space-4));
-  }
 }
 
 .grid {
@@ -2321,31 +2399,31 @@ body > footer a:hover {
   display: grid;
 }
 
-.grid > * {
+:where(.grid > *) {
   min-width: 0;
   margin: 0;
 }
 
-.grid.cols-2 {
+.grid:where(.cols-2) {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.grid.cols-3 {
+.grid:where(.cols-3) {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.grid.cols-4 {
+.grid:where(.cols-4) {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 @media (width <= 959.98px) {
-  .grid.cols-4 {
+  .grid:where(.cols-4) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (width <= 639.98px) {
-  .grid:is(.cols-2, .cols-3, .cols-4) {
+  .grid:where(.cols-2, .cols-3, .cols-4) {
     grid-template-columns: minmax(0, 1fr);
   }
 }
